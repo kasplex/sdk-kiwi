@@ -1,6 +1,6 @@
 import {describe, expect, it} from 'vitest';
 import {Wallet} from '../src/address/wallet';
-import { NetworkType} from "../wasm/kaspa";
+import { NetworkType} from "../src/wasm/kaspa";
 
 describe('wallet  function tests', () => {
 

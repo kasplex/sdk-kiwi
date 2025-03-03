@@ -1,7 +1,5 @@
 import {KasplexApi} from '../src/api/kasplexApi'
 import {describe, expect, it} from 'vitest';
-import { Base } from "../src/base";
-import {NetworkType} from "../wasm/kaspa";
 
 let address = `kaspatest:qpyrh5ev84kc50nrhnc3g59ujr3a3pv4jweg57rge9sydrwyz9drunfa9n4sf`
 describe('api', () => {

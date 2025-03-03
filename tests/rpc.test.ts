@@ -1,6 +1,6 @@
 import {describe, expect, it} from 'vitest';
 import {Rpc} from '../src/rpc/client';
-import {NetworkType} from "../wasm/kaspa";
+import {NetworkType} from "../src/wasm/kaspa";
 
 describe('address generator function tests fo mainnet', async () => {
 

@@ -1,4 +1,4 @@
-import { Mnemonic as KaspaMnemonic } from '../../wasm/kaspa';
+import { Mnemonic as KaspaMnemonic } from '@/wasm/kaspa';
 
 class Mnemonic {
     /**

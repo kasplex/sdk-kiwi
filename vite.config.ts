@@ -1,20 +1,11 @@
 import { defineConfig } from 'vite'
 import { resolve } from 'path'
-import { viteStaticCopy } from 'vite-plugin-static-copy'
 import dts from 'vite-plugin-dts'
 
 export default defineConfig({
   base: './',
   plugins: [
     dts(),
-    viteStaticCopy({
-      targets: [
-        {
-          src: 'wasm/**',
-          dest: 'wasm'
-        }
-      ]
-    }),
   ],
   resolve: {
     alias: {

@@ -1,5 +1,5 @@
 
-import { Encoding, Resolver } from "../../wasm/kaspa/kaspa";
+import { Encoding, Resolver } from "@/wasm/kaspa/kaspa";
 import { OP } from '../utils/enum'
 export interface RpcOptions {
     encoding: Encoding;
@@ -7,9 +7,9 @@ export interface RpcOptions {
     url?: string;
     resolver?: Resolver;
 }
-// export interface Params {
-//     [key: string]: string | number | boolean | undefined;
-// }
+export interface Params {
+    [key: string]: string | number | boolean | Array<string>;
+}
 
 export interface Krc20Data {
     p: 'krc-20',

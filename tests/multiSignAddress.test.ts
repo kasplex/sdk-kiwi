@@ -3,7 +3,7 @@ import {Wallet} from '../src/address/wallet';
 import {Script} from '../src/script/script';
 import {Kaspa} from '../src/kaspa';
 import {Mnemonic} from '../src/address/mnemonic';
-import { NetworkType} from "../wasm/kaspa";
+import { NetworkType} from "../src/wasm/kaspa";
 import {Rpc} from "../src/rpc/client";
 
 let privateKeys = [

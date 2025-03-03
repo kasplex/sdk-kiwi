@@ -8,7 +8,7 @@ import {
     Address,
     type UtxoEntryReference,
     kaspaToSompi,
-} from "../wasm/kaspa";
+} from "@/wasm/kaspa";
 import { Krc20Data } from "./types/interface";
 import { Base } from "./base";
 import { OP } from "./utils/enum";
@@ -40,7 +40,8 @@ class KRC20 {
         const commitTx = await Transaction.createTransactions(address, outputs, fee).sign([privateKey]).submit()
         const revealEntries = Entries.revealEntries(p2shAddress, commitTx!, scriptPublicKey);
         const getFee = getFeeByOp(data.op);
-        return await Transaction.createTransactionsWithEntries(revealEntries, [], address, getFee)
+        return await Transaction.createTransactionsWithEntries(revealEntries, [], p2shAddress.toString(), fee)
+        .sign([privateKey], script).submit()
     }
 
     /**

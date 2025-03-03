@@ -7,7 +7,7 @@ import { Script } from "./script/script";
 import { Transaction } from "./tx/transaction";
 import { KRC20 } from "./krc20";
 import { Base } from "./base";
-import {NetworkType, PrivateKey} from "../wasm/kaspa";
+import {NetworkType, PrivateKey} from "@/wasm/kaspa";
 import { Krc20Data } from './types/interface';
 import { OP } from "./utils/enum";
 

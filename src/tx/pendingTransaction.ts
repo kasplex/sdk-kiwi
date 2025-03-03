@@ -9,7 +9,7 @@ import {
     PaymentOutput,
     ICreateTransactions,
     ScriptBuilder
-} from "../../wasm/kaspa";
+} from "@/wasm/kaspa";
 import { networkToString } from "@/utils/utils";
 import { Rpc } from "@/rpc/client";
 import { Base } from "@/base";

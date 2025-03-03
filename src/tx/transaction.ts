@@ -5,7 +5,7 @@ import {
     UtxoEntryReference,
     UtxoContext,
     PaymentOutput,
-} from "../../wasm/kaspa";
+} from "@/wasm/kaspa";
 import { PendingTransaction } from "./pendingTransaction";
 
 class Transaction {

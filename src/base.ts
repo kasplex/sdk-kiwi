@@ -1,4 +1,4 @@
-import { NetworkType } from "../wasm/kaspa";
+import { NetworkType } from "@/wasm/kaspa";
 
 class Base {
 

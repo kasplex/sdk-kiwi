@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import {addressFromScriptPublicKey, NetworkType, PrivateKey} from "../wasm/kaspa";
+import {addressFromScriptPublicKey, NetworkType, PrivateKey} from "../src/wasm/kaspa";
 import { Script } from '../src/script/script';
 import { createKrc20Data, networkToString } from '../src/utils/utils'
 import { OP } from '../src/utils/enum'

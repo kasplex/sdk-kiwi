@@ -1,5 +1,5 @@
 import { describe, it } from 'vitest';
-import {NetworkType, PrivateKey} from "../wasm/kaspa";
+import {NetworkType, PrivateKey} from "../src/wasm/kaspa";
 import { Rpc } from '../src/rpc/client';
 
 import {Kaspa} from "../src/kaspa";
