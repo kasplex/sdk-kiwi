@@ -105,9 +105,9 @@ class PendingTransaction {
      * @param script - (Optional) Custom script to use in signature.
      * @returns The updated `PendingTransaction` instance.
      */
-    public sign(privateKeys: PrivateKey[], script?: ScriptBuilder): this {
+    public sign(privateKeys: PrivateKey[], script?: ScriptBuilder, isPskt?:boolean): this {
         if (script) {
-            return this.signReveal(privateKeys, script);
+            return isPskt ? this.signPskt(privateKeys, script) : this.signReveal(privateKeys, script);
         }
         this.transaction = this.transaction.then(async transactions => {
             transactions.transactions.forEach(transaction => transaction.sign(privateKeys));
@@ -126,7 +126,6 @@ class PendingTransaction {
     private signReveal(privateKeys: PrivateKey[], script: ScriptBuilder): this {
         const privateKey = privateKeys.shift();
         if (!privateKey) return this;
-
         this.transaction = this.transaction.then(async transactions => {
             transactions.transactions.forEach(transaction => {
                 const inputIndex = transaction.transaction.inputs.findIndex(input => input.signatureScript === '');
@@ -137,6 +136,20 @@ class PendingTransaction {
             });
             return transactions;
         });
+        return this;
+    }
+
+    private signPskt(privateKeys: PrivateKey[], script: ScriptBuilder): this  {
+        const privateKey = privateKeys.shift();
+        if (!privateKey) return this;
+        this.transaction = this.transaction.then(async transactions => {
+            transactions.transactions.forEach(transaction => {
+                let index = 0;
+                transaction.fillInput(index, script.toString());
+                transaction.sign([privateKey], false);
+            });
+            return transactions;
+        })
         return this;
     }
 

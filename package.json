@@ -9,7 +9,7 @@
   "scripts": {
     "test": "vitest",
     "start": "ts-node src/index.ts",
-    "build:prod": "vite build --mode production"
+    "build": "vite build"
   },
   "repository": {
     "type": "git",

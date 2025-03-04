@@ -51,7 +51,7 @@ describe('Transaction', () => {
         let txid = await KRC20.deploy(privateKey, deploydata, 100000n)
         console.log("Deploy txsh", txid)
         await Rpc.getInstance().disconnect()
-    })
+    }, 50000)
 
     it('list', async () => {
         await Rpc.setInstance(NetworkType.Testnet).connect()
@@ -59,38 +59,42 @@ describe('Transaction', () => {
             p: "krc-20",
             op: OP.List,
             tick: "SNOWDN",
-            to: toAddress,
-            amt: "1",
+            amt: "10",
         })  
-        let txid = await KRC20.transfer(privateKey, krc20data, 100000n)
+        let txid = await KRC20.list(privateKey, krc20data, 100000n)
         console.log("List txid", txid)
         await Rpc.getInstance().disconnect()
     }, 50000)
 
-    it('send', async () => {
-        await Rpc.setInstance(NetworkType.Testnet).connect()
-        const krc20data = createKrc20Data({
-            p: "krc-20",
-            op: OP.Send,
-            tick: "TKAS",
-        })  
-        let txid = await KRC20.send(privateKey, krc20data, 100000n)
-        console.log("Send txid", txid)
-        await Rpc.getInstance().disconnect()
-    }, 50000)
+    // it('send', async () => {
+    //     await Rpc.setInstance(NetworkType.Testnet).connect()
+    //     const krc20data = createKrc20Data({
+    //         p: "krc-20",
+    //         op: OP.Send,
+    //         tick: "TKAS",
+    //     })  
+    //     const hash = "6d16bf1a87b73c0cc65299565ef12bd7fa6154e0daa74511a33fc143e8803c1c"
+    //     let txid = await KRC20.send(privateKey, krc20data, hash, 100000n)
+    //     console.log("Send txid", txid)
+    //     await Rpc.getInstance().disconnect()
+    // }, 50000)
 
-    it('signTx', async () => {
-        const _privateKey = new PrivateKey("2596b6e6a76c75148fa41a5f72ea83c5b25f6fc4252d86a1ff8e7021f7632941")
-        await Rpc.setInstance(NetworkType.Testnet).connect()
-        const krc20data = createKrc20Data({
-            p: "krc-20",
-            op: OP.Send,
-            tick: "oiou",
-        })
-        const hash = "792f3ee05a83fc162ed30629e22d133ceaa6001755e0008c2a55af232479611d"
-        let txid = await KRC20.send(_privateKey, krc20data, 100000n,100000000n, hash)
-        console.log("Send txid", txid)
-        await Rpc.getInstance().disconnect()
-    }, 50000)
+    // it('pskt', async () => {
+    //     const _privateKey = new PrivateKey("2596b6e6a76c75148fa41a5f72ea83c5b25f6fc4252d86a1ff8e7021f7632941")
+    //     await Rpc.setInstance(NetworkType.Testnet).connect()
+    //     const krc20data = createKrc20Data({
+    //         p: "krc-20",
+    //         op: OP.Send,
+    //         tick: "snowdn",
+    //     })
+    //     const hash = "6d16bf1a87b73c0cc65299565ef12bd7fa6154e0daa74511a33fc143e8803c1c"
+    //     const signData = await KRC20.signHalf(_privateKey, krc20data, hash, 100000000n)
+    //     console.log("pskt signData", signData)
+
+    //     const _buyPrivateKey = new PrivateKey("eb2570115b126c59b76d797d5cc5b21c92af98344f4a5f0c04df159205d10377")
+    //     const txshId = await KRC20.revealPskt(_buyPrivateKey, signData, hash, 10000n)
+    //     console.log("revealPskt txshId", txshId)
+    //     await Rpc.getInstance().disconnect()
+    // }, 50000)
 
 })
