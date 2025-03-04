@@ -13,17 +13,17 @@ export default defineConfig({
     },
   },
   build: {
-    outDir: 'dist',
-    emptyOutDir: false,
+    outDir: './dist',
+    emptyOutDir: true,
     lib: {
       entry: resolve(__dirname, './src/index.ts'),
-      name: 'KasplexWeb3',
+      name: 'sdk-kiwi',
       fileName: 'index',
     },
     rollupOptions: {
       output: {
         globals: {
-          liteMove: 'KasplexWeb3'
+          liteMove: 'sdk-kiwi'
         }
       }
     },

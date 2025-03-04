@@ -94,7 +94,7 @@ function getFeeByOp(op: OP): bigint {
         case OP.Send:
             return kaspaToSompi("0")!;
         case OP.List:
-            return kaspaToSompi("0")!;
+            return kaspaToSompi("1")!;
         default:
             return kaspaToSompi("0")!;
     }
