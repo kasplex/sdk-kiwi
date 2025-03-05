@@ -13,6 +13,7 @@ async function testKrc20Mint() {
             op: KiwiEnum.OP.Mint,
             tick: 'SNOWDN',
         })
+
         let txid = await KRC20.mint(_privateKey, krc20data, 100000n)
         console.log("Mint txsh:", txid);
 

@@ -8,6 +8,7 @@ import { Kaspa } from "./kaspa";
 import { Script } from "./script/script";
 import { Transaction } from "./tx/transaction";
 import { KRC20 } from "./krc20";
+import { Kiwi as KiwiBase } from "./kiwi";
 import { NetworkType, PrivateKey } from "@/wasm/kaspa";
 import * as KiwiInterface from './types/interface';
 import * as KiwiEnum from "./utils/enum";
@@ -34,15 +35,17 @@ class Kiwi {
     private static initialized: boolean = false;
 
     static async init(network: NetworkType, url: string = '') {
-        if(this.initialized) {
+        if (this.initialized && this.network === network) {
+            console.warn("Kiwi has already been initialized with the same network.");
             return;
         }
-        this.setNetwork(network, url)
+        this.setNetwork(network);
         if (this.rpcClient) {
-            this.rpcClient.disconnect()
+            this.rpcClient.disconnect();
         }
-        this.rpcClient = await Rpc.setInstance(network, url)
-        await this.rpcClient.connect()
+        this.rpcClient = await Rpc.setInstance(network, url);
+        await this.rpcClient.connect();
+
         this.initialized = true;
     }
 
@@ -52,6 +55,7 @@ class Kiwi {
         }
         this.network = network;
         this.networkStr = Utils.networkToString(network);
+
         if (this.initialized) {
             if (this.rpcClient) {
                 this.rpcClient.disconnect();
@@ -60,6 +64,7 @@ class Kiwi {
             await this.rpcClient.connect();
         }
     }
+
 }
 
 export default Kiwi;

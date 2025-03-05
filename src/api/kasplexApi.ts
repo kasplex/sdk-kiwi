@@ -1,7 +1,7 @@
 import { NetworkType } from "@/wasm/kaspa";
 import { httpClient } from '@/utils/http';
 import { BASE_URL_TEST, BASE_URL_MAIN } from '@/utils/constants';
-import { Base } from "@/base";
+import { Kiwi } from "@/kiwi";
 
 class KasplexApi {
 
@@ -10,7 +10,7 @@ class KasplexApi {
      * @returns {string} - The base API URL.
      */
     private static getBaseUrl(): string {
-        return Base.network === NetworkType.Mainnet ? BASE_URL_MAIN : BASE_URL_TEST;
+        return Kiwi.network === NetworkType.Mainnet ? BASE_URL_MAIN : BASE_URL_TEST;
     }
 
     /**

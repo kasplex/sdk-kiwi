@@ -47,8 +47,8 @@ export default defineConfig({
                     liteMove: 'sdk-kiwi'
                 },
                 manualChunks(id) {
-                    if (id.includes("wasm/")) {
-                        return "wasm";
+                    if (id.includes('wasm')) {
+                        return 'wasm';
                     }
                 },
                 

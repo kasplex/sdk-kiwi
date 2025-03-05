@@ -6,7 +6,7 @@ import { OP } from '../src/utils/enum'
 import { Rpc } from '../src/rpc/client';
 import { Transaction } from "../src/tx/transaction";
 import { Entries } from '../src/tx/entries';
-import { Base } from '../src/base';
+import { Kiwi } from '../src/kiwi';
 import { Output } from '../src/tx/output';
 import { BASE_KAS_TO_P2SH_ADDRESS } from "../src/utils/constants";
 
@@ -26,9 +26,9 @@ describe('Transaction', () => {
 
         const script = Script.krc20Script(privateKey.toPublicKey().toXOnlyPublicKey().toString(), krc20data)
         const scriptPublicKey = script.createPayToScriptHashScript()
-        const p2shAddress = addressFromScriptPublicKey(scriptPublicKey, Base.network)!;
+        const p2shAddress = addressFromScriptPublicKey(scriptPublicKey, Kiwi.network)!;
 
-        const address = privateKey.toPublicKey().toAddress(Base.network).toString()
+        const address = privateKey.toPublicKey().toAddress(Kiwi.network).toString()
 
         const outputs = Output.createOutputs(p2shAddress.toString(), BASE_KAS_TO_P2SH_ADDRESS);
 
