@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES2021",
-    "module": "CommonJS",                                
+    "module": "ES2020",                                
     "rootDir": "./",  
     "moduleResolution": "bundler",
     "baseUrl": ".", 
