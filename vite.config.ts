@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite'
 import { resolve } from 'path'
 import { viteStaticCopy } from "vite-plugin-static-copy";
+import { esbuildCommonjs } from '@originjs/vite-plugin-commonjs'
 import dts from 'vite-plugin-dts'
 
 export default defineConfig({
@@ -11,15 +12,16 @@ export default defineConfig({
             targets: [
                 {
                     src: "src/wasm/*",
-                    dest: "wasm",
+                    dest: "src/wasm",
                 },
             ],
-            overwrite: true, 
         }),
+        esbuildCommonjs(),
     ],
     resolve: {
         alias: {
             '@': resolve(__dirname, './src'),
+            '~wasm': resolve(__dirname, './src/wasm'),
         },
     },
     build: {
@@ -30,30 +32,26 @@ export default defineConfig({
             entry: resolve(__dirname, './src/index.ts'),
             name: 'sdk-kiwi',
             fileName: 'index',
+            formats: ["es", "cjs"],
         },
         terserOptions: {
             format: {
                 comments: false,
-            },
-            compress: (file: string | string[]) => {
-                if (file.includes("wasm")) {
-                    return false;
-                }
-                return true;
-            },
+            }
         },
         rollupOptions: {
             output: {
-                manualChunks(id) {
-                    if (id.includes("src/wasm/")) {
-                        return "wasm";
-                    }
-                },
+                format: "cjs",
                 inlineDynamicImports: false,
                 globals: {
                     liteMove: 'sdk-kiwi'
                 },
-
+                manualChunks(id) {
+                    if (id.includes("wasm/")) {
+                        return "wasm";
+                    }
+                },
+                
             }
         },
     }

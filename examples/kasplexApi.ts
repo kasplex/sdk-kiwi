@@ -1,4 +1,7 @@
-import { KasplexApi, NetworkType } from '../src/index';
+
+import Kiwi from '../src/index';
+
+const { KasplexApi, NetworkType } = Kiwi
 
 async function testKasplexApi() {
     try {

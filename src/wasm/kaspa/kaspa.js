@@ -1,4 +1,8 @@
+
+let imports = {};
+imports['__wbindgen_placeholder__'] = module.exports;
 let wasm;
+const { TextDecoder, TextEncoder, inspect } = require(`util`);
 
 const heap = new Array(128).fill(undefined);
 
@@ -29,9 +33,9 @@ function takeObject(idx) {
     return ret;
 }
 
-const cachedTextDecoder = (typeof TextDecoder !== 'undefined' ? new TextDecoder('utf-8', { ignoreBOM: true, fatal: true }) : { decode: () => { throw Error('TextDecoder not available') } } );
+let cachedTextDecoder = new TextDecoder('utf-8', { ignoreBOM: true, fatal: true });
 
-if (typeof TextDecoder !== 'undefined') { cachedTextDecoder.decode(); };
+cachedTextDecoder.decode();
 
 let cachedUint8ArrayMemory0 = null;
 
@@ -62,7 +66,7 @@ function getDataViewMemory0() {
 
 let WASM_VECTOR_LEN = 0;
 
-const cachedTextEncoder = (typeof TextEncoder !== 'undefined' ? new TextEncoder('utf-8') : { encode: () => { throw Error('TextEncoder not available') } } );
+let cachedTextEncoder = new TextEncoder('utf-8');
 
 const encodeString = (typeof cachedTextEncoder.encodeInto === 'function'
     ? function (arg, view) {
@@ -244,10 +248,14 @@ function __wbg_adapter_66(arg0, arg1, arg2) {
     wasm.__wbindgen_export_5(arg0, arg1, addHeapObject(arg2));
 }
 
-function __wbg_adapter_69(arg0, arg1, arg2) {
+function __wbg_adapter_73(arg0, arg1) {
+    wasm.__wbindgen_export_6(arg0, arg1);
+}
+
+function __wbg_adapter_76(arg0, arg1, arg2) {
     try {
         const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-        wasm.__wbindgen_export_6(retptr, arg0, arg1, addHeapObject(arg2));
+        wasm.__wbindgen_export_7(retptr, arg0, arg1, addHeapObject(arg2));
         var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
         var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
         if (r1) {
@@ -256,10 +264,6 @@ function __wbg_adapter_69(arg0, arg1, arg2) {
     } finally {
         wasm.__wbindgen_add_to_stack_pointer(16);
     }
-}
-
-function __wbg_adapter_76(arg0, arg1) {
-    wasm.__wbindgen_export_7(arg0, arg1);
 }
 
 function __wbg_adapter_79(arg0, arg1, arg2) {
@@ -331,7 +335,7 @@ function addBorrowedObject(obj) {
 * @param {HexString | Uint8Array} script
 * @returns {boolean}
 */
-export function isScriptPayToScriptHash(script) {
+module.exports.isScriptPayToScriptHash = function(script) {
     try {
         const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
         wasm.isScriptPayToScriptHash(retptr, addHeapObject(script));
@@ -345,7 +349,7 @@ export function isScriptPayToScriptHash(script) {
     } finally {
         wasm.__wbindgen_add_to_stack_pointer(16);
     }
-}
+};
 
 /**
 * Returns returns true if the script passed is an ECDSA pay-to-pubkey.
@@ -354,7 +358,7 @@ export function isScriptPayToScriptHash(script) {
 * @param {HexString | Uint8Array} script
 * @returns {boolean}
 */
-export function isScriptPayToPubkeyECDSA(script) {
+module.exports.isScriptPayToPubkeyECDSA = function(script) {
     try {
         const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
         wasm.isScriptPayToPubkeyECDSA(retptr, addHeapObject(script));
@@ -368,7 +372,7 @@ export function isScriptPayToPubkeyECDSA(script) {
     } finally {
         wasm.__wbindgen_add_to_stack_pointer(16);
     }
-}
+};
 
 /**
 * Returns true if the script passed is a pay-to-pubkey.
@@ -377,7 +381,7 @@ export function isScriptPayToPubkeyECDSA(script) {
 * @param {HexString | Uint8Array} script
 * @returns {boolean}
 */
-export function isScriptPayToPubkey(script) {
+module.exports.isScriptPayToPubkey = function(script) {
     try {
         const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
         wasm.isScriptPayToPubkey(retptr, addHeapObject(script));
@@ -391,7 +395,7 @@ export function isScriptPayToPubkey(script) {
     } finally {
         wasm.__wbindgen_add_to_stack_pointer(16);
     }
-}
+};
 
 /**
 * Returns the address encoded in a script public key.
@@ -402,7 +406,7 @@ export function isScriptPayToPubkey(script) {
 * @param {NetworkType | NetworkId | string} network
 * @returns {Address | undefined}
 */
-export function addressFromScriptPublicKey(script_public_key, network) {
+module.exports.addressFromScriptPublicKey = function(script_public_key, network) {
     try {
         const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
         wasm.addressFromScriptPublicKey(retptr, addBorrowedObject(script_public_key), addBorrowedObject(network));
@@ -418,7 +422,7 @@ export function addressFromScriptPublicKey(script_public_key, network) {
         heap[stack_pointer++] = undefined;
         heap[stack_pointer++] = undefined;
     }
-}
+};
 
 /**
 * Generates a signature script that fits a pay-to-script-hash script.
@@ -429,7 +433,7 @@ export function addressFromScriptPublicKey(script_public_key, network) {
 * @param {HexString | Uint8Array} signature
 * @returns {HexString}
 */
-export function payToScriptHashSignatureScript(redeem_script, signature) {
+module.exports.payToScriptHashSignatureScript = function(redeem_script, signature) {
     try {
         const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
         wasm.payToScriptHashSignatureScript(retptr, addHeapObject(redeem_script), addHeapObject(signature));
@@ -443,7 +447,7 @@ export function payToScriptHashSignatureScript(redeem_script, signature) {
     } finally {
         wasm.__wbindgen_add_to_stack_pointer(16);
     }
-}
+};
 
 /**
 * Takes a script and returns an equivalent pay-to-script-hash script.
@@ -452,7 +456,7 @@ export function payToScriptHashSignatureScript(redeem_script, signature) {
 * @param {HexString | Uint8Array} redeem_script
 * @returns {ScriptPublicKey}
 */
-export function payToScriptHashScript(redeem_script) {
+module.exports.payToScriptHashScript = function(redeem_script) {
     try {
         const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
         wasm.payToScriptHashScript(retptr, addHeapObject(redeem_script));
@@ -466,7 +470,7 @@ export function payToScriptHashScript(redeem_script) {
     } finally {
         wasm.__wbindgen_add_to_stack_pointer(16);
     }
-}
+};
 
 /**
 * Creates a new script to pay a transaction output to the specified address.
@@ -474,7 +478,7 @@ export function payToScriptHashScript(redeem_script) {
 * @param {Address | string} address
 * @returns {ScriptPublicKey}
 */
-export function payToAddressScript(address) {
+module.exports.payToAddressScript = function(address) {
     try {
         const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
         wasm.payToAddressScript(retptr, addBorrowedObject(address));
@@ -489,7 +493,7 @@ export function payToAddressScript(address) {
         wasm.__wbindgen_add_to_stack_pointer(16);
         heap[stack_pointer++] = undefined;
     }
-}
+};
 
 /**
 * Calculates target from difficulty, based on set_difficulty function on
@@ -498,7 +502,7 @@ export function payToAddressScript(address) {
 * @param {number} difficulty
 * @returns {bigint}
 */
-export function calculateTarget(difficulty) {
+module.exports.calculateTarget = function(difficulty) {
     try {
         const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
         wasm.calculateTarget(retptr, difficulty);
@@ -512,7 +516,7 @@ export function calculateTarget(difficulty) {
     } finally {
         wasm.__wbindgen_add_to_stack_pointer(16);
     }
-}
+};
 
 /**
 * Helper function that creates an estimate using the transaction {@link Generator}
@@ -522,10 +526,10 @@ export function calculateTarget(difficulty) {
 * @param {IGeneratorSettingsObject} settings
 * @returns {Promise<GeneratorSummary>}
 */
-export function estimateTransactions(settings) {
+module.exports.estimateTransactions = function(settings) {
     const ret = wasm.estimateTransactions(addHeapObject(settings));
     return takeObject(ret);
-}
+};
 
 /**
 * Helper function that creates a set of transactions using the transaction {@link Generator}.
@@ -534,10 +538,10 @@ export function estimateTransactions(settings) {
 * @param {IGeneratorSettingsObject} settings
 * @returns {Promise<ICreateTransactions>}
 */
-export function createTransactions(settings) {
+module.exports.createTransactions = function(settings) {
     const ret = wasm.createTransactions(addHeapObject(settings));
     return takeObject(ret);
-}
+};
 
 /**
 * Create a basic transaction without any mass limit checks.
@@ -549,7 +553,7 @@ export function createTransactions(settings) {
 * @param {number | undefined} [sig_op_count]
 * @returns {Transaction}
 */
-export function createTransaction(utxo_entry_source, outputs, priority_fee, payload, sig_op_count) {
+module.exports.createTransaction = function(utxo_entry_source, outputs, priority_fee, payload, sig_op_count) {
     try {
         const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
         wasm.createTransaction(retptr, addHeapObject(utxo_entry_source), addHeapObject(outputs), addHeapObject(priority_fee), isLikeNone(payload) ? 0 : addHeapObject(payload), isLikeNone(sig_op_count) ? 0xFFFFFF : sig_op_count);
@@ -563,7 +567,188 @@ export function createTransaction(utxo_entry_source, outputs, priority_fee, payl
     } finally {
         wasm.__wbindgen_add_to_stack_pointer(16);
     }
-}
+};
+
+/**
+* `calculateTransactionFee()` returns minimum fees needed for the transaction to be
+* accepted by the network. If the transaction is invalid or the mass can not be calculated,
+* the function throws an error. If the mass exceeds the maximum standard transaction mass,
+* the function returns `undefined`.
+*
+* @category Wallet SDK
+* @see {@link maximumStandardTransactionMass}
+* @see {@link calculateTransactionMass}
+* @see {@link updateTransactionMass}
+* @param {NetworkId | string} network_id
+* @param {ITransaction | Transaction} tx
+* @param {number | undefined} [minimum_signatures]
+* @returns {bigint | undefined}
+*/
+module.exports.calculateTransactionFee = function(network_id, tx, minimum_signatures) {
+    try {
+        const retptr = wasm.__wbindgen_add_to_stack_pointer(-32);
+        wasm.calculateTransactionFee(retptr, addHeapObject(network_id), addBorrowedObject(tx), isLikeNone(minimum_signatures) ? 0xFFFFFF : minimum_signatures);
+        var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
+        var r2 = getDataViewMemory0().getBigInt64(retptr + 8 * 1, true);
+        var r4 = getDataViewMemory0().getInt32(retptr + 4 * 4, true);
+        var r5 = getDataViewMemory0().getInt32(retptr + 4 * 5, true);
+        if (r5) {
+            throw takeObject(r4);
+        }
+        return r0 === 0 ? undefined : BigInt.asUintN(64, r2);
+    } finally {
+        wasm.__wbindgen_add_to_stack_pointer(32);
+        heap[stack_pointer++] = undefined;
+    }
+};
+
+/**
+* `updateTransactionMass()` updates the mass property of the passed transaction.
+* If the transaction is invalid, the function throws an error.
+*
+* The function returns `true` if the mass is within the maximum standard transaction mass and
+* the transaction mass is updated. Otherwise, the function returns `false`.
+*
+* This is similar to `calculateTransactionMass()` but modifies the supplied
+* `Transaction` object.
+*
+* @category Wallet SDK
+* @see {@link maximumStandardTransactionMass}
+* @see {@link calculateTransactionMass}
+* @see {@link calculateTransactionFee}
+* @param {NetworkId | string} network_id
+* @param {Transaction} tx
+* @param {number | undefined} [minimum_signatures]
+* @returns {boolean}
+*/
+module.exports.updateTransactionMass = function(network_id, tx, minimum_signatures) {
+    try {
+        const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+        _assertClass(tx, Transaction);
+        wasm.updateTransactionMass(retptr, addHeapObject(network_id), tx.__wbg_ptr, isLikeNone(minimum_signatures) ? 0xFFFFFF : minimum_signatures);
+        var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
+        var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
+        var r2 = getDataViewMemory0().getInt32(retptr + 4 * 2, true);
+        if (r2) {
+            throw takeObject(r1);
+        }
+        return r0 !== 0;
+    } finally {
+        wasm.__wbindgen_add_to_stack_pointer(16);
+    }
+};
+
+/**
+* `calculateTransactionMass()` returns the mass of the passed transaction.
+* If the transaction is invalid, or the mass can not be calculated
+* the function throws an error.
+*
+* The mass value must not exceed the maximum standard transaction mass
+* that can be obtained using `maximumStandardTransactionMass()`.
+*
+* @category Wallet SDK
+* @see {@link maximumStandardTransactionMass}
+* @param {NetworkId | string} network_id
+* @param {ITransaction | Transaction} tx
+* @param {number | undefined} [minimum_signatures]
+* @returns {bigint}
+*/
+module.exports.calculateTransactionMass = function(network_id, tx, minimum_signatures) {
+    try {
+        const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+        wasm.calculateTransactionMass(retptr, addHeapObject(network_id), addBorrowedObject(tx), isLikeNone(minimum_signatures) ? 0xFFFFFF : minimum_signatures);
+        var r0 = getDataViewMemory0().getBigInt64(retptr + 8 * 0, true);
+        var r2 = getDataViewMemory0().getInt32(retptr + 4 * 2, true);
+        var r3 = getDataViewMemory0().getInt32(retptr + 4 * 3, true);
+        if (r3) {
+            throw takeObject(r2);
+        }
+        return BigInt.asUintN(64, r0);
+    } finally {
+        wasm.__wbindgen_add_to_stack_pointer(16);
+        heap[stack_pointer++] = undefined;
+    }
+};
+
+/**
+* `maximumStandardTransactionMass()` returns the maximum transaction
+* size allowed by the network.
+*
+* @category Wallet SDK
+* @see {@link calculateTransactionMass}
+* @see {@link updateTransactionMass}
+* @see {@link calculateTransactionFee}
+* @returns {bigint}
+*/
+module.exports.maximumStandardTransactionMass = function() {
+    const ret = wasm.maximumStandardTransactionMass();
+    return BigInt.asUintN(64, ret);
+};
+
+/**
+* Set a custom storage folder for the wallet SDK
+* subsystem.  Encrypted wallet files and transaction
+* data will be stored in this folder. If not set
+* the storage folder will default to `~/.kaspa`
+* (note that the folder is hidden).
+*
+* This must be called before using any other wallet
+* SDK functions.
+*
+* NOTE: This function will create a folder if it
+* doesn't exist. This function will have no effect
+* if invoked in the browser environment.
+*
+* @param {String} folder - the path to the storage folder
+*
+* @category Wallet API
+*/
+module.exports.setDefaultStorageFolder = function(folder) {
+    try {
+        const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+        const ptr0 = passStringToWasm0(folder, wasm.__wbindgen_export_0, wasm.__wbindgen_export_1);
+        const len0 = WASM_VECTOR_LEN;
+        wasm.setDefaultStorageFolder(retptr, ptr0, len0);
+        var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
+        var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
+        if (r1) {
+            throw takeObject(r0);
+        }
+    } finally {
+        wasm.__wbindgen_add_to_stack_pointer(16);
+    }
+};
+
+/**
+* Set the name of the default wallet file name
+* or the `localStorage` key.  If `Wallet::open`
+* is called without a wallet file name, this name
+* will be used.  Please note that this name
+* will be suffixed with `.wallet` suffix.
+*
+* This function should be called before using any
+* other wallet SDK functions.
+*
+* @param {String} folder - the name to the wallet file or key.
+*
+* @category Wallet API
+* @param {string} folder
+*/
+module.exports.setDefaultWalletFile = function(folder) {
+    try {
+        const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+        const ptr0 = passStringToWasm0(folder, wasm.__wbindgen_export_0, wasm.__wbindgen_export_1);
+        const len0 = WASM_VECTOR_LEN;
+        wasm.setDefaultWalletFile(retptr, ptr0, len0);
+        var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
+        var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
+        if (r1) {
+            throw takeObject(r0);
+        }
+    } finally {
+        wasm.__wbindgen_add_to_stack_pointer(16);
+    }
+};
 
 /**
 * @category Wallet SDK
@@ -573,7 +758,7 @@ export function createTransaction(utxo_entry_source, outputs, priority_fee, payl
 * @param {AccountKind | undefined} [account_kind]
 * @returns {Address}
 */
-export function createAddress(key, network, ecdsa, account_kind) {
+module.exports.createAddress = function(key, network, ecdsa, account_kind) {
     try {
         const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
         let ptr0 = 0;
@@ -594,7 +779,7 @@ export function createAddress(key, network, ecdsa, account_kind) {
         heap[stack_pointer++] = undefined;
         heap[stack_pointer++] = undefined;
     }
-}
+};
 
 /**
 * @category Wallet SDK
@@ -605,7 +790,7 @@ export function createAddress(key, network, ecdsa, account_kind) {
 * @param {AccountKind | undefined} [account_kind]
 * @returns {Address}
 */
-export function createMultisigAddress(minimum_signatures, keys, network_type, ecdsa, account_kind) {
+module.exports.createMultisigAddress = function(minimum_signatures, keys, network_type, ecdsa, account_kind) {
     try {
         const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
         let ptr0 = 0;
@@ -625,7 +810,7 @@ export function createMultisigAddress(minimum_signatures, keys, network_type, ec
         wasm.__wbindgen_add_to_stack_pointer(16);
         heap[stack_pointer++] = undefined;
     }
-}
+};
 
 /**
 * @category Wallet SDK
@@ -633,7 +818,7 @@ export function createMultisigAddress(minimum_signatures, keys, network_type, ec
 * @param {PrivateKey} privkey
 * @returns {string}
 */
-export function signScriptHash(script_hash, privkey) {
+module.exports.signScriptHash = function(script_hash, privkey) {
     let deferred2_0;
     let deferred2_1;
     try {
@@ -657,7 +842,7 @@ export function signScriptHash(script_hash, privkey) {
         wasm.__wbindgen_add_to_stack_pointer(16);
         wasm.__wbindgen_export_17(deferred2_0, deferred2_1, 1);
     }
-}
+};
 
 /**
 * `createInputSignature()` is a helper function to sign a transaction input with a specific SigHash type using a private key.
@@ -668,7 +853,7 @@ export function signScriptHash(script_hash, privkey) {
 * @param {SighashType | undefined} [sighash_type]
 * @returns {HexString}
 */
-export function createInputSignature(tx, input_index, private_key, sighash_type) {
+module.exports.createInputSignature = function(tx, input_index, private_key, sighash_type) {
     try {
         const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
         _assertClass(tx, Transaction);
@@ -684,7 +869,7 @@ export function createInputSignature(tx, input_index, private_key, sighash_type)
     } finally {
         wasm.__wbindgen_add_to_stack_pointer(16);
     }
-}
+};
 
 /**
 * `signTransaction()` is a helper function to sign a transaction using a private key array or a signer array.
@@ -694,7 +879,7 @@ export function createInputSignature(tx, input_index, private_key, sighash_type)
 * @param {boolean} verify_sig
 * @returns {Transaction}
 */
-export function signTransaction(tx, signer, verify_sig) {
+module.exports.signTransaction = function(tx, signer, verify_sig) {
     try {
         const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
         _assertClass(tx, Transaction);
@@ -710,7 +895,7 @@ export function signTransaction(tx, signer, verify_sig) {
         wasm.__wbindgen_add_to_stack_pointer(16);
         heap[stack_pointer++] = undefined;
     }
-}
+};
 
 /**
 *
@@ -723,7 +908,7 @@ export function signTransaction(tx, signer, verify_sig) {
 * @param {NetworkType | NetworkId | string} network
 * @returns {string}
 */
-export function sompiToKaspaStringWithSuffix(sompi, network) {
+module.exports.sompiToKaspaStringWithSuffix = function(sompi, network) {
     let deferred2_0;
     let deferred2_1;
     try {
@@ -747,7 +932,7 @@ export function sompiToKaspaStringWithSuffix(sompi, network) {
         heap[stack_pointer++] = undefined;
         wasm.__wbindgen_export_17(deferred2_0, deferred2_1, 1);
     }
-}
+};
 
 /**
 *
@@ -757,7 +942,7 @@ export function sompiToKaspaStringWithSuffix(sompi, network) {
 * @param {bigint | number | HexString} sompi
 * @returns {string}
 */
-export function sompiToKaspaString(sompi) {
+module.exports.sompiToKaspaString = function(sompi) {
     let deferred2_0;
     let deferred2_1;
     try {
@@ -780,7 +965,7 @@ export function sompiToKaspaString(sompi) {
         wasm.__wbindgen_add_to_stack_pointer(16);
         wasm.__wbindgen_export_17(deferred2_0, deferred2_1, 1);
     }
-}
+};
 
 /**
 * Convert a Kaspa string to Sompi represented by bigint.
@@ -790,83 +975,18 @@ export function sompiToKaspaString(sompi) {
 * @param {string} kaspa
 * @returns {bigint | undefined}
 */
-export function kaspaToSompi(kaspa) {
+module.exports.kaspaToSompi = function(kaspa) {
     const ptr0 = passStringToWasm0(kaspa, wasm.__wbindgen_export_0, wasm.__wbindgen_export_1);
     const len0 = WASM_VECTOR_LEN;
     const ret = wasm.kaspaToSompi(ptr0, len0);
     return takeObject(ret);
-}
-
-/**
-* Set a custom storage folder for the wallet SDK
-* subsystem.  Encrypted wallet files and transaction
-* data will be stored in this folder. If not set
-* the storage folder will default to `~/.kaspa`
-* (note that the folder is hidden).
-*
-* This must be called before using any other wallet
-* SDK functions.
-*
-* NOTE: This function will create a folder if it
-* doesn't exist. This function will have no effect
-* if invoked in the browser environment.
-*
-* @param {String} folder - the path to the storage folder
-*
-* @category Wallet API
-*/
-export function setDefaultStorageFolder(folder) {
-    try {
-        const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-        const ptr0 = passStringToWasm0(folder, wasm.__wbindgen_export_0, wasm.__wbindgen_export_1);
-        const len0 = WASM_VECTOR_LEN;
-        wasm.setDefaultStorageFolder(retptr, ptr0, len0);
-        var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
-        var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
-        if (r1) {
-            throw takeObject(r0);
-        }
-    } finally {
-        wasm.__wbindgen_add_to_stack_pointer(16);
-    }
-}
-
-/**
-* Set the name of the default wallet file name
-* or the `localStorage` key.  If `Wallet::open`
-* is called without a wallet file name, this name
-* will be used.  Please note that this name
-* will be suffixed with `.wallet` suffix.
-*
-* This function should be called before using any
-* other wallet SDK functions.
-*
-* @param {String} folder - the name to the wallet file or key.
-*
-* @category Wallet API
-* @param {string} folder
-*/
-export function setDefaultWalletFile(folder) {
-    try {
-        const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-        const ptr0 = passStringToWasm0(folder, wasm.__wbindgen_export_0, wasm.__wbindgen_export_1);
-        const len0 = WASM_VECTOR_LEN;
-        wasm.setDefaultWalletFile(retptr, ptr0, len0);
-        var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
-        var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
-        if (r1) {
-            throw takeObject(r0);
-        }
-    } finally {
-        wasm.__wbindgen_add_to_stack_pointer(16);
-    }
-}
+};
 
 /**
 * Verifies with a public key the signature of the given message
 * @category Message Signing
 */
-export function verifyMessage(value) {
+module.exports.verifyMessage = function(value) {
     try {
         const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
         wasm.verifyMessage(retptr, addHeapObject(value));
@@ -880,7 +1000,7 @@ export function verifyMessage(value) {
     } finally {
         wasm.__wbindgen_add_to_stack_pointer(16);
     }
-}
+};
 
 /**
 * Signs a message with the given private key
@@ -888,7 +1008,7 @@ export function verifyMessage(value) {
 * @param {ISignMessage} value
 * @returns {HexString}
 */
-export function signMessage(value) {
+module.exports.signMessage = function(value) {
     try {
         const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
         wasm.signMessage(retptr, addHeapObject(value));
@@ -902,158 +1022,7 @@ export function signMessage(value) {
     } finally {
         wasm.__wbindgen_add_to_stack_pointer(16);
     }
-}
-
-/**
-* `calculateStorageMass()` is a helper function to compute the storage mass of inputs and outputs.
-* This function can be use to calculate the storage mass of transaction inputs and outputs.
-* Note that the storage mass is only a component of the total transaction mass. You are not
-* meant to use this function by itself and should use `calculateTransactionMass()` instead.
-* This function purely exists for diagnostic purposes and to help with complex algorithms that
-* may require a manual UTXO selection for identifying UTXOs and outputs needed for low storage mass.
-*
-* @category Wallet SDK
-* @see {@link maximumStandardTransactionMass}
-* @see {@link calculateTransactionMass}
-* @param {NetworkId | string} network_id
-* @param {Array<number>} input_values
-* @param {Array<number>} output_values
-* @returns {bigint | undefined}
-*/
-export function calculateStorageMass(network_id, input_values, output_values) {
-    try {
-        const retptr = wasm.__wbindgen_add_to_stack_pointer(-32);
-        wasm.calculateStorageMass(retptr, addHeapObject(network_id), addBorrowedObject(input_values), addBorrowedObject(output_values));
-        var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
-        var r2 = getDataViewMemory0().getBigInt64(retptr + 8 * 1, true);
-        var r4 = getDataViewMemory0().getInt32(retptr + 4 * 4, true);
-        var r5 = getDataViewMemory0().getInt32(retptr + 4 * 5, true);
-        if (r5) {
-            throw takeObject(r4);
-        }
-        return r0 === 0 ? undefined : BigInt.asUintN(64, r2);
-    } finally {
-        wasm.__wbindgen_add_to_stack_pointer(32);
-        heap[stack_pointer++] = undefined;
-        heap[stack_pointer++] = undefined;
-    }
-}
-
-/**
-* `calculateTransactionFee()` returns minimum fees needed for the transaction to be
-* accepted by the network. If the transaction is invalid or the mass can not be calculated,
-* the function throws an error. If the mass exceeds the maximum standard transaction mass,
-* the function returns `undefined`.
-*
-* @category Wallet SDK
-* @see {@link maximumStandardTransactionMass}
-* @see {@link calculateTransactionMass}
-* @see {@link updateTransactionMass}
-* @param {NetworkId | string} network_id
-* @param {ITransaction | Transaction} tx
-* @param {number | undefined} [minimum_signatures]
-* @returns {bigint | undefined}
-*/
-export function calculateTransactionFee(network_id, tx, minimum_signatures) {
-    try {
-        const retptr = wasm.__wbindgen_add_to_stack_pointer(-32);
-        wasm.calculateTransactionFee(retptr, addHeapObject(network_id), addBorrowedObject(tx), isLikeNone(minimum_signatures) ? 0xFFFFFF : minimum_signatures);
-        var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
-        var r2 = getDataViewMemory0().getBigInt64(retptr + 8 * 1, true);
-        var r4 = getDataViewMemory0().getInt32(retptr + 4 * 4, true);
-        var r5 = getDataViewMemory0().getInt32(retptr + 4 * 5, true);
-        if (r5) {
-            throw takeObject(r4);
-        }
-        return r0 === 0 ? undefined : BigInt.asUintN(64, r2);
-    } finally {
-        wasm.__wbindgen_add_to_stack_pointer(32);
-        heap[stack_pointer++] = undefined;
-    }
-}
-
-/**
-* `updateTransactionMass()` updates the mass property of the passed transaction.
-* If the transaction is invalid, the function throws an error.
-*
-* The function returns `true` if the mass is within the maximum standard transaction mass and
-* the transaction mass is updated. Otherwise, the function returns `false`.
-*
-* This is similar to `calculateTransactionMass()` but modifies the supplied
-* `Transaction` object.
-*
-* @category Wallet SDK
-* @see {@link maximumStandardTransactionMass}
-* @see {@link calculateTransactionMass}
-* @see {@link calculateTransactionFee}
-* @param {NetworkId | string} network_id
-* @param {Transaction} tx
-* @param {number | undefined} [minimum_signatures]
-* @returns {boolean}
-*/
-export function updateTransactionMass(network_id, tx, minimum_signatures) {
-    try {
-        const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-        _assertClass(tx, Transaction);
-        wasm.updateTransactionMass(retptr, addHeapObject(network_id), tx.__wbg_ptr, isLikeNone(minimum_signatures) ? 0xFFFFFF : minimum_signatures);
-        var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
-        var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
-        var r2 = getDataViewMemory0().getInt32(retptr + 4 * 2, true);
-        if (r2) {
-            throw takeObject(r1);
-        }
-        return r0 !== 0;
-    } finally {
-        wasm.__wbindgen_add_to_stack_pointer(16);
-    }
-}
-
-/**
-* `calculateTransactionMass()` returns the mass of the passed transaction.
-* If the transaction is invalid, or the mass can not be calculated
-* the function throws an error.
-*
-* The mass value must not exceed the maximum standard transaction mass
-* that can be obtained using `maximumStandardTransactionMass()`.
-*
-* @category Wallet SDK
-* @see {@link maximumStandardTransactionMass}
-* @param {NetworkId | string} network_id
-* @param {ITransaction | Transaction} tx
-* @param {number | undefined} [minimum_signatures]
-* @returns {bigint}
-*/
-export function calculateTransactionMass(network_id, tx, minimum_signatures) {
-    try {
-        const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-        wasm.calculateTransactionMass(retptr, addHeapObject(network_id), addBorrowedObject(tx), isLikeNone(minimum_signatures) ? 0xFFFFFF : minimum_signatures);
-        var r0 = getDataViewMemory0().getBigInt64(retptr + 8 * 0, true);
-        var r2 = getDataViewMemory0().getInt32(retptr + 4 * 2, true);
-        var r3 = getDataViewMemory0().getInt32(retptr + 4 * 3, true);
-        if (r3) {
-            throw takeObject(r2);
-        }
-        return BigInt.asUintN(64, r0);
-    } finally {
-        wasm.__wbindgen_add_to_stack_pointer(16);
-        heap[stack_pointer++] = undefined;
-    }
-}
-
-/**
-* `maximumStandardTransactionMass()` returns the maximum transaction
-* size allowed by the network.
-*
-* @category Wallet SDK
-* @see {@link calculateTransactionMass}
-* @see {@link updateTransactionMass}
-* @see {@link calculateTransactionFee}
-* @returns {bigint}
-*/
-export function maximumStandardTransactionMass() {
-    const ret = wasm.maximumStandardTransactionMass();
-    return BigInt.asUintN(64, ret);
-}
+};
 
 /**
 * WASM32 binding for `argon2sha256iv` hash function.
@@ -1063,7 +1032,7 @@ export function maximumStandardTransactionMass() {
 * @param {number} byteLength
 * @returns {HexString}
 */
-export function argon2sha256ivFromText(text, byteLength) {
+module.exports.argon2sha256ivFromText = function(text, byteLength) {
     try {
         const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
         const ptr0 = passStringToWasm0(text, wasm.__wbindgen_export_0, wasm.__wbindgen_export_1);
@@ -1079,7 +1048,7 @@ export function argon2sha256ivFromText(text, byteLength) {
     } finally {
         wasm.__wbindgen_add_to_stack_pointer(16);
     }
-}
+};
 
 /**
 * WASM32 binding for `argon2sha256iv` hash function.
@@ -1089,7 +1058,7 @@ export function argon2sha256ivFromText(text, byteLength) {
 * @param {number} hashLength
 * @returns {HexString}
 */
-export function argon2sha256ivFromBinary(data, hashLength) {
+module.exports.argon2sha256ivFromBinary = function(data, hashLength) {
     try {
         const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
         wasm.argon2sha256ivFromBinary(retptr, addHeapObject(data), hashLength);
@@ -1103,7 +1072,7 @@ export function argon2sha256ivFromBinary(data, hashLength) {
     } finally {
         wasm.__wbindgen_add_to_stack_pointer(16);
     }
-}
+};
 
 /**
 * WASM32 binding for `SHA256d` hash function.
@@ -1112,7 +1081,7 @@ export function argon2sha256ivFromBinary(data, hashLength) {
 * @param {string} text
 * @returns {HexString}
 */
-export function sha256dFromText(text) {
+module.exports.sha256dFromText = function(text) {
     try {
         const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
         const ptr0 = passStringToWasm0(text, wasm.__wbindgen_export_0, wasm.__wbindgen_export_1);
@@ -1128,7 +1097,7 @@ export function sha256dFromText(text) {
     } finally {
         wasm.__wbindgen_add_to_stack_pointer(16);
     }
-}
+};
 
 /**
 * WASM32 binding for `SHA256d` hash function.
@@ -1137,7 +1106,7 @@ export function sha256dFromText(text) {
 * @param {HexString | Uint8Array} data
 * @returns {HexString}
 */
-export function sha256dFromBinary(data) {
+module.exports.sha256dFromBinary = function(data) {
     try {
         const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
         wasm.sha256dFromBinary(retptr, addHeapObject(data));
@@ -1151,7 +1120,7 @@ export function sha256dFromBinary(data) {
     } finally {
         wasm.__wbindgen_add_to_stack_pointer(16);
     }
-}
+};
 
 /**
 * WASM32 binding for `SHA256` hash function.
@@ -1160,7 +1129,7 @@ export function sha256dFromBinary(data) {
 * @param {string} text
 * @returns {HexString}
 */
-export function sha256FromText(text) {
+module.exports.sha256FromText = function(text) {
     try {
         const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
         const ptr0 = passStringToWasm0(text, wasm.__wbindgen_export_0, wasm.__wbindgen_export_1);
@@ -1176,7 +1145,7 @@ export function sha256FromText(text) {
     } finally {
         wasm.__wbindgen_add_to_stack_pointer(16);
     }
-}
+};
 
 /**
 * WASM32 binding for `SHA256` hash function.
@@ -1185,7 +1154,7 @@ export function sha256FromText(text) {
 * @param {HexString | Uint8Array} data
 * @returns {HexString}
 */
-export function sha256FromBinary(data) {
+module.exports.sha256FromBinary = function(data) {
     try {
         const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
         wasm.sha256FromBinary(retptr, addHeapObject(data));
@@ -1199,7 +1168,7 @@ export function sha256FromBinary(data) {
     } finally {
         wasm.__wbindgen_add_to_stack_pointer(16);
     }
-}
+};
 
 /**
 * WASM32 binding for `decryptXChaCha20Poly1305` function.
@@ -1208,7 +1177,7 @@ export function sha256FromBinary(data) {
 * @param {string} password
 * @returns {string}
 */
-export function decryptXChaCha20Poly1305(base64string, password) {
+module.exports.decryptXChaCha20Poly1305 = function(base64string, password) {
     let deferred4_0;
     let deferred4_1;
     try {
@@ -1235,7 +1204,7 @@ export function decryptXChaCha20Poly1305(base64string, password) {
         wasm.__wbindgen_add_to_stack_pointer(16);
         wasm.__wbindgen_export_17(deferred4_0, deferred4_1, 1);
     }
-}
+};
 
 /**
 * WASM32 binding for `encryptXChaCha20Poly1305` function.
@@ -1245,7 +1214,7 @@ export function decryptXChaCha20Poly1305(base64string, password) {
 * @param {string} password
 * @returns {string}
 */
-export function encryptXChaCha20Poly1305(plainText, password) {
+module.exports.encryptXChaCha20Poly1305 = function(plainText, password) {
     let deferred4_0;
     let deferred4_1;
     try {
@@ -1272,14 +1241,14 @@ export function encryptXChaCha20Poly1305(plainText, password) {
         wasm.__wbindgen_add_to_stack_pointer(16);
         wasm.__wbindgen_export_17(deferred4_0, deferred4_1, 1);
     }
-}
+};
 
 /**
 * Returns the version of the Rusty Kaspa framework.
 * @category General
 * @returns {string}
 */
-export function version() {
+module.exports.version = function() {
     let deferred1_0;
     let deferred1_1;
     try {
@@ -1294,7 +1263,7 @@ export function version() {
         wasm.__wbindgen_add_to_stack_pointer(16);
         wasm.__wbindgen_export_17(deferred1_0, deferred1_1, 1);
     }
-}
+};
 
 function passArrayJsValueToWasm0(array, malloc) {
     const ptr = malloc(array.length * 4, 4) >>> 0;
@@ -1321,9 +1290,9 @@ function getArrayJsValueFromWasm0(ptr, len) {
 *@category General
 * @param {"off" | "error" | "warn" | "info" | "debug" | "trace"} level
 */
-export function setLogLevel(level) {
+module.exports.setLogLevel = function(level) {
     wasm.setLogLevel(addHeapObject(level));
-}
+};
 
 /**
 * Initialize Rust panic handler in console mode.
@@ -1332,9 +1301,9 @@ export function setLogLevel(level) {
 * This function should be called right after loading WASM libraries.
 * @category General
 */
-export function initConsolePanicHook() {
+module.exports.initConsolePanicHook = function() {
     wasm.initConsolePanicHook();
-}
+};
 
 /**
 * Initialize Rust panic handler in browser mode.
@@ -1347,9 +1316,9 @@ export function initConsolePanicHook() {
 * @see {@link presentPanicHookLogs}
 * @category General
 */
-export function initBrowserPanicHook() {
+module.exports.initBrowserPanicHook = function() {
     wasm.initBrowserPanicHook();
-}
+};
 
 /**
 * Present panic logs to the user in the browser.
@@ -1360,9 +1329,9 @@ export function initBrowserPanicHook() {
 * @see {@link initBrowserPanicHook}
 * @category General
 */
-export function presentPanicHookLogs() {
+module.exports.presentPanicHookLogs = function() {
     wasm.presentPanicHookLogs();
-}
+};
 
 /**
 *r" Deferred promise - an object that has `resolve()` and `reject()`
@@ -1373,10 +1342,10 @@ export function presentPanicHookLogs() {
 *r" @category General
 * @returns {Promise<any>}
 */
-export function defer() {
+module.exports.defer = function() {
     const ret = wasm.defer();
     return takeObject(ret);
-}
+};
 
 /**
 * Configuration for the WASM32 bindings runtime interface.
@@ -1384,7 +1353,7 @@ export function defer() {
 * @category General
 * @param {IWASM32BindingsConfig} config
 */
-export function initWASM32Bindings(config) {
+module.exports.initWASM32Bindings = function(config) {
     try {
         const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
         wasm.initWASM32Bindings(retptr, addHeapObject(config));
@@ -1396,7 +1365,7 @@ export function initWASM32Bindings(config) {
     } finally {
         wasm.__wbindgen_add_to_stack_pointer(16);
     }
-}
+};
 
 function getArrayU8FromWasm0(ptr, len) {
     ptr = ptr >>> 0;
@@ -1404,25 +1373,76 @@ function getArrayU8FromWasm0(ptr, len) {
 }
 /**
 *
-* Languages supported by BIP39.
-*
-* Presently only English is specified by the BIP39 standard.
-*
-* @see {@link Mnemonic}
-*
+* @see {@link IFees}, {@link IGeneratorSettingsObject}, {@link Generator}, {@link estimateTransactions}, {@link createTransactions}
 * @category Wallet SDK
 */
-export const Language = Object.freeze({
+module.exports.FeeSource = Object.freeze({ SenderPays:0,"0":"SenderPays",ReceiverPays:1,"1":"ReceiverPays", });
 /**
-* English is presently the only supported language
+* wRPC protocol encoding: `Borsh` or `JSON`
+* @category Transport
 */
-English:0,"0":"English", });
+module.exports.Encoding = Object.freeze({ Borsh:0,"0":"Borsh",SerdeJson:1,"1":"SerdeJson", });
+/**
+* Specifies the type of an account address to create.
+* The address can bea receive address or a change address.
+*
+* @category Wallet API
+*/
+module.exports.NewAddressKind = Object.freeze({ Receive:0,"0":"Receive",Change:1,"1":"Change", });
+/**
+*
+*  Kaspa `Address` version (`PubKey`, `PubKey ECDSA`, `ScriptHash`)
+*
+* @category Address
+*/
+module.exports.AddressVersion = Object.freeze({
+/**
+* PubKey addresses always have the version byte set to 0
+*/
+PubKey:0,"0":"PubKey",
+/**
+* PubKey ECDSA addresses always have the version byte set to 1
+*/
+PubKeyECDSA:1,"1":"PubKeyECDSA",
+/**
+* ScriptHash addresses always have the version byte set to 8
+*/
+ScriptHash:8,"8":"ScriptHash", });
+/**
+* Kaspa Sighash types allowed by consensus
+* @category Consensus
+*/
+module.exports.SighashType = Object.freeze({ All:0,"0":"All",None:1,"1":"None",Single:2,"2":"Single",AllAnyOneCanPay:3,"3":"AllAnyOneCanPay",NoneAnyOneCanPay:4,"4":"NoneAnyOneCanPay",SingleAnyOneCanPay:5,"5":"SingleAnyOneCanPay", });
+/**
+* @category Consensus
+*/
+module.exports.NetworkType = Object.freeze({ Mainnet:0,"0":"Mainnet",Testnet:1,"1":"Testnet",Devnet:2,"2":"Devnet",Simnet:3,"3":"Simnet", });
+/**
+* `ConnectionStrategy` specifies how the WebSocket `async fn connect()`
+* function should behave during the first-time connectivity phase.
+* @category WebSocket
+*/
+module.exports.ConnectStrategy = Object.freeze({
+/**
+* Continuously attempt to connect to the server. This behavior will
+* block `connect()` function until the connection is established.
+*/
+Retry:0,"0":"Retry",
+/**
+* Causes `connect()` to return immediately if the first-time connection
+* has failed.
+*/
+Fallback:1,"1":"Fallback", });
+/**
+* @category Wallet API
+*/
+module.exports.AccountsDiscoveryKind = Object.freeze({ Bip44:0,"0":"Bip44", });
 /**
 * Kaspa Transaction Script Opcodes
 * @see {@link ScriptBuilder}
 * @category Consensus
 */
-export const Opcodes = Object.freeze({ OpFalse:0,"0":"OpFalse",OpData1:1,"1":"OpData1",OpData2:2,"2":"OpData2",OpData3:3,"3":"OpData3",OpData4:4,"4":"OpData4",OpData5:5,"5":"OpData5",OpData6:6,"6":"OpData6",OpData7:7,"7":"OpData7",OpData8:8,"8":"OpData8",OpData9:9,"9":"OpData9",OpData10:10,"10":"OpData10",OpData11:11,"11":"OpData11",OpData12:12,"12":"OpData12",OpData13:13,"13":"OpData13",OpData14:14,"14":"OpData14",OpData15:15,"15":"OpData15",OpData16:16,"16":"OpData16",OpData17:17,"17":"OpData17",OpData18:18,"18":"OpData18",OpData19:19,"19":"OpData19",OpData20:20,"20":"OpData20",OpData21:21,"21":"OpData21",OpData22:22,"22":"OpData22",OpData23:23,"23":"OpData23",OpData24:24,"24":"OpData24",OpData25:25,"25":"OpData25",OpData26:26,"26":"OpData26",OpData27:27,"27":"OpData27",OpData28:28,"28":"OpData28",OpData29:29,"29":"OpData29",OpData30:30,"30":"OpData30",OpData31:31,"31":"OpData31",OpData32:32,"32":"OpData32",OpData33:33,"33":"OpData33",OpData34:34,"34":"OpData34",OpData35:35,"35":"OpData35",OpData36:36,"36":"OpData36",OpData37:37,"37":"OpData37",OpData38:38,"38":"OpData38",OpData39:39,"39":"OpData39",OpData40:40,"40":"OpData40",OpData41:41,"41":"OpData41",OpData42:42,"42":"OpData42",OpData43:43,"43":"OpData43",OpData44:44,"44":"OpData44",OpData45:45,"45":"OpData45",OpData46:46,"46":"OpData46",OpData47:47,"47":"OpData47",OpData48:48,"48":"OpData48",OpData49:49,"49":"OpData49",OpData50:50,"50":"OpData50",OpData51:51,"51":"OpData51",OpData52:52,"52":"OpData52",OpData53:53,"53":"OpData53",OpData54:54,"54":"OpData54",OpData55:55,"55":"OpData55",OpData56:56,"56":"OpData56",OpData57:57,"57":"OpData57",OpData58:58,"58":"OpData58",OpData59:59,"59":"OpData59",OpData60:60,"60":"OpData60",OpData61:61,"61":"OpData61",OpData62:62,"62":"OpData62",OpData63:63,"63":"OpData63",OpData64:64,"64":"OpData64",OpData65:65,"65":"OpData65",OpData66:66,"66":"OpData66",OpData67:67,"67":"OpData67",OpData68:68,"68":"OpData68",OpData69:69,"69":"OpData69",OpData70:70,"70":"OpData70",OpData71:71,"71":"OpData71",OpData72:72,"72":"OpData72",OpData73:73,"73":"OpData73",OpData74:74,"74":"OpData74",OpData75:75,"75":"OpData75",OpPushData1:76,"76":"OpPushData1",OpPushData2:77,"77":"OpPushData2",OpPushData4:78,"78":"OpPushData4",Op1Negate:79,"79":"Op1Negate",OpReserved:80,"80":"OpReserved",OpTrue:81,"81":"OpTrue",Op2:82,"82":"Op2",Op3:83,"83":"Op3",Op4:84,"84":"Op4",Op5:85,"85":"Op5",Op6:86,"86":"Op6",Op7:87,"87":"Op7",Op8:88,"88":"Op8",Op9:89,"89":"Op9",Op10:90,"90":"Op10",Op11:91,"91":"Op11",Op12:92,"92":"Op12",Op13:93,"93":"Op13",Op14:94,"94":"Op14",Op15:95,"95":"Op15",Op16:96,"96":"Op16",OpNop:97,"97":"OpNop",OpVer:98,"98":"OpVer",OpIf:99,"99":"OpIf",OpNotIf:100,"100":"OpNotIf",OpVerIf:101,"101":"OpVerIf",OpVerNotIf:102,"102":"OpVerNotIf",OpElse:103,"103":"OpElse",OpEndIf:104,"104":"OpEndIf",OpVerify:105,"105":"OpVerify",OpReturn:106,"106":"OpReturn",OpToAltStack:107,"107":"OpToAltStack",OpFromAltStack:108,"108":"OpFromAltStack",Op2Drop:109,"109":"Op2Drop",Op2Dup:110,"110":"Op2Dup",Op3Dup:111,"111":"Op3Dup",Op2Over:112,"112":"Op2Over",Op2Rot:113,"113":"Op2Rot",Op2Swap:114,"114":"Op2Swap",OpIfDup:115,"115":"OpIfDup",OpDepth:116,"116":"OpDepth",OpDrop:117,"117":"OpDrop",OpDup:118,"118":"OpDup",OpNip:119,"119":"OpNip",OpOver:120,"120":"OpOver",OpPick:121,"121":"OpPick",OpRoll:122,"122":"OpRoll",OpRot:123,"123":"OpRot",OpSwap:124,"124":"OpSwap",OpTuck:125,"125":"OpTuck",
+module.exports.Opcodes = Object.freeze({ OpFalse:0,"0":"OpFalse",OpData1:1,"1":"OpData1",OpData2:2,"2":"OpData2",OpData3:3,"3":"OpData3",OpData4:4,"4":"OpData4",OpData5:5,"5":"OpData5",OpData6:6,"6":"OpData6",OpData7:7,"7":"OpData7",OpData8:8,"8":"OpData8",OpData9:9,"9":"OpData9",OpData10:10,"10":"OpData10",OpData11:11,"11":"OpData11",OpData12:12,"12":"OpData12",OpData13:13,"13":"OpData13",OpData14:14,"14":"OpData14",OpData15:15,"15":"OpData15",OpData16:16,"16":"OpData16",OpData17:17,"17":"OpData17",OpData18:18,"18":"OpData18",OpData19:19,"19":"OpData19",OpData20:20,"20":"OpData20",OpData21:21,"21":"OpData21",OpData22:22,"22":"OpData22",OpData23:23,"23":"OpData23",OpData24:24,"24":"OpData24",OpData25:25,"25":"OpData25",OpData26:26,"26":"OpData26",OpData27:27,"27":"OpData27",OpData28:28,"28":"OpData28",OpData29:29,"29":"OpData29",OpData30:30,"30":"OpData30",OpData31:31,"31":"OpData31",OpData32:32,"32":"OpData32",OpData33:33,"33":"OpData33",OpData34:34,"34":"OpData34",OpData35:35,"35":"OpData35",OpData36:36,"36":"OpData36",OpData37:37,"37":"OpData37",OpData38:38,"38":"OpData38",OpData39:39,"39":"OpData39",OpData40:40,"40":"OpData40",OpData41:41,"41":"OpData41",OpData42:42,"42":"OpData42",OpData43:43,"43":"OpData43",OpData44:44,"44":"OpData44",OpData45:45,"45":"OpData45",OpData46:46,"46":"OpData46",OpData47:47,"47":"OpData47",OpData48:48,"48":"OpData48",OpData49:49,"49":"OpData49",OpData50:50,"50":"OpData50",OpData51:51,"51":"OpData51",OpData52:52,"52":"OpData52",OpData53:53,"53":"OpData53",OpData54:54,"54":"OpData54",OpData55:55,"55":"OpData55",OpData56:56,"56":"OpData56",OpData57:57,"57":"OpData57",OpData58:58,"58":"OpData58",OpData59:59,"59":"OpData59",OpData60:60,"60":"OpData60",OpData61:61,"61":"OpData61",OpData62:62,"62":"OpData62",OpData63:63,"63":"OpData63",OpData64:64,"64":"OpData64",OpData65:65,"65":"OpData65",OpData66:66,"66":"OpData66",OpData67:67,"67":"OpData67",OpData68:68,"68":"OpData68",OpData69:69,"69":"OpData69",OpData70:70,"70":"OpData70",OpData71:71,"71":"OpData71",OpData72:72,"72":"OpData72",OpData73:73,"73":"OpData73",OpData74:74,"74":"OpData74",OpData75:75,"75":"OpData75",OpPushData1:76,"76":"OpPushData1",OpPushData2:77,"77":"OpPushData2",OpPushData4:78,"78":"OpPushData4",Op1Negate:79,"79":"Op1Negate",OpReserved:80,"80":"OpReserved",OpTrue:81,"81":"OpTrue",Op2:82,"82":"Op2",Op3:83,"83":"Op3",Op4:84,"84":"Op4",Op5:85,"85":"Op5",Op6:86,"86":"Op6",Op7:87,"87":"Op7",Op8:88,"88":"Op8",Op9:89,"89":"Op9",Op10:90,"90":"Op10",Op11:91,"91":"Op11",Op12:92,"92":"Op12",Op13:93,"93":"Op13",Op14:94,"94":"Op14",Op15:95,"95":"Op15",Op16:96,"96":"Op16",OpNop:97,"97":"OpNop",OpVer:98,"98":"OpVer",OpIf:99,"99":"OpIf",OpNotIf:100,"100":"OpNotIf",OpVerIf:101,"101":"OpVerIf",OpVerNotIf:102,"102":"OpVerNotIf",OpElse:103,"103":"OpElse",OpEndIf:104,"104":"OpEndIf",OpVerify:105,"105":"OpVerify",OpReturn:106,"106":"OpReturn",OpToAltStack:107,"107":"OpToAltStack",OpFromAltStack:108,"108":"OpFromAltStack",Op2Drop:109,"109":"Op2Drop",Op2Dup:110,"110":"Op2Dup",Op3Dup:111,"111":"Op3Dup",Op2Over:112,"112":"Op2Over",Op2Rot:113,"113":"Op2Rot",Op2Swap:114,"114":"Op2Swap",OpIfDup:115,"115":"OpIfDup",OpDepth:116,"116":"OpDepth",OpDrop:117,"117":"OpDrop",OpDup:118,"118":"OpDup",OpNip:119,"119":"OpNip",OpOver:120,"120":"OpOver",OpPick:121,"121":"OpPick",OpRoll:122,"122":"OpRoll",OpRot:123,"123":"OpRot",OpSwap:124,"124":"OpSwap",OpTuck:125,"125":"OpTuck",
 /**
 * Splice opcodes.
 */
@@ -1449,70 +1469,19 @@ OpSHA256:168,"168":"OpSHA256",OpCheckMultiSigECDSA:169,"169":"OpCheckMultiSigECD
 OpUnknown178:178,"178":"OpUnknown178",OpUnknown179:179,"179":"OpUnknown179",OpUnknown180:180,"180":"OpUnknown180",OpUnknown181:181,"181":"OpUnknown181",OpUnknown182:182,"182":"OpUnknown182",OpUnknown183:183,"183":"OpUnknown183",OpUnknown184:184,"184":"OpUnknown184",OpUnknown185:185,"185":"OpUnknown185",OpUnknown186:186,"186":"OpUnknown186",OpUnknown187:187,"187":"OpUnknown187",OpUnknown188:188,"188":"OpUnknown188",OpUnknown189:189,"189":"OpUnknown189",OpUnknown190:190,"190":"OpUnknown190",OpUnknown191:191,"191":"OpUnknown191",OpUnknown192:192,"192":"OpUnknown192",OpUnknown193:193,"193":"OpUnknown193",OpUnknown194:194,"194":"OpUnknown194",OpUnknown195:195,"195":"OpUnknown195",OpUnknown196:196,"196":"OpUnknown196",OpUnknown197:197,"197":"OpUnknown197",OpUnknown198:198,"198":"OpUnknown198",OpUnknown199:199,"199":"OpUnknown199",OpUnknown200:200,"200":"OpUnknown200",OpUnknown201:201,"201":"OpUnknown201",OpUnknown202:202,"202":"OpUnknown202",OpUnknown203:203,"203":"OpUnknown203",OpUnknown204:204,"204":"OpUnknown204",OpUnknown205:205,"205":"OpUnknown205",OpUnknown206:206,"206":"OpUnknown206",OpUnknown207:207,"207":"OpUnknown207",OpUnknown208:208,"208":"OpUnknown208",OpUnknown209:209,"209":"OpUnknown209",OpUnknown210:210,"210":"OpUnknown210",OpUnknown211:211,"211":"OpUnknown211",OpUnknown212:212,"212":"OpUnknown212",OpUnknown213:213,"213":"OpUnknown213",OpUnknown214:214,"214":"OpUnknown214",OpUnknown215:215,"215":"OpUnknown215",OpUnknown216:216,"216":"OpUnknown216",OpUnknown217:217,"217":"OpUnknown217",OpUnknown218:218,"218":"OpUnknown218",OpUnknown219:219,"219":"OpUnknown219",OpUnknown220:220,"220":"OpUnknown220",OpUnknown221:221,"221":"OpUnknown221",OpUnknown222:222,"222":"OpUnknown222",OpUnknown223:223,"223":"OpUnknown223",OpUnknown224:224,"224":"OpUnknown224",OpUnknown225:225,"225":"OpUnknown225",OpUnknown226:226,"226":"OpUnknown226",OpUnknown227:227,"227":"OpUnknown227",OpUnknown228:228,"228":"OpUnknown228",OpUnknown229:229,"229":"OpUnknown229",OpUnknown230:230,"230":"OpUnknown230",OpUnknown231:231,"231":"OpUnknown231",OpUnknown232:232,"232":"OpUnknown232",OpUnknown233:233,"233":"OpUnknown233",OpUnknown234:234,"234":"OpUnknown234",OpUnknown235:235,"235":"OpUnknown235",OpUnknown236:236,"236":"OpUnknown236",OpUnknown237:237,"237":"OpUnknown237",OpUnknown238:238,"238":"OpUnknown238",OpUnknown239:239,"239":"OpUnknown239",OpUnknown240:240,"240":"OpUnknown240",OpUnknown241:241,"241":"OpUnknown241",OpUnknown242:242,"242":"OpUnknown242",OpUnknown243:243,"243":"OpUnknown243",OpUnknown244:244,"244":"OpUnknown244",OpUnknown245:245,"245":"OpUnknown245",OpUnknown246:246,"246":"OpUnknown246",OpUnknown247:247,"247":"OpUnknown247",OpUnknown248:248,"248":"OpUnknown248",OpUnknown249:249,"249":"OpUnknown249",OpSmallInteger:250,"250":"OpSmallInteger",OpPubKeys:251,"251":"OpPubKeys",OpUnknown252:252,"252":"OpUnknown252",OpPubKeyHash:253,"253":"OpPubKeyHash",OpPubKey:254,"254":"OpPubKey",OpInvalidOpCode:255,"255":"OpInvalidOpCode", });
 /**
 *
-* @see {@link IFees}, {@link IGeneratorSettingsObject}, {@link Generator}, {@link estimateTransactions}, {@link createTransactions}
+* Languages supported by BIP39.
+*
+* Presently only English is specified by the BIP39 standard.
+*
+* @see {@link Mnemonic}
+*
 * @category Wallet SDK
 */
-export const FeeSource = Object.freeze({ SenderPays:0,"0":"SenderPays",ReceiverPays:1,"1":"ReceiverPays", });
+module.exports.Language = Object.freeze({
 /**
-* @category Wallet API
+* English is presently the only supported language
 */
-export const AccountsDiscoveryKind = Object.freeze({ Bip44:0,"0":"Bip44", });
-/**
-* wRPC protocol encoding: `Borsh` or `JSON`
-* @category Transport
-*/
-export const Encoding = Object.freeze({ Borsh:0,"0":"Borsh",SerdeJson:1,"1":"SerdeJson", });
-/**
-* `ConnectionStrategy` specifies how the WebSocket `async fn connect()`
-* function should behave during the first-time connectivity phase.
-* @category WebSocket
-*/
-export const ConnectStrategy = Object.freeze({
-/**
-* Continuously attempt to connect to the server. This behavior will
-* block `connect()` function until the connection is established.
-*/
-Retry:0,"0":"Retry",
-/**
-* Causes `connect()` to return immediately if the first-time connection
-* has failed.
-*/
-Fallback:1,"1":"Fallback", });
-/**
-* @category Consensus
-*/
-export const NetworkType = Object.freeze({ Mainnet:0,"0":"Mainnet",Testnet:1,"1":"Testnet",Devnet:2,"2":"Devnet",Simnet:3,"3":"Simnet", });
-/**
-* Kaspa Sighash types allowed by consensus
-* @category Consensus
-*/
-export const SighashType = Object.freeze({ All:0,"0":"All",None:1,"1":"None",Single:2,"2":"Single",AllAnyOneCanPay:3,"3":"AllAnyOneCanPay",NoneAnyOneCanPay:4,"4":"NoneAnyOneCanPay",SingleAnyOneCanPay:5,"5":"SingleAnyOneCanPay", });
-/**
-*
-*  Kaspa `Address` version (`PubKey`, `PubKey ECDSA`, `ScriptHash`)
-*
-* @category Address
-*/
-export const AddressVersion = Object.freeze({
-/**
-* PubKey addresses always have the version byte set to 0
-*/
-PubKey:0,"0":"PubKey",
-/**
-* PubKey ECDSA addresses always have the version byte set to 1
-*/
-PubKeyECDSA:1,"1":"PubKeyECDSA",
-/**
-* ScriptHash addresses always have the version byte set to 8
-*/
-ScriptHash:8,"8":"ScriptHash", });
-/**
-* Specifies the type of an account address to create.
-* The address can bea receive address or a change address.
-*
-* @category Wallet API
-*/
-export const NewAddressKind = Object.freeze({ Receive:0,"0":"Receive",Change:1,"1":"Change", });
+English:0,"0":"English", });
 
 const AbortableFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
@@ -1531,7 +1500,7 @@ const AbortableFinalization = (typeof FinalizationRegistry === 'undefined')
 *
 * @category General
 */
-export class Abortable {
+class Abortable {
 
     __destroy_into_raw() {
         const ptr = this.__wbg_ptr;
@@ -1585,6 +1554,7 @@ export class Abortable {
         wasm.abortable_reset(this.__wbg_ptr);
     }
 }
+module.exports.Abortable = Abortable;
 
 const AbortedFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
@@ -1593,7 +1563,7 @@ const AbortedFinalization = (typeof FinalizationRegistry === 'undefined')
 * Error emitted by [`Abortable`].
 * @category General
 */
-export class Aborted {
+class Aborted {
 
     static __wrap(ptr) {
         ptr = ptr >>> 0;
@@ -1615,6 +1585,7 @@ export class Aborted {
         wasm.__wbg_aborted_free(ptr, 0);
     }
 }
+module.exports.Aborted = Aborted;
 
 const AccountKindFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
@@ -1622,7 +1593,7 @@ const AccountKindFinalization = (typeof FinalizationRegistry === 'undefined')
 /**
 * @category Wallet SDK
 */
-export class AccountKind {
+class AccountKind {
 
     static __wrap(ptr) {
         ptr = ptr >>> 0;
@@ -1685,6 +1656,7 @@ export class AccountKind {
         }
     }
 }
+module.exports.AccountKind = AccountKind;
 
 const AddressFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
@@ -1693,7 +1665,7 @@ const AddressFinalization = (typeof FinalizationRegistry === 'undefined')
 * Kaspa `Address` struct that serializes to and from an address format string: `kaspa:qz0s...t8cv`.
 * @category Address
 */
-export class Address {
+class Address {
 
     static __wrap(ptr) {
         ptr = ptr >>> 0;
@@ -1713,6 +1685,10 @@ export class Address {
 
     toString() {
         return JSON.stringify(this);
+    }
+
+    [inspect.custom]() {
+        return Object.assign(Object.create({constructor: this.constructor}), this.toJSON());
     }
 
     __destroy_into_raw() {
@@ -1853,13 +1829,14 @@ export class Address {
         }
     }
 }
+module.exports.Address = Address;
 
 const AgentConstructorOptionsFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
     : new FinalizationRegistry(ptr => wasm.__wbg_agentconstructoroptions_free(ptr >>> 0, 1));
 /**
 */
-export class AgentConstructorOptions {
+class AgentConstructorOptions {
 
     __destroy_into_raw() {
         const ptr = this.__wbg_ptr;
@@ -1938,13 +1915,14 @@ export class AgentConstructorOptions {
         wasm.agentconstructoroptions_set_timeout(this.__wbg_ptr, value);
     }
 }
+module.exports.AgentConstructorOptions = AgentConstructorOptions;
 
 const AppendFileOptionsFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
     : new FinalizationRegistry(ptr => wasm.__wbg_appendfileoptions_free(ptr >>> 0, 1));
 /**
 */
-export class AppendFileOptions {
+class AppendFileOptions {
 
     static __wrap(ptr) {
         ptr = ptr >>> 0;
@@ -2030,13 +2008,14 @@ export class AppendFileOptions {
         wasm.appendfileoptions_set_flag(this.__wbg_ptr, isLikeNone(value) ? 0 : addHeapObject(value));
     }
 }
+module.exports.AppendFileOptions = AppendFileOptions;
 
 const AssertionErrorOptionsFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
     : new FinalizationRegistry(ptr => wasm.__wbg_assertionerroroptions_free(ptr >>> 0, 1));
 /**
 */
-export class AssertionErrorOptions {
+class AssertionErrorOptions {
 
     __destroy_into_raw() {
         const ptr = this.__wbg_ptr;
@@ -2118,6 +2097,7 @@ export class AssertionErrorOptions {
         wasm.assertionerroroptions_set_operator(this.__wbg_ptr, addHeapObject(value));
     }
 }
+module.exports.AssertionErrorOptions = AssertionErrorOptions;
 
 const BalanceFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
@@ -2130,7 +2110,7 @@ const BalanceFinalization = (typeof FinalizationRegistry === 'undefined')
 *
 * @category Wallet SDK
 */
-export class Balance {
+class Balance {
 
     static __wrap(ptr) {
         ptr = ptr >>> 0;
@@ -2196,6 +2176,7 @@ export class Balance {
         }
     }
 }
+module.exports.Balance = Balance;
 
 const BalanceStringsFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
@@ -2208,7 +2189,7 @@ const BalanceStringsFinalization = (typeof FinalizationRegistry === 'undefined')
 *
 * @category Wallet SDK
 */
-export class BalanceStrings {
+class BalanceStrings {
 
     static __wrap(ptr) {
         ptr = ptr >>> 0;
@@ -2268,13 +2249,14 @@ export class BalanceStrings {
         }
     }
 }
+module.exports.BalanceStrings = BalanceStrings;
 
 const ConsoleConstructorOptionsFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
     : new FinalizationRegistry(ptr => wasm.__wbg_consoleconstructoroptions_free(ptr >>> 0, 1));
 /**
 */
-export class ConsoleConstructorOptions {
+class ConsoleConstructorOptions {
 
     static __wrap(ptr) {
         ptr = ptr >>> 0;
@@ -2383,13 +2365,14 @@ export class ConsoleConstructorOptions {
         wasm.consoleconstructoroptions_set_inspect_options(this.__wbg_ptr, isLikeNone(value) ? 0 : addHeapObject(value));
     }
 }
+module.exports.ConsoleConstructorOptions = ConsoleConstructorOptions;
 
 const CreateHookCallbacksFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
     : new FinalizationRegistry(ptr => wasm.__wbg_createhookcallbacks_free(ptr >>> 0, 1));
 /**
 */
-export class CreateHookCallbacks {
+class CreateHookCallbacks {
 
     __destroy_into_raw() {
         const ptr = this.__wbg_ptr;
@@ -2489,13 +2472,14 @@ export class CreateHookCallbacks {
         wasm.createhookcallbacks_set_promise_resolve(this.__wbg_ptr, addHeapObject(value));
     }
 }
+module.exports.CreateHookCallbacks = CreateHookCallbacks;
 
 const CreateReadStreamOptionsFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
     : new FinalizationRegistry(ptr => wasm.__wbg_createreadstreamoptions_free(ptr >>> 0, 1));
 /**
 */
-export class CreateReadStreamOptions {
+class CreateReadStreamOptions {
 
     __destroy_into_raw() {
         const ptr = this.__wbg_ptr;
@@ -2678,13 +2662,14 @@ export class CreateReadStreamOptions {
         wasm.createreadstreamoptions_set_start(this.__wbg_ptr, !isLikeNone(value), isLikeNone(value) ? 0 : value);
     }
 }
+module.exports.CreateReadStreamOptions = CreateReadStreamOptions;
 
 const CreateWriteStreamOptionsFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
     : new FinalizationRegistry(ptr => wasm.__wbg_createwritestreamoptions_free(ptr >>> 0, 1));
 /**
 */
-export class CreateWriteStreamOptions {
+class CreateWriteStreamOptions {
 
     __destroy_into_raw() {
         const ptr = this.__wbg_ptr;
@@ -2825,6 +2810,7 @@ export class CreateWriteStreamOptions {
         wasm.createwritestreamoptions_set_start(this.__wbg_ptr, !isLikeNone(value), isLikeNone(value) ? 0 : value);
     }
 }
+module.exports.CreateWriteStreamOptions = CreateWriteStreamOptions;
 
 const CryptoBoxFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
@@ -2837,7 +2823,7 @@ const CryptoBoxFinalization = (typeof FinalizationRegistry === 'undefined')
 *
 *  @category Wallet SDK
 */
-export class CryptoBox {
+class CryptoBox {
 
     toJSON() {
         return {
@@ -2847,6 +2833,10 @@ export class CryptoBox {
 
     toString() {
         return JSON.stringify(this);
+    }
+
+    [inspect.custom]() {
+        return Object.assign(Object.create({constructor: this.constructor}), this.toJSON());
     }
 
     __destroy_into_raw() {
@@ -2963,6 +2953,7 @@ export class CryptoBox {
         }
     }
 }
+module.exports.CryptoBox = CryptoBox;
 
 const CryptoBoxPrivateKeyFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
@@ -2970,7 +2961,7 @@ const CryptoBoxPrivateKeyFinalization = (typeof FinalizationRegistry === 'undefi
 /**
 * @category Wallet SDK
 */
-export class CryptoBoxPrivateKey {
+class CryptoBoxPrivateKey {
 
     __destroy_into_raw() {
         const ptr = this.__wbg_ptr;
@@ -3011,6 +3002,7 @@ export class CryptoBoxPrivateKey {
         return CryptoBoxPublicKey.__wrap(ret);
     }
 }
+module.exports.CryptoBoxPrivateKey = CryptoBoxPrivateKey;
 
 const CryptoBoxPublicKeyFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
@@ -3018,7 +3010,7 @@ const CryptoBoxPublicKeyFinalization = (typeof FinalizationRegistry === 'undefin
 /**
 * @category Wallet SDK
 */
-export class CryptoBoxPublicKey {
+class CryptoBoxPublicKey {
 
     static __wrap(ptr) {
         ptr = ptr >>> 0;
@@ -3079,6 +3071,7 @@ export class CryptoBoxPublicKey {
         }
     }
 }
+module.exports.CryptoBoxPublicKey = CryptoBoxPublicKey;
 
 const DerivationPathFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
@@ -3087,7 +3080,7 @@ const DerivationPathFinalization = (typeof FinalizationRegistry === 'undefined')
 * Key derivation path
 * @category Wallet SDK
 */
-export class DerivationPath {
+class DerivationPath {
 
     static __wrap(ptr) {
         ptr = ptr >>> 0;
@@ -3194,13 +3187,14 @@ export class DerivationPath {
         }
     }
 }
+module.exports.DerivationPath = DerivationPath;
 
 const FormatInputPathObjectFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
     : new FinalizationRegistry(ptr => wasm.__wbg_formatinputpathobject_free(ptr >>> 0, 1));
 /**
 */
-export class FormatInputPathObject {
+class FormatInputPathObject {
 
     static __wrap(ptr) {
         ptr = ptr >>> 0;
@@ -3307,6 +3301,7 @@ export class FormatInputPathObject {
         wasm.formatinputpathobject_set_root(this.__wbg_ptr, isLikeNone(value) ? 0 : addHeapObject(value));
     }
 }
+module.exports.FormatInputPathObject = FormatInputPathObject;
 
 const GeneratorFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
@@ -3355,7 +3350,7 @@ const GeneratorFinalization = (typeof FinalizationRegistry === 'undefined')
 *     {@link estimateTransactions},
 * @category Wallet SDK
 */
-export class Generator {
+class Generator {
 
     __destroy_into_raw() {
         const ptr = this.__wbg_ptr;
@@ -3411,6 +3406,7 @@ export class Generator {
         return GeneratorSummary.__wrap(ret);
     }
 }
+module.exports.Generator = Generator;
 
 const GeneratorSummaryFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
@@ -3425,7 +3421,7 @@ const GeneratorSummaryFinalization = (typeof FinalizationRegistry === 'undefined
 * @see {@link createTransactions}, {@link IGeneratorSettingsObject}, {@link Generator}
 * @category Wallet SDK
 */
-export class GeneratorSummary {
+class GeneratorSummary {
 
     static __wrap(ptr) {
         ptr = ptr >>> 0;
@@ -3449,6 +3445,10 @@ export class GeneratorSummary {
 
     toString() {
         return JSON.stringify(this);
+    }
+
+    [inspect.custom]() {
+        return Object.assign(Object.create({constructor: this.constructor}), this.toJSON());
     }
 
     __destroy_into_raw() {
@@ -3524,13 +3524,14 @@ export class GeneratorSummary {
         }
     }
 }
+module.exports.GeneratorSummary = GeneratorSummary;
 
 const GetNameOptionsFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
     : new FinalizationRegistry(ptr => wasm.__wbg_getnameoptions_free(ptr >>> 0, 1));
 /**
 */
-export class GetNameOptions {
+class GetNameOptions {
 
     static __wrap(ptr) {
         ptr = ptr >>> 0;
@@ -3615,6 +3616,7 @@ export class GetNameOptions {
         wasm.getnameoptions_set_port(this.__wbg_ptr, value);
     }
 }
+module.exports.GetNameOptions = GetNameOptions;
 
 const HashFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
@@ -3622,7 +3624,7 @@ const HashFinalization = (typeof FinalizationRegistry === 'undefined')
 /**
 * @category General
 */
-export class Hash {
+class Hash {
 
     static __wrap(ptr) {
         ptr = ptr >>> 0;
@@ -3674,6 +3676,7 @@ export class Hash {
         }
     }
 }
+module.exports.Hash = Hash;
 
 const HeaderFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
@@ -3681,7 +3684,7 @@ const HeaderFinalization = (typeof FinalizationRegistry === 'undefined')
 /**
 * @category Consensus
 */
-export class Header {
+class Header {
 
     toJSON() {
         return {
@@ -3703,6 +3706,10 @@ export class Header {
 
     toString() {
         return JSON.stringify(this);
+    }
+
+    [inspect.custom]() {
+        return Object.assign(Object.create({constructor: this.constructor}), this.toJSON());
     }
 
     __destroy_into_raw() {
@@ -4022,6 +4029,7 @@ export class Header {
         wasm.header_set_blue_work_from_js_value(this.__wbg_ptr, addHeapObject(js_value));
     }
 }
+module.exports.Header = Header;
 
 const KeypairFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
@@ -4030,7 +4038,7 @@ const KeypairFinalization = (typeof FinalizationRegistry === 'undefined')
 * Data structure that contains a secret and public keys.
 * @category Wallet SDK
 */
-export class Keypair {
+class Keypair {
 
     static __wrap(ptr) {
         ptr = ptr >>> 0;
@@ -4050,6 +4058,10 @@ export class Keypair {
 
     toString() {
         return JSON.stringify(this);
+    }
+
+    [inspect.custom]() {
+        return Object.assign(Object.create({constructor: this.constructor}), this.toJSON());
     }
 
     __destroy_into_raw() {
@@ -4200,13 +4212,14 @@ export class Keypair {
         }
     }
 }
+module.exports.Keypair = Keypair;
 
 const MkdtempSyncOptionsFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
     : new FinalizationRegistry(ptr => wasm.__wbg_mkdtempsyncoptions_free(ptr >>> 0, 1));
 /**
 */
-export class MkdtempSyncOptions {
+class MkdtempSyncOptions {
 
     static __wrap(ptr) {
         ptr = ptr >>> 0;
@@ -4257,6 +4270,7 @@ export class MkdtempSyncOptions {
         wasm.mkdtempsyncoptions_set_encoding(this.__wbg_ptr, isLikeNone(value) ? 0 : addHeapObject(value));
     }
 }
+module.exports.MkdtempSyncOptions = MkdtempSyncOptions;
 
 const MnemonicFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
@@ -4265,7 +4279,7 @@ const MnemonicFinalization = (typeof FinalizationRegistry === 'undefined')
 * BIP39 mnemonic phrases: sequences of words representing cryptographic keys.
 * @category Wallet SDK
 */
-export class Mnemonic {
+class Mnemonic {
 
     static __wrap(ptr) {
         ptr = ptr >>> 0;
@@ -4284,6 +4298,10 @@ export class Mnemonic {
 
     toString() {
         return JSON.stringify(this);
+    }
+
+    [inspect.custom]() {
+        return Object.assign(Object.create({constructor: this.constructor}), this.toJSON());
     }
 
     __destroy_into_raw() {
@@ -4428,13 +4446,14 @@ export class Mnemonic {
         }
     }
 }
+module.exports.Mnemonic = Mnemonic;
 
 const NetServerOptionsFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
     : new FinalizationRegistry(ptr => wasm.__wbg_netserveroptions_free(ptr >>> 0, 1));
 /**
 */
-export class NetServerOptions {
+class NetServerOptions {
 
     __destroy_into_raw() {
         const ptr = this.__wbg_ptr;
@@ -4478,6 +4497,7 @@ export class NetServerOptions {
         wasm.netserveroptions_set_allow_half_open(ptr, isLikeNone(value) ? 0xFFFFFF : value ? 1 : 0);
     }
 }
+module.exports.NetServerOptions = NetServerOptions;
 
 const NetworkIdFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
@@ -4489,7 +4509,7 @@ const NetworkIdFinalization = (typeof FinalizationRegistry === 'undefined')
 *
 * @category Consensus
 */
-export class NetworkId {
+class NetworkId {
 
     static __wrap(ptr) {
         ptr = ptr >>> 0;
@@ -4509,6 +4529,10 @@ export class NetworkId {
 
     toString() {
         return JSON.stringify(this);
+    }
+
+    [inspect.custom]() {
+        return Object.assign(Object.create({constructor: this.constructor}), this.toJSON());
     }
 
     __destroy_into_raw() {
@@ -4634,6 +4658,7 @@ export class NetworkId {
         }
     }
 }
+module.exports.NetworkId = NetworkId;
 
 const NodeDescriptorFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
@@ -4645,7 +4670,7 @@ const NodeDescriptorFinalization = (typeof FinalizationRegistry === 'undefined')
 *
 * @category Node RPC
 */
-export class NodeDescriptor {
+class NodeDescriptor {
 
     static __wrap(ptr) {
         ptr = ptr >>> 0;
@@ -4664,6 +4689,10 @@ export class NodeDescriptor {
 
     toString() {
         return JSON.stringify(this);
+    }
+
+    [inspect.custom]() {
+        return Object.assign(Object.create({constructor: this.constructor}), this.toJSON());
     }
 
     __destroy_into_raw() {
@@ -4736,13 +4765,14 @@ export class NodeDescriptor {
         wasm.__wbg_set_nodedescriptor_url(this.__wbg_ptr, ptr0, len0);
     }
 }
+module.exports.NodeDescriptor = NodeDescriptor;
 
 const PSKTFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
     : new FinalizationRegistry(ptr => wasm.__wbg_pskt_free(ptr >>> 0, 1));
 /**
 */
-export class PSKT {
+class PSKT {
 
     static __wrap(ptr) {
         ptr = ptr >>> 0;
@@ -4761,6 +4791,10 @@ export class PSKT {
 
     toString() {
         return JSON.stringify(this);
+    }
+
+    [inspect.custom]() {
+        return Object.assign(Object.create({constructor: this.constructor}), this.toJSON());
     }
 
     __destroy_into_raw() {
@@ -5124,6 +5158,7 @@ export class PSKT {
         }
     }
 }
+module.exports.PSKT = PSKT;
 
 const PaymentOutputFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
@@ -5131,7 +5166,7 @@ const PaymentOutputFinalization = (typeof FinalizationRegistry === 'undefined')
 /**
 * @category Wallet SDK
 */
-export class PaymentOutput {
+class PaymentOutput {
 
     toJSON() {
         return {
@@ -5142,6 +5177,10 @@ export class PaymentOutput {
 
     toString() {
         return JSON.stringify(this);
+    }
+
+    [inspect.custom]() {
+        return Object.assign(Object.create({constructor: this.constructor}), this.toJSON());
     }
 
     __destroy_into_raw() {
@@ -5196,6 +5235,7 @@ export class PaymentOutput {
         return this;
     }
 }
+module.exports.PaymentOutput = PaymentOutput;
 
 const PaymentOutputsFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
@@ -5203,7 +5243,7 @@ const PaymentOutputsFinalization = (typeof FinalizationRegistry === 'undefined')
 /**
 * @category Wallet SDK
 */
-export class PaymentOutputs {
+class PaymentOutputs {
 
     __destroy_into_raw() {
         const ptr = this.__wbg_ptr;
@@ -5237,6 +5277,7 @@ export class PaymentOutputs {
         }
     }
 }
+module.exports.PaymentOutputs = PaymentOutputs;
 
 const PendingTransactionFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
@@ -5244,7 +5285,7 @@ const PendingTransactionFinalization = (typeof FinalizationRegistry === 'undefin
 /**
 * @category Wallet SDK
 */
-export class PendingTransaction {
+class PendingTransaction {
 
     static __wrap(ptr) {
         ptr = ptr >>> 0;
@@ -5271,6 +5312,10 @@ export class PendingTransaction {
 
     toString() {
         return JSON.stringify(this);
+    }
+
+    [inspect.custom]() {
+        return Object.assign(Object.create({constructor: this.constructor}), this.toJSON());
     }
 
     __destroy_into_raw() {
@@ -5606,13 +5651,14 @@ export class PendingTransaction {
         }
     }
 }
+module.exports.PendingTransaction = PendingTransaction;
 
 const PipeOptionsFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
     : new FinalizationRegistry(ptr => wasm.__wbg_pipeoptions_free(ptr >>> 0, 1));
 /**
 */
-export class PipeOptions {
+class PipeOptions {
 
     __destroy_into_raw() {
         const ptr = this.__wbg_ptr;
@@ -5650,6 +5696,7 @@ export class PipeOptions {
         wasm.pipeoptions_set_end(ptr, isLikeNone(value) ? 0xFFFFFF : value ? 1 : 0);
     }
 }
+module.exports.PipeOptions = PipeOptions;
 
 const PoWFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
@@ -5658,7 +5705,7 @@ const PoWFinalization = (typeof FinalizationRegistry === 'undefined')
 * Represents a Kaspa header PoW manager
 * @category Mining
 */
-export class PoW {
+class PoW {
 
     static __wrap(ptr) {
         ptr = ptr >>> 0;
@@ -5677,6 +5724,10 @@ export class PoW {
 
     toString() {
         return JSON.stringify(this);
+    }
+
+    [inspect.custom]() {
+        return Object.assign(Object.create({constructor: this.constructor}), this.toJSON());
     }
 
     __destroy_into_raw() {
@@ -5797,6 +5848,7 @@ export class PoW {
         }
     }
 }
+module.exports.PoW = PoW;
 
 const PrivateKeyFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
@@ -5805,7 +5857,7 @@ const PrivateKeyFinalization = (typeof FinalizationRegistry === 'undefined')
 * Data structure that envelops a Private Key.
 * @category Wallet SDK
 */
-export class PrivateKey {
+class PrivateKey {
 
     static __wrap(ptr) {
         ptr = ptr >>> 0;
@@ -5953,6 +6005,7 @@ export class PrivateKey {
         }
     }
 }
+module.exports.PrivateKey = PrivateKey;
 
 const PrivateKeyGeneratorFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
@@ -5969,7 +6022,7 @@ const PrivateKeyGeneratorFinalization = (typeof FinalizationRegistry === 'undefi
 * @see {@link PublicKeyGenerator}, {@link XPub}, {@link XPrv}, {@link Mnemonic}
 * @category Wallet SDK
 */
-export class PrivateKeyGenerator {
+class PrivateKeyGenerator {
 
     __destroy_into_raw() {
         const ptr = this.__wbg_ptr;
@@ -6045,13 +6098,14 @@ export class PrivateKeyGenerator {
         }
     }
 }
+module.exports.PrivateKeyGenerator = PrivateKeyGenerator;
 
 const ProcessSendOptionsFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
     : new FinalizationRegistry(ptr => wasm.__wbg_processsendoptions_free(ptr >>> 0, 1));
 /**
 */
-export class ProcessSendOptions {
+class ProcessSendOptions {
 
     __destroy_into_raw() {
         const ptr = this.__wbg_ptr;
@@ -6087,6 +6141,7 @@ export class ProcessSendOptions {
         wasm.processsendoptions_set_swallow_errors(this.__wbg_ptr, isLikeNone(value) ? 0xFFFFFF : value ? 1 : 0);
     }
 }
+module.exports.ProcessSendOptions = ProcessSendOptions;
 
 const PrvKeyDataInfoFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
@@ -6094,7 +6149,7 @@ const PrvKeyDataInfoFinalization = (typeof FinalizationRegistry === 'undefined')
 /**
 * @category Wallet SDK
 */
-export class PrvKeyDataInfo {
+class PrvKeyDataInfo {
 
     __destroy_into_raw() {
         const ptr = this.__wbg_ptr;
@@ -6159,6 +6214,7 @@ export class PrvKeyDataInfo {
         }
     }
 }
+module.exports.PrvKeyDataInfo = PrvKeyDataInfo;
 
 const PublicKeyFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
@@ -6168,7 +6224,7 @@ const PublicKeyFinalization = (typeof FinalizationRegistry === 'undefined')
 * Only supports Schnorr-based addresses.
 * @category Wallet SDK
 */
-export class PublicKey {
+class PublicKey {
 
     static __wrap(ptr) {
         ptr = ptr >>> 0;
@@ -6294,6 +6350,7 @@ export class PublicKey {
         return takeObject(ret);
     }
 }
+module.exports.PublicKey = PublicKey;
 
 const PublicKeyGeneratorFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
@@ -6308,7 +6365,7 @@ const PublicKeyGeneratorFinalization = (typeof FinalizationRegistry === 'undefin
 * @see {@link PrivateKeyGenerator}, {@link XPub}, {@link XPrv}, {@link Mnemonic}
 * @category Wallet SDK
 */
-export class PublicKeyGenerator {
+class PublicKeyGenerator {
 
     static __wrap(ptr) {
         ptr = ptr >>> 0;
@@ -6781,12 +6838,13 @@ export class PublicKeyGenerator {
         }
     }
 }
+module.exports.PublicKeyGenerator = PublicKeyGenerator;
 
 const ReadStreamFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
     : new FinalizationRegistry(ptr => wasm.__wbg_readstream_free(ptr >>> 0, 1));
 
-export class ReadStream {
+class ReadStream {
 
     __destroy_into_raw() {
         const ptr = this.__wbg_ptr;
@@ -6920,6 +6978,7 @@ export class ReadStream {
         }
     }
 }
+module.exports.ReadStream = ReadStream;
 
 const ResolverFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
@@ -6952,7 +7011,7 @@ const ResolverFinalization = (typeof FinalizationRegistry === 'undefined')
 * @see {@link IResolverConfig}, {@link IResolverConnect}, {@link RpcClient}
 * @category Node RPC
 */
-export class Resolver {
+class Resolver {
 
     static __wrap(ptr) {
         ptr = ptr >>> 0;
@@ -6970,6 +7029,10 @@ export class Resolver {
 
     toString() {
         return JSON.stringify(this);
+    }
+
+    [inspect.custom]() {
+        return Object.assign(Object.create({constructor: this.constructor}), this.toJSON());
     }
 
     __destroy_into_raw() {
@@ -7050,6 +7113,7 @@ export class Resolver {
         }
     }
 }
+module.exports.Resolver = Resolver;
 
 const RpcClientFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
@@ -7140,7 +7204,7 @@ const RpcClientFinalization = (typeof FinalizationRegistry === 'undefined')
 *
 * @category Node RPC
 */
-export class RpcClient {
+class RpcClient {
 
     static __wrap(ptr) {
         ptr = ptr >>> 0;
@@ -7162,6 +7226,10 @@ export class RpcClient {
 
     toString() {
         return JSON.stringify(this);
+    }
+
+    [inspect.custom]() {
+        return Object.assign(Object.create({constructor: this.constructor}), this.toJSON());
     }
 
     __destroy_into_raw() {
@@ -8262,6 +8330,7 @@ export class RpcClient {
         }
     }
 }
+module.exports.RpcClient = RpcClient;
 
 const ScriptBuilderFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
@@ -8275,7 +8344,7 @@ const ScriptBuilderFinalization = (typeof FinalizationRegistry === 'undefined')
 * the Script function returning an error.
 * @category Consensus
 */
-export class ScriptBuilder {
+class ScriptBuilder {
 
     static __wrap(ptr) {
         ptr = ptr >>> 0;
@@ -8292,6 +8361,10 @@ export class ScriptBuilder {
 
     toString() {
         return JSON.stringify(this);
+    }
+
+    [inspect.custom]() {
+        return Object.assign(Object.create({constructor: this.constructor}), this.toJSON());
     }
 
     __destroy_into_raw() {
@@ -8557,6 +8630,7 @@ export class ScriptBuilder {
         }
     }
 }
+module.exports.ScriptBuilder = ScriptBuilder;
 
 const ScriptPublicKeyFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
@@ -8565,7 +8639,7 @@ const ScriptPublicKeyFinalization = (typeof FinalizationRegistry === 'undefined'
 * Represents a Kaspad ScriptPublicKey
 * @category Consensus
 */
-export class ScriptPublicKey {
+class ScriptPublicKey {
 
     static __wrap(ptr) {
         ptr = ptr >>> 0;
@@ -8584,6 +8658,10 @@ export class ScriptPublicKey {
 
     toString() {
         return JSON.stringify(this);
+    }
+
+    [inspect.custom]() {
+        return Object.assign(Object.create({constructor: this.constructor}), this.toJSON());
     }
 
     __destroy_into_raw() {
@@ -8651,13 +8729,14 @@ export class ScriptPublicKey {
         }
     }
 }
+module.exports.ScriptPublicKey = ScriptPublicKey;
 
 const SetAadOptionsFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
     : new FinalizationRegistry(ptr => wasm.__wbg_setaadoptions_free(ptr >>> 0, 1));
 /**
 */
-export class SetAadOptions {
+class SetAadOptions {
 
     __destroy_into_raw() {
         const ptr = this.__wbg_ptr;
@@ -8721,13 +8800,14 @@ export class SetAadOptions {
         wasm.setaadoptions_set_transform(this.__wbg_ptr, addHeapObject(value));
     }
 }
+module.exports.SetAadOptions = SetAadOptions;
 
 const SigHashTypeFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
     : new FinalizationRegistry(ptr => wasm.__wbg_sighashtype_free(ptr >>> 0, 1));
 /**
 */
-export class SigHashType {
+class SigHashType {
 
     __destroy_into_raw() {
         const ptr = this.__wbg_ptr;
@@ -8741,6 +8821,7 @@ export class SigHashType {
         wasm.__wbg_sighashtype_free(ptr, 0);
     }
 }
+module.exports.SigHashType = SigHashType;
 
 const StorageFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
@@ -8749,7 +8830,7 @@ const StorageFinalization = (typeof FinalizationRegistry === 'undefined')
 * Wallet file storage interface
 * @category Wallet SDK
 */
-export class Storage {
+class Storage {
 
     toJSON() {
         return {
@@ -8759,6 +8840,10 @@ export class Storage {
 
     toString() {
         return JSON.stringify(this);
+    }
+
+    [inspect.custom]() {
+        return Object.assign(Object.create({constructor: this.constructor}), this.toJSON());
     }
 
     __destroy_into_raw() {
@@ -8792,13 +8877,14 @@ export class Storage {
         }
     }
 }
+module.exports.Storage = Storage;
 
 const StreamTransformOptionsFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
     : new FinalizationRegistry(ptr => wasm.__wbg_streamtransformoptions_free(ptr >>> 0, 1));
 /**
 */
-export class StreamTransformOptions {
+class StreamTransformOptions {
 
     __destroy_into_raw() {
         const ptr = this.__wbg_ptr;
@@ -8848,6 +8934,7 @@ export class StreamTransformOptions {
         wasm.streamtransformoptions_set_transform(this.__wbg_ptr, addHeapObject(value));
     }
 }
+module.exports.StreamTransformOptions = StreamTransformOptions;
 
 const TransactionFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
@@ -8859,7 +8946,7 @@ const TransactionFinalization = (typeof FinalizationRegistry === 'undefined')
 * used by transaction inputs.
 * @category Consensus
 */
-export class Transaction {
+class Transaction {
 
     static __wrap(ptr) {
         ptr = ptr >>> 0;
@@ -8885,6 +8972,10 @@ export class Transaction {
 
     toString() {
         return JSON.stringify(this);
+    }
+
+    [inspect.custom]() {
+        return Object.assign(Object.create({constructor: this.constructor}), this.toJSON());
     }
 
     __destroy_into_raw() {
@@ -9272,6 +9363,7 @@ export class Transaction {
         }
     }
 }
+module.exports.Transaction = Transaction;
 
 const TransactionInputFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
@@ -9280,7 +9372,7 @@ const TransactionInputFinalization = (typeof FinalizationRegistry === 'undefined
 * Represents a Kaspa transaction input
 * @category Consensus
 */
-export class TransactionInput {
+class TransactionInput {
 
     static __wrap(ptr) {
         ptr = ptr >>> 0;
@@ -9302,6 +9394,10 @@ export class TransactionInput {
 
     toString() {
         return JSON.stringify(this);
+    }
+
+    [inspect.custom]() {
+        return Object.assign(Object.create({constructor: this.constructor}), this.toJSON());
     }
 
     __destroy_into_raw() {
@@ -9429,6 +9525,7 @@ export class TransactionInput {
         return ret === 0 ? undefined : UtxoEntryReference.__wrap(ret);
     }
 }
+module.exports.TransactionInput = TransactionInput;
 
 const TransactionOutpointFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
@@ -9440,7 +9537,7 @@ const TransactionOutpointFinalization = (typeof FinalizationRegistry === 'undefi
 * use `new TransactionOutpoint(transactionId, index)`).
 * @category Consensus
 */
-export class TransactionOutpoint {
+class TransactionOutpoint {
 
     static __wrap(ptr) {
         ptr = ptr >>> 0;
@@ -9459,6 +9556,10 @@ export class TransactionOutpoint {
 
     toString() {
         return JSON.stringify(this);
+    }
+
+    [inspect.custom]() {
+        return Object.assign(Object.create({constructor: this.constructor}), this.toJSON());
     }
 
     __destroy_into_raw() {
@@ -9530,6 +9631,7 @@ export class TransactionOutpoint {
         return ret >>> 0;
     }
 }
+module.exports.TransactionOutpoint = TransactionOutpoint;
 
 const TransactionOutputFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
@@ -9538,7 +9640,7 @@ const TransactionOutputFinalization = (typeof FinalizationRegistry === 'undefine
 * Represents a Kaspad transaction output
 * @category Consensus
 */
-export class TransactionOutput {
+class TransactionOutput {
 
     static __wrap(ptr) {
         ptr = ptr >>> 0;
@@ -9557,6 +9659,10 @@ export class TransactionOutput {
 
     toString() {
         return JSON.stringify(this);
+    }
+
+    [inspect.custom]() {
+        return Object.assign(Object.create({constructor: this.constructor}), this.toJSON());
     }
 
     __destroy_into_raw() {
@@ -9610,6 +9716,7 @@ export class TransactionOutput {
         wasm.transactionoutput_set_scriptPublicKey(this.__wbg_ptr, v.__wbg_ptr);
     }
 }
+module.exports.TransactionOutput = TransactionOutput;
 
 const TransactionRecordFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
@@ -9617,7 +9724,7 @@ const TransactionRecordFinalization = (typeof FinalizationRegistry === 'undefine
 /**
 * @category Wallet SDK
 */
-export class TransactionRecord {
+class TransactionRecord {
 
     static __wrap(ptr) {
         ptr = ptr >>> 0;
@@ -9644,6 +9751,10 @@ export class TransactionRecord {
 
     toString() {
         return JSON.stringify(this);
+    }
+
+    [inspect.custom]() {
+        return Object.assign(Object.create({constructor: this.constructor}), this.toJSON());
     }
 
     __destroy_into_raw() {
@@ -9829,13 +9940,14 @@ export class TransactionRecord {
         return takeObject(ret);
     }
 }
+module.exports.TransactionRecord = TransactionRecord;
 
 const TransactionRecordNotificationFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
     : new FinalizationRegistry(ptr => wasm.__wbg_transactionrecordnotification_free(ptr >>> 0, 1));
 /**
 */
-export class TransactionRecordNotification {
+class TransactionRecordNotification {
 
     static __wrap(ptr) {
         ptr = ptr >>> 0;
@@ -9854,6 +9966,10 @@ export class TransactionRecordNotification {
 
     toString() {
         return JSON.stringify(this);
+    }
+
+    [inspect.custom]() {
+        return Object.assign(Object.create({constructor: this.constructor}), this.toJSON());
     }
 
     __destroy_into_raw() {
@@ -9910,6 +10026,7 @@ export class TransactionRecordNotification {
         wasm.__wbg_set_transactionrecordnotification_data(this.__wbg_ptr, ptr0);
     }
 }
+module.exports.TransactionRecordNotification = TransactionRecordNotification;
 
 const TransactionSigningHashFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
@@ -9917,7 +10034,7 @@ const TransactionSigningHashFinalization = (typeof FinalizationRegistry === 'und
 /**
 * @category Wallet SDK
 */
-export class TransactionSigningHash {
+class TransactionSigningHash {
 
     __destroy_into_raw() {
         const ptr = this.__wbg_ptr;
@@ -9974,6 +10091,7 @@ export class TransactionSigningHash {
         }
     }
 }
+module.exports.TransactionSigningHash = TransactionSigningHash;
 
 const TransactionSigningHashECDSAFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
@@ -9981,7 +10099,7 @@ const TransactionSigningHashECDSAFinalization = (typeof FinalizationRegistry ===
 /**
 * @category Wallet SDK
 */
-export class TransactionSigningHashECDSA {
+class TransactionSigningHashECDSA {
 
     __destroy_into_raw() {
         const ptr = this.__wbg_ptr;
@@ -10038,6 +10156,7 @@ export class TransactionSigningHashECDSA {
         }
     }
 }
+module.exports.TransactionSigningHashECDSA = TransactionSigningHashECDSA;
 
 const TransactionUtxoEntryFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
@@ -10049,7 +10168,7 @@ const TransactionUtxoEntryFinalization = (typeof FinalizationRegistry === 'undef
 * much it pays.
 * @category Consensus
 */
-export class TransactionUtxoEntry {
+class TransactionUtxoEntry {
 
     toJSON() {
         return {
@@ -10062,6 +10181,10 @@ export class TransactionUtxoEntry {
 
     toString() {
         return JSON.stringify(this);
+    }
+
+    [inspect.custom]() {
+        return Object.assign(Object.create({constructor: this.constructor}), this.toJSON());
     }
 
     __destroy_into_raw() {
@@ -10130,13 +10253,14 @@ export class TransactionUtxoEntry {
         wasm.__wbg_set_transactionutxoentry_isCoinbase(this.__wbg_ptr, arg0);
     }
 }
+module.exports.TransactionUtxoEntry = TransactionUtxoEntry;
 
 const UserInfoOptionsFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
     : new FinalizationRegistry(ptr => wasm.__wbg_userinfooptions_free(ptr >>> 0, 1));
 /**
 */
-export class UserInfoOptions {
+class UserInfoOptions {
 
     static __wrap(ptr) {
         ptr = ptr >>> 0;
@@ -10187,6 +10311,7 @@ export class UserInfoOptions {
         wasm.userinfooptions_set_encoding(this.__wbg_ptr, isLikeNone(value) ? 0 : addHeapObject(value));
     }
 }
+module.exports.UserInfoOptions = UserInfoOptions;
 
 const UtxoContextFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
@@ -10247,7 +10372,7 @@ const UtxoContextFinalization = (typeof FinalizationRegistry === 'undefined')
 *
 * @category Wallet SDK
 */
-export class UtxoContext {
+class UtxoContext {
 
     toJSON() {
         return {
@@ -10260,6 +10385,10 @@ export class UtxoContext {
 
     toString() {
         return JSON.stringify(this);
+    }
+
+    [inspect.custom]() {
+        return Object.assign(Object.create({constructor: this.constructor}), this.toJSON());
     }
 
     __destroy_into_raw() {
@@ -10418,6 +10547,7 @@ export class UtxoContext {
         }
     }
 }
+module.exports.UtxoContext = UtxoContext;
 
 const UtxoEntriesFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
@@ -10431,7 +10561,7 @@ const UtxoEntriesFinalization = (typeof FinalizationRegistry === 'undefined')
 * Please consider using `UtxoContext` instead.
 * @category Wallet SDK
 */
-export class UtxoEntries {
+class UtxoEntries {
 
     toJSON() {
         return {
@@ -10441,6 +10571,10 @@ export class UtxoEntries {
 
     toString() {
         return JSON.stringify(this);
+    }
+
+    [inspect.custom]() {
+        return Object.assign(Object.create({constructor: this.constructor}), this.toJSON());
     }
 
     __destroy_into_raw() {
@@ -10508,6 +10642,7 @@ export class UtxoEntries {
         return BigInt.asUintN(64, ret);
     }
 }
+module.exports.UtxoEntries = UtxoEntries;
 
 const UtxoEntryFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
@@ -10515,7 +10650,7 @@ const UtxoEntryFinalization = (typeof FinalizationRegistry === 'undefined')
 /**
 * @category Wallet SDK
 */
-export class UtxoEntry {
+class UtxoEntry {
 
     static __wrap(ptr) {
         ptr = ptr >>> 0;
@@ -10538,6 +10673,10 @@ export class UtxoEntry {
 
     toString() {
         return JSON.stringify(this);
+    }
+
+    [inspect.custom]() {
+        return Object.assign(Object.create({constructor: this.constructor}), this.toJSON());
     }
 
     __destroy_into_raw() {
@@ -10657,6 +10796,7 @@ export class UtxoEntry {
         }
     }
 }
+module.exports.UtxoEntry = UtxoEntry;
 
 const UtxoEntryReferenceFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
@@ -10664,7 +10804,7 @@ const UtxoEntryReferenceFinalization = (typeof FinalizationRegistry === 'undefin
 /**
 * @category Wallet SDK
 */
-export class UtxoEntryReference {
+class UtxoEntryReference {
 
     static __wrap(ptr) {
         ptr = ptr >>> 0;
@@ -10688,6 +10828,10 @@ export class UtxoEntryReference {
 
     toString() {
         return JSON.stringify(this);
+    }
+
+    [inspect.custom]() {
+        return Object.assign(Object.create({constructor: this.constructor}), this.toJSON());
     }
 
     __destroy_into_raw() {
@@ -10769,6 +10913,7 @@ export class UtxoEntryReference {
         return ScriptPublicKey.__wrap(ret);
     }
 }
+module.exports.UtxoEntryReference = UtxoEntryReference;
 
 const UtxoProcessorFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
@@ -10787,7 +10932,7 @@ const UtxoProcessorFinalization = (typeof FinalizationRegistry === 'undefined')
 * {@link IDisconnectEvent}
 * @category Wallet SDK
 */
-export class UtxoProcessor {
+class UtxoProcessor {
 
     toJSON() {
         return {
@@ -10799,6 +10944,10 @@ export class UtxoProcessor {
 
     toString() {
         return JSON.stringify(this);
+    }
+
+    [inspect.custom]() {
+        return Object.assign(Object.create({constructor: this.constructor}), this.toJSON());
     }
 
     __destroy_into_raw() {
@@ -10992,6 +11141,7 @@ export class UtxoProcessor {
         }
     }
 }
+module.exports.UtxoProcessor = UtxoProcessor;
 
 const WalletFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
@@ -11031,7 +11181,7 @@ const WalletFinalization = (typeof FinalizationRegistry === 'undefined')
 *
 * @category Wallet API
 */
-export class Wallet {
+class Wallet {
 
     toJSON() {
         return {
@@ -11044,6 +11194,10 @@ export class Wallet {
 
     toString() {
         return JSON.stringify(this);
+    }
+
+    [inspect.custom]() {
+        return Object.assign(Object.create({constructor: this.constructor}), this.toJSON());
     }
 
     __destroy_into_raw() {
@@ -11515,6 +11669,7 @@ export class Wallet {
         return takeObject(ret);
     }
 }
+module.exports.Wallet = Wallet;
 
 const WalletDescriptorFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
@@ -11522,7 +11677,7 @@ const WalletDescriptorFinalization = (typeof FinalizationRegistry === 'undefined
 /**
 * @category Wallet API
 */
-export class WalletDescriptor {
+class WalletDescriptor {
 
     static __wrap(ptr) {
         ptr = ptr >>> 0;
@@ -11541,6 +11696,10 @@ export class WalletDescriptor {
 
     toString() {
         return JSON.stringify(this);
+    }
+
+    [inspect.custom]() {
+        return Object.assign(Object.create({constructor: this.constructor}), this.toJSON());
     }
 
     __destroy_into_raw() {
@@ -11609,13 +11768,14 @@ export class WalletDescriptor {
         wasm.__wbg_set_walletdescriptor_filename(this.__wbg_ptr, ptr0, len0);
     }
 }
+module.exports.WalletDescriptor = WalletDescriptor;
 
 const WasiOptionsFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
     : new FinalizationRegistry(ptr => wasm.__wbg_wasioptions_free(ptr >>> 0, 1));
 /**
 */
-export class WasiOptions {
+class WasiOptions {
 
     static __wrap(ptr) {
         ptr = ptr >>> 0;
@@ -11711,13 +11871,14 @@ export class WasiOptions {
         wasm.wasioptions_set_preopens(this.__wbg_ptr, addHeapObject(value));
     }
 }
+module.exports.WasiOptions = WasiOptions;
 
 const WriteFileSyncOptionsFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
     : new FinalizationRegistry(ptr => wasm.__wbg_writefilesyncoptions_free(ptr >>> 0, 1));
 /**
 */
-export class WriteFileSyncOptions {
+class WriteFileSyncOptions {
 
     __destroy_into_raw() {
         const ptr = this.__wbg_ptr;
@@ -11788,12 +11949,13 @@ export class WriteFileSyncOptions {
         wasm.writefilesyncoptions_set_mode(this.__wbg_ptr, !isLikeNone(value), isLikeNone(value) ? 0 : value);
     }
 }
+module.exports.WriteFileSyncOptions = WriteFileSyncOptions;
 
 const WriteStreamFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
     : new FinalizationRegistry(ptr => wasm.__wbg_writestream_free(ptr >>> 0, 1));
 
-export class WriteStream {
+class WriteStream {
 
     __destroy_into_raw() {
         const ptr = this.__wbg_ptr;
@@ -11927,6 +12089,7 @@ export class WriteStream {
         }
     }
 }
+module.exports.WriteStream = WriteStream;
 
 const XOnlyPublicKeyFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
@@ -11940,7 +12103,7 @@ const XOnlyPublicKeyFinalization = (typeof FinalizationRegistry === 'undefined')
 * @see {@link PublicKey}
 * @category Wallet SDK
 */
-export class XOnlyPublicKey {
+class XOnlyPublicKey {
 
     static __wrap(ptr) {
         ptr = ptr >>> 0;
@@ -12069,6 +12232,7 @@ export class XOnlyPublicKey {
         }
     }
 }
+module.exports.XOnlyPublicKey = XOnlyPublicKey;
 
 const XPrvFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
@@ -12085,7 +12249,7 @@ const XPrvFinalization = (typeof FinalizationRegistry === 'undefined')
 * @see {@link PrivateKeyGenerator}, {@link PublicKeyGenerator}, {@link XPub}, {@link Mnemonic}
 * @category Wallet SDK
 */
-export class XPrv {
+class XPrv {
 
     static __wrap(ptr) {
         ptr = ptr >>> 0;
@@ -12108,6 +12272,10 @@ export class XPrv {
 
     toString() {
         return JSON.stringify(this);
+    }
+
+    [inspect.custom]() {
+        return Object.assign(Object.create({constructor: this.constructor}), this.toJSON());
     }
 
     __destroy_into_raw() {
@@ -12395,6 +12563,7 @@ export class XPrv {
         }
     }
 }
+module.exports.XPrv = XPrv;
 
 const XPubFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
@@ -12411,7 +12580,7 @@ const XPubFinalization = (typeof FinalizationRegistry === 'undefined')
 * @see {@link PrivateKeyGenerator}, {@link PublicKeyGenerator}, {@link XPrv}, {@link Mnemonic}
 * @category Wallet SDK
 */
-export class XPub {
+class XPub {
 
     static __wrap(ptr) {
         ptr = ptr >>> 0;
@@ -12433,6 +12602,10 @@ export class XPub {
 
     toString() {
         return JSON.stringify(this);
+    }
+
+    [inspect.custom]() {
+        return Object.assign(Object.create({constructor: this.constructor}), this.toJSON());
     }
 
     __destroy_into_raw() {
@@ -12625,663 +12798,670 @@ export class XPub {
         }
     }
 }
+module.exports.XPub = XPub;
 
-async function __wbg_load(module, imports) {
-    if (typeof Response === 'function' && module instanceof Response) {
-        if (typeof WebAssembly.instantiateStreaming === 'function') {
-            try {
-                return await WebAssembly.instantiateStreaming(module, imports);
-
-            } catch (e) {
-                if (module.headers.get('Content-Type') != 'application/wasm') {
-                    console.warn("`WebAssembly.instantiateStreaming` failed because your server does not serve wasm with `application/wasm` MIME type. Falling back to `WebAssembly.instantiate` which is slower. Original error:\n", e);
-
-                } else {
-                    throw e;
-                }
-            }
-        }
-
-        const bytes = await module.arrayBuffer();
-        return await WebAssembly.instantiate(bytes, imports);
-
-    } else {
-        const instance = await WebAssembly.instantiate(module, imports);
-
-        if (instance instanceof WebAssembly.Instance) {
-            return { instance, module };
-
-        } else {
-            return instance;
-        }
-    }
-}
-
-function __wbg_get_imports() {
-    const imports = {};
-    imports.wbg = {};
-    imports.wbg.__wbindgen_object_clone_ref = function(arg0) {
-        const ret = getObject(arg0);
-        return addHeapObject(ret);
-    };
-    imports.wbg.__wbg_crypto_1d1f22824a6a080c = function(arg0) {
-        const ret = getObject(arg0).crypto;
-        return addHeapObject(ret);
-    };
-    imports.wbg.__wbindgen_is_object = function(arg0) {
-        const val = getObject(arg0);
-        const ret = typeof(val) === 'object' && val !== null;
-        return ret;
-    };
-    imports.wbg.__wbg_process_4a72847cc503995b = function(arg0) {
-        const ret = getObject(arg0).process;
-        return addHeapObject(ret);
-    };
-    imports.wbg.__wbg_versions_f686565e586dd935 = function(arg0) {
-        const ret = getObject(arg0).versions;
-        return addHeapObject(ret);
-    };
-    imports.wbg.__wbg_node_104a2ff8d6ea03a2 = function(arg0) {
-        const ret = getObject(arg0).node;
-        return addHeapObject(ret);
-    };
-    imports.wbg.__wbindgen_is_string = function(arg0) {
-        const ret = typeof(getObject(arg0)) === 'string';
-        return ret;
-    };
-    imports.wbg.__wbindgen_object_drop_ref = function(arg0) {
-        takeObject(arg0);
-    };
-    imports.wbg.__wbg_require_cca90b1a94a0255b = function() { return handleError(function () {
-        const ret = module.require;
-        return addHeapObject(ret);
-    }, arguments) };
-    imports.wbg.__wbindgen_is_function = function(arg0) {
-        const ret = typeof(getObject(arg0)) === 'function';
-        return ret;
-    };
-    imports.wbg.__wbindgen_string_new = function(arg0, arg1) {
-        const ret = getStringFromWasm0(arg0, arg1);
-        return addHeapObject(ret);
-    };
-    imports.wbg.__wbg_msCrypto_eb05e62b530a1508 = function(arg0) {
-        const ret = getObject(arg0).msCrypto;
-        return addHeapObject(ret);
-    };
-    imports.wbg.__wbg_newwithlength_ec548f448387c968 = function(arg0) {
-        const ret = new Uint8Array(arg0 >>> 0);
-        return addHeapObject(ret);
-    };
-    imports.wbg.__wbindgen_memory = function() {
-        const ret = wasm.memory;
-        return addHeapObject(ret);
-    };
-    imports.wbg.__wbg_buffer_b7b08af79b0b0974 = function(arg0) {
-        const ret = getObject(arg0).buffer;
-        return addHeapObject(ret);
-    };
-    imports.wbg.__wbg_newwithbyteoffsetandlength_8a2cb9ca96b27ec9 = function(arg0, arg1, arg2) {
-        const ret = new Uint8Array(getObject(arg0), arg1 >>> 0, arg2 >>> 0);
-        return addHeapObject(ret);
-    };
-    imports.wbg.__wbg_randomFillSync_5c9c955aa56b6049 = function() { return handleError(function (arg0, arg1) {
-        getObject(arg0).randomFillSync(takeObject(arg1));
-    }, arguments) };
-    imports.wbg.__wbg_subarray_7c2e3576afe181d1 = function(arg0, arg1, arg2) {
-        const ret = getObject(arg0).subarray(arg1 >>> 0, arg2 >>> 0);
-        return addHeapObject(ret);
-    };
-    imports.wbg.__wbg_getRandomValues_3aa56aa6edec874c = function() { return handleError(function (arg0, arg1) {
-        getObject(arg0).getRandomValues(getObject(arg1));
-    }, arguments) };
-    imports.wbg.__wbg_new_ea1883e1e5e86686 = function(arg0) {
-        const ret = new Uint8Array(getObject(arg0));
-        return addHeapObject(ret);
-    };
-    imports.wbg.__wbg_set_d1e79e2388520f18 = function(arg0, arg1, arg2) {
-        getObject(arg0).set(getObject(arg1), arg2 >>> 0);
-    };
-    imports.wbg.__wbg_target_b7cb1739bee70928 = function(arg0) {
-        const ret = getObject(arg0).target;
-        return isLikeNone(ret) ? 0 : addHeapObject(ret);
-    };
-    imports.wbg.__wbg_result_fd2dae625828961d = function() { return handleError(function (arg0) {
-        const ret = getObject(arg0).result;
-        return addHeapObject(ret);
-    }, arguments) };
-    imports.wbg.__wbg_open_e8f45f3526088828 = function() { return handleError(function (arg0, arg1, arg2, arg3) {
-        const ret = getObject(arg0).open(getStringFromWasm0(arg1, arg2), arg3 >>> 0);
-        return addHeapObject(ret);
-    }, arguments) };
-    imports.wbg.__wbg_transaction_5a1543682e4ad921 = function() { return handleError(function (arg0, arg1, arg2, arg3) {
-        const ret = getObject(arg0).transaction(getStringFromWasm0(arg1, arg2), ["readonly","readwrite","versionchange","readwriteflush","cleanup",][arg3]);
-        return addHeapObject(ret);
-    }, arguments) };
-    imports.wbg.__wbg_createObjectStore_190c19a0bae3fedb = function() { return handleError(function (arg0, arg1, arg2) {
-        const ret = getObject(arg0).createObjectStore(getStringFromWasm0(arg1, arg2));
-        return addHeapObject(ret);
-    }, arguments) };
-    imports.wbg.__wbg_setonversionchange_b1a0928064e9b758 = function(arg0, arg1) {
-        getObject(arg0).onversionchange = getObject(arg1);
-    };
-    imports.wbg.__wbg_Window_6a2291ac118902bc = function(arg0) {
-        const ret = getObject(arg0).Window;
-        return addHeapObject(ret);
-    };
-    imports.wbg.__wbindgen_is_undefined = function(arg0) {
-        const ret = getObject(arg0) === undefined;
-        return ret;
-    };
-    imports.wbg.__wbg_WorkerGlobalScope_e82ddd4027f19bb8 = function(arg0) {
-        const ret = getObject(arg0).WorkerGlobalScope;
-        return addHeapObject(ret);
-    };
-    imports.wbg.__wbg_global_12bfcc55465b53ad = function(arg0) {
-        const ret = getObject(arg0).global;
-        return addHeapObject(ret);
-    };
-    imports.wbg.__wbg_indexedDB_1f9ee79bddf7d011 = function() { return handleError(function (arg0) {
-        const ret = getObject(arg0).indexedDB;
-        return isLikeNone(ret) ? 0 : addHeapObject(ret);
-    }, arguments) };
-    imports.wbg.__wbg_indexedDB_9d299adf9543d0c3 = function() { return handleError(function (arg0) {
-        const ret = getObject(arg0).indexedDB;
-        return isLikeNone(ret) ? 0 : addHeapObject(ret);
-    }, arguments) };
-    imports.wbg.__wbg_indexedDB_59bf81be2abc635d = function() { return handleError(function (arg0) {
-        const ret = getObject(arg0).indexedDB;
-        return isLikeNone(ret) ? 0 : addHeapObject(ret);
-    }, arguments) };
-    imports.wbg.__wbg_error_1221bc1f1d0b14d3 = function() { return handleError(function (arg0) {
-        const ret = getObject(arg0).error;
-        return isLikeNone(ret) ? 0 : addHeapObject(ret);
-    }, arguments) };
-    imports.wbg.__wbg_objectStore_80724f9f6d33ab5b = function() { return handleError(function (arg0, arg1, arg2) {
-        const ret = getObject(arg0).objectStore(getStringFromWasm0(arg1, arg2));
-        return addHeapObject(ret);
-    }, arguments) };
-    imports.wbg.__wbg_setoncomplete_a9e0ec1d6568a6d9 = function(arg0, arg1) {
-        getObject(arg0).oncomplete = getObject(arg1);
-    };
-    imports.wbg.__wbg_setonerror_00500154a07e987d = function(arg0, arg1) {
-        getObject(arg0).onerror = getObject(arg1);
-    };
-    imports.wbg.__wbg_setonabort_aedc77f0151af20c = function(arg0, arg1) {
-        getObject(arg0).onabort = getObject(arg1);
-    };
-    imports.wbg.__wbindgen_number_get = function(arg0, arg1) {
-        const obj = getObject(arg1);
-        const ret = typeof(obj) === 'number' ? obj : undefined;
-        getDataViewMemory0().setFloat64(arg0 + 8 * 1, isLikeNone(ret) ? 0 : ret, true);
-        getDataViewMemory0().setInt32(arg0 + 4 * 0, !isLikeNone(ret), true);
-    };
-    imports.wbg.__wbindgen_is_null = function(arg0) {
-        const ret = getObject(arg0) === null;
-        return ret;
-    };
-    imports.wbg.__wbg_createIndex_6d4c3e20ee0f1066 = function() { return handleError(function (arg0, arg1, arg2, arg3, arg4) {
-        const ret = getObject(arg0).createIndex(getStringFromWasm0(arg1, arg2), getObject(arg3), getObject(arg4));
-        return addHeapObject(ret);
-    }, arguments) };
-    imports.wbg.__wbg_setonupgradeneeded_8f3f0ac5d7130a6f = function(arg0, arg1) {
-        getObject(arg0).onupgradeneeded = getObject(arg1);
-    };
-    imports.wbg.__wbg_setonblocked_554fa1541fe66a16 = function(arg0, arg1) {
-        getObject(arg0).onblocked = getObject(arg1);
-    };
-    imports.wbg.__wbg_readyState_80e6a6c7d538fa33 = function(arg0) {
-        const ret = getObject(arg0).readyState;
-        return {"pending":0,"done":1,}[ret] ?? 2;
-    };
-    imports.wbg.__wbg_setonsuccess_962c293b6e38a5d5 = function(arg0, arg1) {
-        getObject(arg0).onsuccess = getObject(arg1);
-    };
-    imports.wbg.__wbg_setonerror_bd61d0a61808ca40 = function(arg0, arg1) {
-        getObject(arg0).onerror = getObject(arg1);
-    };
-    imports.wbg.__wbg_get_224d16597dbbfd96 = function() { return handleError(function (arg0, arg1) {
-        const ret = Reflect.get(getObject(arg0), getObject(arg1));
-        return addHeapObject(ret);
-    }, arguments) };
-    imports.wbg.__wbg_now_a69647afb1f66247 = function(arg0) {
-        const ret = getObject(arg0).now();
-        return ret;
-    };
-    imports.wbg.__wbg_get_3baa728f9d58d3f6 = function(arg0, arg1) {
-        const ret = getObject(arg0)[arg1 >>> 0];
-        return addHeapObject(ret);
-    };
-    imports.wbg.__wbg_length_ae22078168b726f5 = function(arg0) {
-        const ret = getObject(arg0).length;
-        return ret;
-    };
-    imports.wbg.__wbg_new_a220cf903aa02ca2 = function() {
-        const ret = new Array();
-        return addHeapObject(ret);
-    };
-    imports.wbg.__wbg_new_8608a2b51a5f6737 = function() {
-        const ret = new Map();
-        return addHeapObject(ret);
-    };
-    imports.wbg.__wbg_next_f9cb570345655b9a = function() { return handleError(function (arg0) {
-        const ret = getObject(arg0).next();
-        return addHeapObject(ret);
-    }, arguments) };
-    imports.wbg.__wbg_done_bfda7aa8f252b39f = function(arg0) {
-        const ret = getObject(arg0).done;
-        return ret;
-    };
-    imports.wbg.__wbg_value_6d39332ab4788d86 = function(arg0) {
-        const ret = getObject(arg0).value;
-        return addHeapObject(ret);
-    };
-    imports.wbg.__wbg_iterator_888179a48810a9fe = function() {
-        const ret = Symbol.iterator;
-        return addHeapObject(ret);
-    };
-    imports.wbg.__wbg_call_1084a111329e68ce = function() { return handleError(function (arg0, arg1) {
-        const ret = getObject(arg0).call(getObject(arg1));
-        return addHeapObject(ret);
-    }, arguments) };
-    imports.wbg.__wbg_next_de3e9db4440638b2 = function(arg0) {
-        const ret = getObject(arg0).next;
-        return addHeapObject(ret);
-    };
-    imports.wbg.__wbg_new_525245e2b9901204 = function() {
-        const ret = new Object();
-        return addHeapObject(ret);
-    };
-    imports.wbg.__wbg_self_3093d5d1f7bcb682 = function() { return handleError(function () {
-        const ret = self.self;
-        return addHeapObject(ret);
-    }, arguments) };
-    imports.wbg.__wbg_window_3bcfc4d31bc012f8 = function() { return handleError(function () {
-        const ret = window.window;
-        return addHeapObject(ret);
-    }, arguments) };
-    imports.wbg.__wbg_globalThis_86b222e13bdf32ed = function() { return handleError(function () {
-        const ret = globalThis.globalThis;
-        return addHeapObject(ret);
-    }, arguments) };
-    imports.wbg.__wbg_global_e5a3fe56f8be9485 = function() { return handleError(function () {
-        const ret = global.global;
-        return addHeapObject(ret);
-    }, arguments) };
-    imports.wbg.__wbg_newnoargs_76313bd6ff35d0f2 = function(arg0, arg1) {
-        const ret = new Function(getStringFromWasm0(arg0, arg1));
-        return addHeapObject(ret);
-    };
-    imports.wbg.__wbg_set_673dda6c73d19609 = function(arg0, arg1, arg2) {
-        getObject(arg0)[arg1 >>> 0] = takeObject(arg2);
-    };
-    imports.wbg.__wbg_from_0791d740a9d37830 = function(arg0) {
-        const ret = Array.from(getObject(arg0));
-        return addHeapObject(ret);
-    };
-    imports.wbg.__wbg_isArray_8364a5371e9737d8 = function(arg0) {
-        const ret = Array.isArray(getObject(arg0));
-        return ret;
-    };
-    imports.wbg.__wbg_push_37c89022f34c01ca = function(arg0, arg1) {
-        const ret = getObject(arg0).push(getObject(arg1));
-        return ret;
-    };
-    imports.wbg.__wbg_instanceof_ArrayBuffer_61dfc3198373c902 = function(arg0) {
-        let result;
-        try {
-            result = getObject(arg0) instanceof ArrayBuffer;
-        } catch (_) {
-            result = false;
-        }
-        const ret = result;
-        return ret;
-    };
-    imports.wbg.__wbg_new_7695fb2ba274b094 = function(arg0) {
-        const ret = new ArrayBuffer(arg0 >>> 0);
-        return addHeapObject(ret);
-    };
-    imports.wbg.__wbg_BigInt_38f8da7386bbae76 = function() { return handleError(function (arg0) {
-        const ret = BigInt(getObject(arg0));
-        return addHeapObject(ret);
-    }, arguments) };
-    imports.wbg.__wbg_BigInt_c180ff1ada0e172c = function(arg0) {
-        const ret = BigInt(getObject(arg0));
-        return addHeapObject(ret);
-    };
-    imports.wbg.__wbg_toString_2e14737b6219a1c7 = function() { return handleError(function (arg0, arg1) {
-        const ret = getObject(arg0).toString(arg1);
-        return addHeapObject(ret);
-    }, arguments) };
-    imports.wbg.__wbg_toString_515790fe476e2613 = function(arg0, arg1, arg2) {
-        const ret = getObject(arg1).toString(arg2);
-        const ptr1 = passStringToWasm0(ret, wasm.__wbindgen_export_0, wasm.__wbindgen_export_1);
-        const len1 = WASM_VECTOR_LEN;
-        getDataViewMemory0().setInt32(arg0 + 4 * 1, len1, true);
-        getDataViewMemory0().setInt32(arg0 + 4 * 0, ptr1, true);
-    };
-    imports.wbg.__wbg_call_89af060b4e1523f2 = function() { return handleError(function (arg0, arg1, arg2) {
-        const ret = getObject(arg0).call(getObject(arg1), getObject(arg2));
-        return addHeapObject(ret);
-    }, arguments) };
-    imports.wbg.__wbg_instanceof_Map_763ce0e95960d55e = function(arg0) {
-        let result;
-        try {
-            result = getObject(arg0) instanceof Map;
-        } catch (_) {
-            result = false;
-        }
-        const ret = result;
-        return ret;
-    };
-    imports.wbg.__wbg_delete_4c9190c1892c9b79 = function(arg0, arg1) {
-        const ret = getObject(arg0).delete(getObject(arg1));
-        return ret;
-    };
-    imports.wbg.__wbg_get_5a402b270e32a550 = function(arg0, arg1) {
-        const ret = getObject(arg0).get(getObject(arg1));
-        return addHeapObject(ret);
-    };
-    imports.wbg.__wbg_set_49185437f0ab06f8 = function(arg0, arg1, arg2) {
-        const ret = getObject(arg0).set(getObject(arg1), getObject(arg2));
-        return addHeapObject(ret);
-    };
-    imports.wbg.__wbg_entries_2f5ddf03b53c6730 = function(arg0) {
-        const ret = getObject(arg0).entries();
-        return addHeapObject(ret);
-    };
-    imports.wbg.__wbg_isSafeInteger_7f1ed56200d90674 = function(arg0) {
-        const ret = Number.isSafeInteger(getObject(arg0));
-        return ret;
-    };
-    imports.wbg.__wbg_new0_65387337a95cf44d = function() {
-        const ret = new Date();
-        return addHeapObject(ret);
-    };
-    imports.wbg.__wbg_now_b7a162010a9e75b4 = function() {
-        const ret = Date.now();
-        return ret;
-    };
-    imports.wbg.__wbg_setTime_07f7863c994c1d6f = function(arg0, arg1) {
-        const ret = getObject(arg0).setTime(arg1);
-        return ret;
-    };
-    imports.wbg.__wbg_instanceof_Object_b80213ae6cc9aafb = function(arg0) {
-        let result;
-        try {
-            result = getObject(arg0) instanceof Object;
-        } catch (_) {
-            result = false;
-        }
-        const ret = result;
-        return ret;
-    };
-    imports.wbg.__wbg_entries_7a0e06255456ebcd = function(arg0) {
-        const ret = Object.entries(getObject(arg0));
-        return addHeapObject(ret);
-    };
-    imports.wbg.__wbg_is_009b1ef508712fda = function(arg0, arg1) {
-        const ret = Object.is(getObject(arg0), getObject(arg1));
-        return ret;
-    };
-    imports.wbg.__wbg_keys_7840ae453e408eab = function(arg0) {
-        const ret = Object.keys(getObject(arg0));
-        return addHeapObject(ret);
-    };
-    imports.wbg.__wbg_fromCodePoint_ae875c4ff5f6a86b = function() { return handleError(function (arg0) {
-        const ret = String.fromCodePoint(arg0 >>> 0);
-        return addHeapObject(ret);
-    }, arguments) };
-    imports.wbg.__wbg_new_b85e72ed1bfd57f9 = function(arg0, arg1) {
-        try {
-            var state0 = {a: arg0, b: arg1};
-            var cb0 = (arg0, arg1) => {
-                const a = state0.a;
-                state0.a = 0;
-                try {
-                    return __wbg_adapter_218(a, state0.b, arg0, arg1);
-                } finally {
-                    state0.a = a;
-                }
-            };
-            const ret = new Promise(cb0);
-            return addHeapObject(ret);
-        } finally {
-            state0.a = state0.b = 0;
-        }
-    };
-    imports.wbg.__wbg_resolve_570458cb99d56a43 = function(arg0) {
-        const ret = Promise.resolve(getObject(arg0));
-        return addHeapObject(ret);
-    };
-    imports.wbg.__wbg_then_95e6edc0f89b73b1 = function(arg0, arg1) {
-        const ret = getObject(arg0).then(getObject(arg1));
-        return addHeapObject(ret);
-    };
-    imports.wbg.__wbg_then_876bb3c633745cc6 = function(arg0, arg1, arg2) {
-        const ret = getObject(arg0).then(getObject(arg1), getObject(arg2));
-        return addHeapObject(ret);
-    };
-    imports.wbg.__wbg_length_8339fcf5d8ecd12e = function(arg0) {
-        const ret = getObject(arg0).length;
-        return ret;
-    };
-    imports.wbg.__wbg_instanceof_Uint8Array_247a91427532499e = function(arg0) {
-        let result;
-        try {
-            result = getObject(arg0) instanceof Uint8Array;
-        } catch (_) {
-            result = false;
-        }
-        const ret = result;
-        return ret;
-    };
-    imports.wbg.__wbg_stringify_bbf45426c92a6bf5 = function() { return handleError(function (arg0) {
-        const ret = JSON.stringify(getObject(arg0));
-        return addHeapObject(ret);
-    }, arguments) };
-    imports.wbg.__wbindgen_string_get = function(arg0, arg1) {
-        const obj = getObject(arg1);
-        const ret = typeof(obj) === 'string' ? obj : undefined;
-        var ptr1 = isLikeNone(ret) ? 0 : passStringToWasm0(ret, wasm.__wbindgen_export_0, wasm.__wbindgen_export_1);
-        var len1 = WASM_VECTOR_LEN;
-        getDataViewMemory0().setInt32(arg0 + 4 * 1, len1, true);
-        getDataViewMemory0().setInt32(arg0 + 4 * 0, ptr1, true);
-    };
-    imports.wbg.__wbg_has_4bfbc01db38743f7 = function() { return handleError(function (arg0, arg1) {
-        const ret = Reflect.has(getObject(arg0), getObject(arg1));
-        return ret;
-    }, arguments) };
-    imports.wbg.__wbg_set_eacc7d73fefaafdf = function() { return handleError(function (arg0, arg1, arg2) {
-        const ret = Reflect.set(getObject(arg0), getObject(arg1), getObject(arg2));
-        return ret;
-    }, arguments) };
-    imports.wbg.__wbindgen_is_array = function(arg0) {
-        const ret = Array.isArray(getObject(arg0));
-        return ret;
-    };
-    imports.wbg.__wbg_address_new = function(arg0) {
-        const ret = Address.__wrap(arg0);
-        return addHeapObject(ret);
-    };
-    imports.wbg.__wbindgen_jsval_loose_eq = function(arg0, arg1) {
-        const ret = getObject(arg0) == getObject(arg1);
-        return ret;
-    };
-    imports.wbg.__wbindgen_boolean_get = function(arg0) {
-        const v = getObject(arg0);
-        const ret = typeof(v) === 'boolean' ? (v ? 1 : 0) : 2;
-        return ret;
-    };
-    imports.wbg.__wbindgen_is_bigint = function(arg0) {
-        const ret = typeof(getObject(arg0)) === 'bigint';
-        return ret;
-    };
-    imports.wbg.__wbindgen_in = function(arg0, arg1) {
-        const ret = getObject(arg0) in getObject(arg1);
-        return ret;
-    };
-    imports.wbg.__wbindgen_bigint_get_as_i64 = function(arg0, arg1) {
-        const v = getObject(arg1);
-        const ret = typeof(v) === 'bigint' ? v : undefined;
-        getDataViewMemory0().setBigInt64(arg0 + 8 * 1, isLikeNone(ret) ? BigInt(0) : ret, true);
-        getDataViewMemory0().setInt32(arg0 + 4 * 0, !isLikeNone(ret), true);
-    };
-    imports.wbg.__wbindgen_bigint_from_i64 = function(arg0) {
-        const ret = arg0;
-        return addHeapObject(ret);
-    };
-    imports.wbg.__wbindgen_jsval_eq = function(arg0, arg1) {
-        const ret = getObject(arg0) === getObject(arg1);
-        return ret;
-    };
-    imports.wbg.__wbindgen_bigint_from_u64 = function(arg0) {
-        const ret = BigInt.asUintN(64, arg0);
-        return addHeapObject(ret);
-    };
-    imports.wbg.__wbindgen_error_new = function(arg0, arg1) {
-        const ret = new Error(getStringFromWasm0(arg0, arg1));
-        return addHeapObject(ret);
-    };
-    imports.wbg.__wbindgen_as_number = function(arg0) {
-        const ret = +getObject(arg0);
-        return ret;
-    };
-    imports.wbg.__wbg_getwithrefkey_edc2c8960f0f1191 = function(arg0, arg1) {
-        const ret = getObject(arg0)[getObject(arg1)];
-        return addHeapObject(ret);
-    };
-    imports.wbg.__wbindgen_number_new = function(arg0) {
-        const ret = arg0;
-        return addHeapObject(ret);
-    };
-    imports.wbg.__wbg_transaction_new = function(arg0) {
-        const ret = Transaction.__wrap(arg0);
-        return addHeapObject(ret);
-    };
-    imports.wbg.__wbg_utxoentryreference_new = function(arg0) {
-        const ret = UtxoEntryReference.__wrap(arg0);
-        return addHeapObject(ret);
-    };
-    imports.wbg.__wbg_set_f975102236d3c502 = function(arg0, arg1, arg2) {
-        getObject(arg0)[takeObject(arg1)] = takeObject(arg2);
-    };
-    imports.wbg.__wbg_transactioninput_new = function(arg0) {
-        const ret = TransactionInput.__wrap(arg0);
-        return addHeapObject(ret);
-    };
-    imports.wbg.__wbg_transactionoutput_new = function(arg0) {
-        const ret = TransactionOutput.__wrap(arg0);
-        return addHeapObject(ret);
-    };
-    imports.wbg.__wbindgen_try_into_number = function(arg0) {
-        let result;
-    try { result = +getObject(arg0) } catch (e) { result = e }
-    const ret = result;
+module.exports.__wbindgen_object_clone_ref = function(arg0) {
+    const ret = getObject(arg0);
     return addHeapObject(ret);
 };
-imports.wbg.__wbg_networkid_new = function(arg0) {
+
+module.exports.__wbg_crypto_1d1f22824a6a080c = function(arg0) {
+    const ret = getObject(arg0).crypto;
+    return addHeapObject(ret);
+};
+
+module.exports.__wbindgen_is_object = function(arg0) {
+    const val = getObject(arg0);
+    const ret = typeof(val) === 'object' && val !== null;
+    return ret;
+};
+
+module.exports.__wbg_process_4a72847cc503995b = function(arg0) {
+    const ret = getObject(arg0).process;
+    return addHeapObject(ret);
+};
+
+module.exports.__wbg_versions_f686565e586dd935 = function(arg0) {
+    const ret = getObject(arg0).versions;
+    return addHeapObject(ret);
+};
+
+module.exports.__wbg_node_104a2ff8d6ea03a2 = function(arg0) {
+    const ret = getObject(arg0).node;
+    return addHeapObject(ret);
+};
+
+module.exports.__wbindgen_is_string = function(arg0) {
+    const ret = typeof(getObject(arg0)) === 'string';
+    return ret;
+};
+
+module.exports.__wbindgen_object_drop_ref = function(arg0) {
+    takeObject(arg0);
+};
+
+module.exports.__wbg_require_cca90b1a94a0255b = function() { return handleError(function () {
+    const ret = module.require;
+    return addHeapObject(ret);
+}, arguments) };
+
+module.exports.__wbindgen_is_function = function(arg0) {
+    const ret = typeof(getObject(arg0)) === 'function';
+    return ret;
+};
+
+module.exports.__wbindgen_string_new = function(arg0, arg1) {
+    const ret = getStringFromWasm0(arg0, arg1);
+    return addHeapObject(ret);
+};
+
+module.exports.__wbg_msCrypto_eb05e62b530a1508 = function(arg0) {
+    const ret = getObject(arg0).msCrypto;
+    return addHeapObject(ret);
+};
+
+module.exports.__wbg_newwithlength_ec548f448387c968 = function(arg0) {
+    const ret = new Uint8Array(arg0 >>> 0);
+    return addHeapObject(ret);
+};
+
+module.exports.__wbindgen_memory = function() {
+    const ret = wasm.memory;
+    return addHeapObject(ret);
+};
+
+module.exports.__wbg_buffer_b7b08af79b0b0974 = function(arg0) {
+    const ret = getObject(arg0).buffer;
+    return addHeapObject(ret);
+};
+
+module.exports.__wbg_newwithbyteoffsetandlength_8a2cb9ca96b27ec9 = function(arg0, arg1, arg2) {
+    const ret = new Uint8Array(getObject(arg0), arg1 >>> 0, arg2 >>> 0);
+    return addHeapObject(ret);
+};
+
+module.exports.__wbg_randomFillSync_5c9c955aa56b6049 = function() { return handleError(function (arg0, arg1) {
+    getObject(arg0).randomFillSync(takeObject(arg1));
+}, arguments) };
+
+module.exports.__wbg_subarray_7c2e3576afe181d1 = function(arg0, arg1, arg2) {
+    const ret = getObject(arg0).subarray(arg1 >>> 0, arg2 >>> 0);
+    return addHeapObject(ret);
+};
+
+module.exports.__wbg_getRandomValues_3aa56aa6edec874c = function() { return handleError(function (arg0, arg1) {
+    getObject(arg0).getRandomValues(getObject(arg1));
+}, arguments) };
+
+module.exports.__wbg_new_ea1883e1e5e86686 = function(arg0) {
+    const ret = new Uint8Array(getObject(arg0));
+    return addHeapObject(ret);
+};
+
+module.exports.__wbg_set_d1e79e2388520f18 = function(arg0, arg1, arg2) {
+    getObject(arg0).set(getObject(arg1), arg2 >>> 0);
+};
+
+module.exports.__wbg_target_b7cb1739bee70928 = function(arg0) {
+    const ret = getObject(arg0).target;
+    return isLikeNone(ret) ? 0 : addHeapObject(ret);
+};
+
+module.exports.__wbg_result_fd2dae625828961d = function() { return handleError(function (arg0) {
+    const ret = getObject(arg0).result;
+    return addHeapObject(ret);
+}, arguments) };
+
+module.exports.__wbg_open_e8f45f3526088828 = function() { return handleError(function (arg0, arg1, arg2, arg3) {
+    const ret = getObject(arg0).open(getStringFromWasm0(arg1, arg2), arg3 >>> 0);
+    return addHeapObject(ret);
+}, arguments) };
+
+module.exports.__wbg_transaction_5a1543682e4ad921 = function() { return handleError(function (arg0, arg1, arg2, arg3) {
+    const ret = getObject(arg0).transaction(getStringFromWasm0(arg1, arg2), ["readonly","readwrite","versionchange","readwriteflush","cleanup",][arg3]);
+    return addHeapObject(ret);
+}, arguments) };
+
+module.exports.__wbg_createObjectStore_190c19a0bae3fedb = function() { return handleError(function (arg0, arg1, arg2) {
+    const ret = getObject(arg0).createObjectStore(getStringFromWasm0(arg1, arg2));
+    return addHeapObject(ret);
+}, arguments) };
+
+module.exports.__wbg_setonversionchange_b1a0928064e9b758 = function(arg0, arg1) {
+    getObject(arg0).onversionchange = getObject(arg1);
+};
+
+module.exports.__wbg_Window_6a2291ac118902bc = function(arg0) {
+    const ret = getObject(arg0).Window;
+    return addHeapObject(ret);
+};
+
+module.exports.__wbindgen_is_undefined = function(arg0) {
+    const ret = getObject(arg0) === undefined;
+    return ret;
+};
+
+module.exports.__wbg_WorkerGlobalScope_e82ddd4027f19bb8 = function(arg0) {
+    const ret = getObject(arg0).WorkerGlobalScope;
+    return addHeapObject(ret);
+};
+
+module.exports.__wbg_global_12bfcc55465b53ad = function(arg0) {
+    const ret = getObject(arg0).global;
+    return addHeapObject(ret);
+};
+
+module.exports.__wbg_indexedDB_1f9ee79bddf7d011 = function() { return handleError(function (arg0) {
+    const ret = getObject(arg0).indexedDB;
+    return isLikeNone(ret) ? 0 : addHeapObject(ret);
+}, arguments) };
+
+module.exports.__wbg_indexedDB_9d299adf9543d0c3 = function() { return handleError(function (arg0) {
+    const ret = getObject(arg0).indexedDB;
+    return isLikeNone(ret) ? 0 : addHeapObject(ret);
+}, arguments) };
+
+module.exports.__wbg_indexedDB_59bf81be2abc635d = function() { return handleError(function (arg0) {
+    const ret = getObject(arg0).indexedDB;
+    return isLikeNone(ret) ? 0 : addHeapObject(ret);
+}, arguments) };
+
+module.exports.__wbg_error_1221bc1f1d0b14d3 = function() { return handleError(function (arg0) {
+    const ret = getObject(arg0).error;
+    return isLikeNone(ret) ? 0 : addHeapObject(ret);
+}, arguments) };
+
+module.exports.__wbg_objectStore_80724f9f6d33ab5b = function() { return handleError(function (arg0, arg1, arg2) {
+    const ret = getObject(arg0).objectStore(getStringFromWasm0(arg1, arg2));
+    return addHeapObject(ret);
+}, arguments) };
+
+module.exports.__wbg_setoncomplete_a9e0ec1d6568a6d9 = function(arg0, arg1) {
+    getObject(arg0).oncomplete = getObject(arg1);
+};
+
+module.exports.__wbg_setonerror_00500154a07e987d = function(arg0, arg1) {
+    getObject(arg0).onerror = getObject(arg1);
+};
+
+module.exports.__wbg_setonabort_aedc77f0151af20c = function(arg0, arg1) {
+    getObject(arg0).onabort = getObject(arg1);
+};
+
+module.exports.__wbindgen_number_get = function(arg0, arg1) {
+    const obj = getObject(arg1);
+    const ret = typeof(obj) === 'number' ? obj : undefined;
+    getDataViewMemory0().setFloat64(arg0 + 8 * 1, isLikeNone(ret) ? 0 : ret, true);
+    getDataViewMemory0().setInt32(arg0 + 4 * 0, !isLikeNone(ret), true);
+};
+
+module.exports.__wbindgen_is_null = function(arg0) {
+    const ret = getObject(arg0) === null;
+    return ret;
+};
+
+module.exports.__wbg_createIndex_6d4c3e20ee0f1066 = function() { return handleError(function (arg0, arg1, arg2, arg3, arg4) {
+    const ret = getObject(arg0).createIndex(getStringFromWasm0(arg1, arg2), getObject(arg3), getObject(arg4));
+    return addHeapObject(ret);
+}, arguments) };
+
+module.exports.__wbg_setonupgradeneeded_8f3f0ac5d7130a6f = function(arg0, arg1) {
+    getObject(arg0).onupgradeneeded = getObject(arg1);
+};
+
+module.exports.__wbg_setonblocked_554fa1541fe66a16 = function(arg0, arg1) {
+    getObject(arg0).onblocked = getObject(arg1);
+};
+
+module.exports.__wbg_readyState_80e6a6c7d538fa33 = function(arg0) {
+    const ret = getObject(arg0).readyState;
+    return {"pending":0,"done":1,}[ret] ?? 2;
+};
+
+module.exports.__wbg_setonsuccess_962c293b6e38a5d5 = function(arg0, arg1) {
+    getObject(arg0).onsuccess = getObject(arg1);
+};
+
+module.exports.__wbg_setonerror_bd61d0a61808ca40 = function(arg0, arg1) {
+    getObject(arg0).onerror = getObject(arg1);
+};
+
+module.exports.__wbg_get_224d16597dbbfd96 = function() { return handleError(function (arg0, arg1) {
+    const ret = Reflect.get(getObject(arg0), getObject(arg1));
+    return addHeapObject(ret);
+}, arguments) };
+
+module.exports.__wbg_now_a69647afb1f66247 = function(arg0) {
+    const ret = getObject(arg0).now();
+    return ret;
+};
+
+module.exports.__wbg_get_3baa728f9d58d3f6 = function(arg0, arg1) {
+    const ret = getObject(arg0)[arg1 >>> 0];
+    return addHeapObject(ret);
+};
+
+module.exports.__wbg_length_ae22078168b726f5 = function(arg0) {
+    const ret = getObject(arg0).length;
+    return ret;
+};
+
+module.exports.__wbg_new_a220cf903aa02ca2 = function() {
+    const ret = new Array();
+    return addHeapObject(ret);
+};
+
+module.exports.__wbg_new_8608a2b51a5f6737 = function() {
+    const ret = new Map();
+    return addHeapObject(ret);
+};
+
+module.exports.__wbg_next_f9cb570345655b9a = function() { return handleError(function (arg0) {
+    const ret = getObject(arg0).next();
+    return addHeapObject(ret);
+}, arguments) };
+
+module.exports.__wbg_done_bfda7aa8f252b39f = function(arg0) {
+    const ret = getObject(arg0).done;
+    return ret;
+};
+
+module.exports.__wbg_value_6d39332ab4788d86 = function(arg0) {
+    const ret = getObject(arg0).value;
+    return addHeapObject(ret);
+};
+
+module.exports.__wbg_iterator_888179a48810a9fe = function() {
+    const ret = Symbol.iterator;
+    return addHeapObject(ret);
+};
+
+module.exports.__wbg_call_1084a111329e68ce = function() { return handleError(function (arg0, arg1) {
+    const ret = getObject(arg0).call(getObject(arg1));
+    return addHeapObject(ret);
+}, arguments) };
+
+module.exports.__wbg_next_de3e9db4440638b2 = function(arg0) {
+    const ret = getObject(arg0).next;
+    return addHeapObject(ret);
+};
+
+module.exports.__wbg_new_525245e2b9901204 = function() {
+    const ret = new Object();
+    return addHeapObject(ret);
+};
+
+module.exports.__wbg_self_3093d5d1f7bcb682 = function() { return handleError(function () {
+    const ret = self.self;
+    return addHeapObject(ret);
+}, arguments) };
+
+module.exports.__wbg_window_3bcfc4d31bc012f8 = function() { return handleError(function () {
+    const ret = window.window;
+    return addHeapObject(ret);
+}, arguments) };
+
+module.exports.__wbg_globalThis_86b222e13bdf32ed = function() { return handleError(function () {
+    const ret = globalThis.globalThis;
+    return addHeapObject(ret);
+}, arguments) };
+
+module.exports.__wbg_global_e5a3fe56f8be9485 = function() { return handleError(function () {
+    const ret = global.global;
+    return addHeapObject(ret);
+}, arguments) };
+
+module.exports.__wbg_newnoargs_76313bd6ff35d0f2 = function(arg0, arg1) {
+    const ret = new Function(getStringFromWasm0(arg0, arg1));
+    return addHeapObject(ret);
+};
+
+module.exports.__wbg_set_673dda6c73d19609 = function(arg0, arg1, arg2) {
+    getObject(arg0)[arg1 >>> 0] = takeObject(arg2);
+};
+
+module.exports.__wbg_from_0791d740a9d37830 = function(arg0) {
+    const ret = Array.from(getObject(arg0));
+    return addHeapObject(ret);
+};
+
+module.exports.__wbg_isArray_8364a5371e9737d8 = function(arg0) {
+    const ret = Array.isArray(getObject(arg0));
+    return ret;
+};
+
+module.exports.__wbg_push_37c89022f34c01ca = function(arg0, arg1) {
+    const ret = getObject(arg0).push(getObject(arg1));
+    return ret;
+};
+
+module.exports.__wbg_instanceof_ArrayBuffer_61dfc3198373c902 = function(arg0) {
+    let result;
+    try {
+        result = getObject(arg0) instanceof ArrayBuffer;
+    } catch (_) {
+        result = false;
+    }
+    const ret = result;
+    return ret;
+};
+
+module.exports.__wbg_new_7695fb2ba274b094 = function(arg0) {
+    const ret = new ArrayBuffer(arg0 >>> 0);
+    return addHeapObject(ret);
+};
+
+module.exports.__wbg_BigInt_38f8da7386bbae76 = function() { return handleError(function (arg0) {
+    const ret = BigInt(getObject(arg0));
+    return addHeapObject(ret);
+}, arguments) };
+
+module.exports.__wbg_BigInt_c180ff1ada0e172c = function(arg0) {
+    const ret = BigInt(getObject(arg0));
+    return addHeapObject(ret);
+};
+
+module.exports.__wbg_toString_2e14737b6219a1c7 = function() { return handleError(function (arg0, arg1) {
+    const ret = getObject(arg0).toString(arg1);
+    return addHeapObject(ret);
+}, arguments) };
+
+module.exports.__wbg_toString_515790fe476e2613 = function(arg0, arg1, arg2) {
+    const ret = getObject(arg1).toString(arg2);
+    const ptr1 = passStringToWasm0(ret, wasm.__wbindgen_export_0, wasm.__wbindgen_export_1);
+    const len1 = WASM_VECTOR_LEN;
+    getDataViewMemory0().setInt32(arg0 + 4 * 1, len1, true);
+    getDataViewMemory0().setInt32(arg0 + 4 * 0, ptr1, true);
+};
+
+module.exports.__wbg_call_89af060b4e1523f2 = function() { return handleError(function (arg0, arg1, arg2) {
+    const ret = getObject(arg0).call(getObject(arg1), getObject(arg2));
+    return addHeapObject(ret);
+}, arguments) };
+
+module.exports.__wbg_instanceof_Map_763ce0e95960d55e = function(arg0) {
+    let result;
+    try {
+        result = getObject(arg0) instanceof Map;
+    } catch (_) {
+        result = false;
+    }
+    const ret = result;
+    return ret;
+};
+
+module.exports.__wbg_delete_4c9190c1892c9b79 = function(arg0, arg1) {
+    const ret = getObject(arg0).delete(getObject(arg1));
+    return ret;
+};
+
+module.exports.__wbg_get_5a402b270e32a550 = function(arg0, arg1) {
+    const ret = getObject(arg0).get(getObject(arg1));
+    return addHeapObject(ret);
+};
+
+module.exports.__wbg_set_49185437f0ab06f8 = function(arg0, arg1, arg2) {
+    const ret = getObject(arg0).set(getObject(arg1), getObject(arg2));
+    return addHeapObject(ret);
+};
+
+module.exports.__wbg_entries_2f5ddf03b53c6730 = function(arg0) {
+    const ret = getObject(arg0).entries();
+    return addHeapObject(ret);
+};
+
+module.exports.__wbg_isSafeInteger_7f1ed56200d90674 = function(arg0) {
+    const ret = Number.isSafeInteger(getObject(arg0));
+    return ret;
+};
+
+module.exports.__wbg_new0_65387337a95cf44d = function() {
+    const ret = new Date();
+    return addHeapObject(ret);
+};
+
+module.exports.__wbg_now_b7a162010a9e75b4 = function() {
+    const ret = Date.now();
+    return ret;
+};
+
+module.exports.__wbg_setTime_07f7863c994c1d6f = function(arg0, arg1) {
+    const ret = getObject(arg0).setTime(arg1);
+    return ret;
+};
+
+module.exports.__wbg_instanceof_Object_b80213ae6cc9aafb = function(arg0) {
+    let result;
+    try {
+        result = getObject(arg0) instanceof Object;
+    } catch (_) {
+        result = false;
+    }
+    const ret = result;
+    return ret;
+};
+
+module.exports.__wbg_entries_7a0e06255456ebcd = function(arg0) {
+    const ret = Object.entries(getObject(arg0));
+    return addHeapObject(ret);
+};
+
+module.exports.__wbg_is_009b1ef508712fda = function(arg0, arg1) {
+    const ret = Object.is(getObject(arg0), getObject(arg1));
+    return ret;
+};
+
+module.exports.__wbg_keys_7840ae453e408eab = function(arg0) {
+    const ret = Object.keys(getObject(arg0));
+    return addHeapObject(ret);
+};
+
+module.exports.__wbg_fromCodePoint_ae875c4ff5f6a86b = function() { return handleError(function (arg0) {
+    const ret = String.fromCodePoint(arg0 >>> 0);
+    return addHeapObject(ret);
+}, arguments) };
+
+module.exports.__wbg_new_b85e72ed1bfd57f9 = function(arg0, arg1) {
+    try {
+        var state0 = {a: arg0, b: arg1};
+        var cb0 = (arg0, arg1) => {
+            const a = state0.a;
+            state0.a = 0;
+            try {
+                return __wbg_adapter_218(a, state0.b, arg0, arg1);
+            } finally {
+                state0.a = a;
+            }
+        };
+        const ret = new Promise(cb0);
+        return addHeapObject(ret);
+    } finally {
+        state0.a = state0.b = 0;
+    }
+};
+
+module.exports.__wbg_resolve_570458cb99d56a43 = function(arg0) {
+    const ret = Promise.resolve(getObject(arg0));
+    return addHeapObject(ret);
+};
+
+module.exports.__wbg_then_95e6edc0f89b73b1 = function(arg0, arg1) {
+    const ret = getObject(arg0).then(getObject(arg1));
+    return addHeapObject(ret);
+};
+
+module.exports.__wbg_then_876bb3c633745cc6 = function(arg0, arg1, arg2) {
+    const ret = getObject(arg0).then(getObject(arg1), getObject(arg2));
+    return addHeapObject(ret);
+};
+
+module.exports.__wbg_length_8339fcf5d8ecd12e = function(arg0) {
+    const ret = getObject(arg0).length;
+    return ret;
+};
+
+module.exports.__wbg_instanceof_Uint8Array_247a91427532499e = function(arg0) {
+    let result;
+    try {
+        result = getObject(arg0) instanceof Uint8Array;
+    } catch (_) {
+        result = false;
+    }
+    const ret = result;
+    return ret;
+};
+
+module.exports.__wbg_stringify_bbf45426c92a6bf5 = function() { return handleError(function (arg0) {
+    const ret = JSON.stringify(getObject(arg0));
+    return addHeapObject(ret);
+}, arguments) };
+
+module.exports.__wbindgen_string_get = function(arg0, arg1) {
+    const obj = getObject(arg1);
+    const ret = typeof(obj) === 'string' ? obj : undefined;
+    var ptr1 = isLikeNone(ret) ? 0 : passStringToWasm0(ret, wasm.__wbindgen_export_0, wasm.__wbindgen_export_1);
+    var len1 = WASM_VECTOR_LEN;
+    getDataViewMemory0().setInt32(arg0 + 4 * 1, len1, true);
+    getDataViewMemory0().setInt32(arg0 + 4 * 0, ptr1, true);
+};
+
+module.exports.__wbg_has_4bfbc01db38743f7 = function() { return handleError(function (arg0, arg1) {
+    const ret = Reflect.has(getObject(arg0), getObject(arg1));
+    return ret;
+}, arguments) };
+
+module.exports.__wbg_set_eacc7d73fefaafdf = function() { return handleError(function (arg0, arg1, arg2) {
+    const ret = Reflect.set(getObject(arg0), getObject(arg1), getObject(arg2));
+    return ret;
+}, arguments) };
+
+module.exports.__wbindgen_is_array = function(arg0) {
+    const ret = Array.isArray(getObject(arg0));
+    return ret;
+};
+
+module.exports.__wbg_address_new = function(arg0) {
+    const ret = Address.__wrap(arg0);
+    return addHeapObject(ret);
+};
+
+module.exports.__wbindgen_jsval_loose_eq = function(arg0, arg1) {
+    const ret = getObject(arg0) == getObject(arg1);
+    return ret;
+};
+
+module.exports.__wbindgen_boolean_get = function(arg0) {
+    const v = getObject(arg0);
+    const ret = typeof(v) === 'boolean' ? (v ? 1 : 0) : 2;
+    return ret;
+};
+
+module.exports.__wbindgen_is_bigint = function(arg0) {
+    const ret = typeof(getObject(arg0)) === 'bigint';
+    return ret;
+};
+
+module.exports.__wbindgen_in = function(arg0, arg1) {
+    const ret = getObject(arg0) in getObject(arg1);
+    return ret;
+};
+
+module.exports.__wbindgen_bigint_get_as_i64 = function(arg0, arg1) {
+    const v = getObject(arg1);
+    const ret = typeof(v) === 'bigint' ? v : undefined;
+    getDataViewMemory0().setBigInt64(arg0 + 8 * 1, isLikeNone(ret) ? BigInt(0) : ret, true);
+    getDataViewMemory0().setInt32(arg0 + 4 * 0, !isLikeNone(ret), true);
+};
+
+module.exports.__wbindgen_bigint_from_i64 = function(arg0) {
+    const ret = arg0;
+    return addHeapObject(ret);
+};
+
+module.exports.__wbindgen_jsval_eq = function(arg0, arg1) {
+    const ret = getObject(arg0) === getObject(arg1);
+    return ret;
+};
+
+module.exports.__wbindgen_bigint_from_u64 = function(arg0) {
+    const ret = BigInt.asUintN(64, arg0);
+    return addHeapObject(ret);
+};
+
+module.exports.__wbindgen_error_new = function(arg0, arg1) {
+    const ret = new Error(getStringFromWasm0(arg0, arg1));
+    return addHeapObject(ret);
+};
+
+module.exports.__wbindgen_as_number = function(arg0) {
+    const ret = +getObject(arg0);
+    return ret;
+};
+
+module.exports.__wbg_getwithrefkey_edc2c8960f0f1191 = function(arg0, arg1) {
+    const ret = getObject(arg0)[getObject(arg1)];
+    return addHeapObject(ret);
+};
+
+module.exports.__wbindgen_number_new = function(arg0) {
+    const ret = arg0;
+    return addHeapObject(ret);
+};
+
+module.exports.__wbg_transaction_new = function(arg0) {
+    const ret = Transaction.__wrap(arg0);
+    return addHeapObject(ret);
+};
+
+module.exports.__wbg_utxoentryreference_new = function(arg0) {
+    const ret = UtxoEntryReference.__wrap(arg0);
+    return addHeapObject(ret);
+};
+
+module.exports.__wbg_set_f975102236d3c502 = function(arg0, arg1, arg2) {
+    getObject(arg0)[takeObject(arg1)] = takeObject(arg2);
+};
+
+module.exports.__wbg_transactioninput_new = function(arg0) {
+    const ret = TransactionInput.__wrap(arg0);
+    return addHeapObject(ret);
+};
+
+module.exports.__wbg_transactionoutput_new = function(arg0) {
+    const ret = TransactionOutput.__wrap(arg0);
+    return addHeapObject(ret);
+};
+
+module.exports.__wbindgen_try_into_number = function(arg0) {
+    let result;
+try { result = +getObject(arg0) } catch (e) { result = e }
+const ret = result;
+return addHeapObject(ret);
+};
+
+module.exports.__wbg_networkid_new = function(arg0) {
     const ret = NetworkId.__wrap(arg0);
     return addHeapObject(ret);
 };
-imports.wbg.__wbg_hash_new = function(arg0) {
+
+module.exports.__wbg_hash_new = function(arg0) {
     const ret = Hash.__wrap(arg0);
     return addHeapObject(ret);
 };
-imports.wbg.__wbg_String_b9412f8799faab3e = function(arg0, arg1) {
+
+module.exports.__wbg_String_b9412f8799faab3e = function(arg0, arg1) {
     const ret = String(getObject(arg1));
     const ptr1 = passStringToWasm0(ret, wasm.__wbindgen_export_0, wasm.__wbindgen_export_1);
     const len1 = WASM_VECTOR_LEN;
     getDataViewMemory0().setInt32(arg0 + 4 * 1, len1, true);
     getDataViewMemory0().setInt32(arg0 + 4 * 0, ptr1, true);
 };
-imports.wbg.__wbg_log_117e2aa9c9ac35ef = function(arg0, arg1) {
+
+module.exports.__wbg_log_117e2aa9c9ac35ef = function(arg0, arg1) {
     console.log(getStringFromWasm0(arg0, arg1));
 };
-imports.wbg.__wbg_warn_2b7cdd18b11959d4 = function(arg0, arg1) {
-    console.warn(getStringFromWasm0(arg0, arg1));
-};
-imports.wbg.__wbg_renameSync_6187da191329d2e4 = function() { return handleError(function (arg0, arg1, arg2, arg3, arg4) {
-    getObject(arg0).renameSync(getStringFromWasm0(arg1, arg2), getStringFromWasm0(arg3, arg4));
-}, arguments) };
-imports.wbg.__wbg_mkdirSync_e0e18e086e2ef088 = function() { return handleError(function (arg0, arg1, arg2, arg3) {
-    getObject(arg0).mkdirSync(getStringFromWasm0(arg1, arg2), takeObject(arg3));
-}, arguments) };
-imports.wbg.__wbg_existsSync_71c4330089739336 = function() { return handleError(function (arg0, arg1, arg2) {
-    const ret = getObject(arg0).existsSync(getStringFromWasm0(arg1, arg2));
-    return ret;
-}, arguments) };
-imports.wbg.__wbg_getItem_cab39762abab3e70 = function() { return handleError(function (arg0, arg1, arg2, arg3) {
-    const ret = getObject(arg1).getItem(getStringFromWasm0(arg2, arg3));
-    var ptr1 = isLikeNone(ret) ? 0 : passStringToWasm0(ret, wasm.__wbindgen_export_0, wasm.__wbindgen_export_1);
-    var len1 = WASM_VECTOR_LEN;
-    getDataViewMemory0().setInt32(arg0 + 4 * 1, len1, true);
-    getDataViewMemory0().setInt32(arg0 + 4 * 0, ptr1, true);
-}, arguments) };
-imports.wbg.__wbg_cancelAnimationFrame_63674bbd9fe50db0 = function(arg0) {
-    cancelAnimationFrame(takeObject(arg0));
-};
-imports.wbg.__wbg_length_17e41c43021d9584 = function() { return handleError(function (arg0) {
-    const ret = getObject(arg0).length;
-    return ret;
-}, arguments) };
-imports.wbg.__wbg_key_89eef9cf026e74da = function() { return handleError(function (arg0, arg1, arg2) {
-    const ret = getObject(arg1).key(arg2 >>> 0);
-    var ptr1 = isLikeNone(ret) ? 0 : passStringToWasm0(ret, wasm.__wbindgen_export_0, wasm.__wbindgen_export_1);
-    var len1 = WASM_VECTOR_LEN;
-    getDataViewMemory0().setInt32(arg0 + 4 * 1, len1, true);
-    getDataViewMemory0().setInt32(arg0 + 4 * 0, ptr1, true);
-}, arguments) };
-imports.wbg.__wbg_error_8a5920abbe618207 = function(arg0, arg1) {
-    console.error(getStringFromWasm0(arg0, arg1));
-};
-imports.wbg.__wbg_readFileSync_de49edfedd87a445 = function() { return handleError(function (arg0, arg1, arg2, arg3) {
-    const ret = getObject(arg0).readFileSync(getStringFromWasm0(arg1, arg2), takeObject(arg3));
-    return addHeapObject(ret);
-}, arguments) };
-imports.wbg.__wbg_from_90240fa076fed36a = function(arg0) {
-    const ret = Buffer.from(getObject(arg0));
-    return addHeapObject(ret);
-};
-imports.wbg.__wbg_writeFileSync_c19a5360f851c3d9 = function() { return handleError(function (arg0, arg1, arg2, arg3, arg4) {
-    getObject(arg0).writeFileSync(getStringFromWasm0(arg1, arg2), takeObject(arg3), takeObject(arg4));
-}, arguments) };
-imports.wbg.__wbg_setItem_9482185c870abba6 = function() { return handleError(function (arg0, arg1, arg2, arg3, arg4) {
-    getObject(arg0).setItem(getStringFromWasm0(arg1, arg2), getStringFromWasm0(arg3, arg4));
-}, arguments) };
-imports.wbg.__wbg_unlinkSync_814cf160f57ba152 = function() { return handleError(function (arg0, arg1, arg2) {
-    getObject(arg0).unlinkSync(getStringFromWasm0(arg1, arg2));
-}, arguments) };
-imports.wbg.__wbg_removeItem_f10a84254de33054 = function() { return handleError(function (arg0, arg1, arg2) {
-    getObject(arg0).removeItem(getStringFromWasm0(arg1, arg2));
-}, arguments) };
-imports.wbg.__wbg_accountkind_new = function(arg0) {
-    const ret = AccountKind.__wrap(arg0);
-    return addHeapObject(ret);
-};
-imports.wbg.__wbg_put_f83d95662936dee7 = function() { return handleError(function (arg0, arg1, arg2) {
-    const ret = getObject(arg0).put(getObject(arg1), getObject(arg2));
-    return addHeapObject(ret);
-}, arguments) };
-imports.wbg.__wbg_setonopen_627ecbd31f447580 = function(arg0, arg1) {
-    getObject(arg0).onopen = getObject(arg1);
-};
-imports.wbg.__wbg_setonclose_5493577767d066d1 = function(arg0, arg1) {
-    getObject(arg0).onclose = getObject(arg1);
-};
-imports.wbg.__wbg_setonerror_8bb4d27c1bd546a1 = function(arg0, arg1) {
-    getObject(arg0).onerror = getObject(arg1);
-};
-imports.wbg.__wbg_setonmessage_aa9deea5b0e4c255 = function(arg0, arg1) {
-    getObject(arg0).onmessage = getObject(arg1);
-};
-imports.wbg.__wbg_readyState_02fb3a5c8e82fb5c = function(arg0) {
-    const ret = getObject(arg0).readyState;
-    return ret;
-};
-imports.wbg.__wbg_close_f1f7d57aca466836 = function() { return handleError(function (arg0) {
-    getObject(arg0).close();
-}, arguments) };
-imports.wbg.__wbindgen_cb_drop = function(arg0) {
+
+module.exports.__wbindgen_cb_drop = function(arg0) {
     const obj = takeObject(arg0).original;
     if (obj.cnt-- == 1) {
         obj.a = 0;
@@ -13290,19 +13470,157 @@ imports.wbg.__wbindgen_cb_drop = function(arg0) {
     const ret = false;
     return ret;
 };
-imports.wbg.__wbg_readdir_10db195565f761a0 = function() { return handleError(function (arg0, arg1, arg2) {
+
+module.exports.__wbg_cancelAnimationFrame_63674bbd9fe50db0 = function(arg0) {
+    cancelAnimationFrame(takeObject(arg0));
+};
+
+module.exports.__wbindgen_ge = function(arg0, arg1) {
+    const ret = getObject(arg0) >= getObject(arg1);
+    return ret;
+};
+
+module.exports.__wbg_length_17e41c43021d9584 = function() { return handleError(function (arg0) {
+    const ret = getObject(arg0).length;
+    return ret;
+}, arguments) };
+
+module.exports.__wbg_key_89eef9cf026e74da = function() { return handleError(function (arg0, arg1, arg2) {
+    const ret = getObject(arg1).key(arg2 >>> 0);
+    var ptr1 = isLikeNone(ret) ? 0 : passStringToWasm0(ret, wasm.__wbindgen_export_0, wasm.__wbindgen_export_1);
+    var len1 = WASM_VECTOR_LEN;
+    getDataViewMemory0().setInt32(arg0 + 4 * 1, len1, true);
+    getDataViewMemory0().setInt32(arg0 + 4 * 0, ptr1, true);
+}, arguments) };
+
+module.exports.__wbg_error_8a5920abbe618207 = function(arg0, arg1) {
+    console.error(getStringFromWasm0(arg0, arg1));
+};
+
+module.exports.__wbg_readFileSync_de49edfedd87a445 = function() { return handleError(function (arg0, arg1, arg2, arg3) {
+    const ret = getObject(arg0).readFileSync(getStringFromWasm0(arg1, arg2), takeObject(arg3));
+    return addHeapObject(ret);
+}, arguments) };
+
+module.exports.__wbg_getItem_cab39762abab3e70 = function() { return handleError(function (arg0, arg1, arg2, arg3) {
+    const ret = getObject(arg1).getItem(getStringFromWasm0(arg2, arg3));
+    var ptr1 = isLikeNone(ret) ? 0 : passStringToWasm0(ret, wasm.__wbindgen_export_0, wasm.__wbindgen_export_1);
+    var len1 = WASM_VECTOR_LEN;
+    getDataViewMemory0().setInt32(arg0 + 4 * 1, len1, true);
+    getDataViewMemory0().setInt32(arg0 + 4 * 0, ptr1, true);
+}, arguments) };
+
+module.exports.__wbg_from_90240fa076fed36a = function(arg0) {
+    const ret = Buffer.from(getObject(arg0));
+    return addHeapObject(ret);
+};
+
+module.exports.__wbg_writeFileSync_c19a5360f851c3d9 = function() { return handleError(function (arg0, arg1, arg2, arg3, arg4) {
+    getObject(arg0).writeFileSync(getStringFromWasm0(arg1, arg2), takeObject(arg3), takeObject(arg4));
+}, arguments) };
+
+module.exports.__wbg_setItem_9482185c870abba6 = function() { return handleError(function (arg0, arg1, arg2, arg3, arg4) {
+    getObject(arg0).setItem(getStringFromWasm0(arg1, arg2), getStringFromWasm0(arg3, arg4));
+}, arguments) };
+
+module.exports.__wbg_warn_2b7cdd18b11959d4 = function(arg0, arg1) {
+    console.warn(getStringFromWasm0(arg0, arg1));
+};
+
+module.exports.__wbg_unlinkSync_814cf160f57ba152 = function() { return handleError(function (arg0, arg1, arg2) {
+    getObject(arg0).unlinkSync(getStringFromWasm0(arg1, arg2));
+}, arguments) };
+
+module.exports.__wbg_removeItem_f10a84254de33054 = function() { return handleError(function (arg0, arg1, arg2) {
+    getObject(arg0).removeItem(getStringFromWasm0(arg1, arg2));
+}, arguments) };
+
+module.exports.__wbg_renameSync_6187da191329d2e4 = function() { return handleError(function (arg0, arg1, arg2, arg3, arg4) {
+    getObject(arg0).renameSync(getStringFromWasm0(arg1, arg2), getStringFromWasm0(arg3, arg4));
+}, arguments) };
+
+module.exports.__wbg_mkdirSync_e0e18e086e2ef088 = function() { return handleError(function (arg0, arg1, arg2, arg3) {
+    getObject(arg0).mkdirSync(getStringFromWasm0(arg1, arg2), takeObject(arg3));
+}, arguments) };
+
+module.exports.__wbg_existsSync_71c4330089739336 = function() { return handleError(function (arg0, arg1, arg2) {
+    const ret = getObject(arg0).existsSync(getStringFromWasm0(arg1, arg2));
+    return ret;
+}, arguments) };
+
+module.exports.__wbg_advance_0922866a23942467 = function() { return handleError(function (arg0, arg1) {
+    getObject(arg0).advance(arg1 >>> 0);
+}, arguments) };
+
+module.exports.__wbg_oldVersion_74205b5e4698efc3 = function(arg0) {
+    const ret = getObject(arg0).oldVersion;
+    return ret;
+};
+
+module.exports.__wbg_setunique_6f46c3f803001492 = function(arg0, arg1) {
+    getObject(arg0).unique = arg1 !== 0;
+};
+
+module.exports.__wbg_put_f83d95662936dee7 = function() { return handleError(function (arg0, arg1, arg2) {
+    const ret = getObject(arg0).put(getObject(arg1), getObject(arg2));
+    return addHeapObject(ret);
+}, arguments) };
+
+module.exports.__wbg_setonopen_627ecbd31f447580 = function(arg0, arg1) {
+    getObject(arg0).onopen = getObject(arg1);
+};
+
+module.exports.__wbg_setonclose_5493577767d066d1 = function(arg0, arg1) {
+    getObject(arg0).onclose = getObject(arg1);
+};
+
+module.exports.__wbg_setonerror_8bb4d27c1bd546a1 = function(arg0, arg1) {
+    getObject(arg0).onerror = getObject(arg1);
+};
+
+module.exports.__wbg_setonmessage_aa9deea5b0e4c255 = function(arg0, arg1) {
+    getObject(arg0).onmessage = getObject(arg1);
+};
+
+module.exports.__wbg_readyState_02fb3a5c8e82fb5c = function(arg0) {
+    const ret = getObject(arg0).readyState;
+    return ret;
+};
+
+module.exports.__wbg_close_f1f7d57aca466836 = function() { return handleError(function (arg0) {
+    getObject(arg0).close();
+}, arguments) };
+
+module.exports.__wbg_get_396d4cb09bce1873 = function() { return handleError(function () {
+    const ret = chrome.storage.local.get();
+    return addHeapObject(ret);
+}, arguments) };
+
+module.exports.__wbg_count_7b9a7e71c616b931 = function() { return handleError(function (arg0) {
+    const ret = getObject(arg0).count();
+    return addHeapObject(ret);
+}, arguments) };
+
+module.exports.__wbg_value_d4be628e515b251f = function() { return handleError(function (arg0) {
+    const ret = getObject(arg0).value;
+    return addHeapObject(ret);
+}, arguments) };
+
+module.exports.__wbg_continue_a92b4c9f17458897 = function() { return handleError(function (arg0) {
+    getObject(arg0).continue();
+}, arguments) };
+
+module.exports.__wbg_readdir_10db195565f761a0 = function() { return handleError(function (arg0, arg1, arg2) {
     const ret = getObject(arg0).readdir(getStringFromWasm0(arg1, arg2));
     return addHeapObject(ret);
 }, arguments) };
-imports.wbg.__wbg_statSync_edbaafda26c0599a = function() { return handleError(function (arg0, arg1, arg2) {
+
+module.exports.__wbg_statSync_edbaafda26c0599a = function() { return handleError(function (arg0, arg1, arg2) {
     const ret = getObject(arg0).statSync(getStringFromWasm0(arg1, arg2));
     return addHeapObject(ret);
 }, arguments) };
-imports.wbg.__wbg_get_88b5e79e9daccb9f = function() { return handleError(function (arg0, arg1) {
-    const ret = getObject(arg0).get(getObject(arg1));
-    return addHeapObject(ret);
-}, arguments) };
-imports.wbg.__wbg_get_d8f9cfb1368ca9b7 = function() { return handleError(function (arg0, arg1) {
+
+module.exports.__wbg_get_d8f9cfb1368ca9b7 = function() { return handleError(function (arg0, arg1) {
     let deferred0_0;
     let deferred0_1;
     try {
@@ -13314,34 +13632,8 @@ imports.wbg.__wbg_get_d8f9cfb1368ca9b7 = function() { return handleError(functio
         wasm.__wbindgen_export_17(deferred0_0, deferred0_1, 1);
     }
 }, arguments) };
-imports.wbg.__wbg_value_d4be628e515b251f = function() { return handleError(function (arg0) {
-    const ret = getObject(arg0).value;
-    return addHeapObject(ret);
-}, arguments) };
-imports.wbg.__wbg_update_375c91f2a290ec51 = function() { return handleError(function (arg0, arg1) {
-    const ret = getObject(arg0).update(getObject(arg1));
-    return addHeapObject(ret);
-}, arguments) };
-imports.wbg.__wbg_continue_a92b4c9f17458897 = function() { return handleError(function (arg0) {
-    getObject(arg0).continue();
-}, arguments) };
-imports.wbg.__wbg_set_1d630b100fb9094b = function() { return handleError(function (arg0) {
-    const ret = chrome.storage.local.set(takeObject(arg0));
-    return addHeapObject(ret);
-}, arguments) };
-imports.wbg.__wbg_delete_34764ece57bdc720 = function() { return handleError(function (arg0, arg1) {
-    const ret = getObject(arg0).delete(getObject(arg1));
-    return addHeapObject(ret);
-}, arguments) };
-imports.wbg.__wbg_get_396d4cb09bce1873 = function() { return handleError(function () {
-    const ret = chrome.storage.local.get();
-    return addHeapObject(ret);
-}, arguments) };
-imports.wbg.__wbg_count_7b9a7e71c616b931 = function() { return handleError(function (arg0) {
-    const ret = getObject(arg0).count();
-    return addHeapObject(ret);
-}, arguments) };
-imports.wbg.__wbg_remove_d58cbb142852d2e8 = function() { return handleError(function (arg0, arg1) {
+
+module.exports.__wbg_remove_d58cbb142852d2e8 = function() { return handleError(function (arg0, arg1) {
     let deferred0_0;
     let deferred0_1;
     try {
@@ -13353,48 +13645,67 @@ imports.wbg.__wbg_remove_d58cbb142852d2e8 = function() { return handleError(func
         wasm.__wbindgen_export_17(deferred0_0, deferred0_1, 1);
     }
 }, arguments) };
-imports.wbg.__wbindgen_ge = function(arg0, arg1) {
-    const ret = getObject(arg0) >= getObject(arg1);
-    return ret;
-};
-imports.wbg.__wbg_walletdescriptor_new = function(arg0) {
+
+module.exports.__wbg_get_88b5e79e9daccb9f = function() { return handleError(function (arg0, arg1) {
+    const ret = getObject(arg0).get(getObject(arg1));
+    return addHeapObject(ret);
+}, arguments) };
+
+module.exports.__wbg_update_375c91f2a290ec51 = function() { return handleError(function (arg0, arg1) {
+    const ret = getObject(arg0).update(getObject(arg1));
+    return addHeapObject(ret);
+}, arguments) };
+
+module.exports.__wbg_set_1d630b100fb9094b = function() { return handleError(function (arg0) {
+    const ret = chrome.storage.local.set(takeObject(arg0));
+    return addHeapObject(ret);
+}, arguments) };
+
+module.exports.__wbg_delete_34764ece57bdc720 = function() { return handleError(function (arg0, arg1) {
+    const ret = getObject(arg0).delete(getObject(arg1));
+    return addHeapObject(ret);
+}, arguments) };
+
+module.exports.__wbg_walletdescriptor_new = function(arg0) {
     const ret = WalletDescriptor.__wrap(arg0);
     return addHeapObject(ret);
 };
-imports.wbg.__wbg_pendingtransaction_new = function(arg0) {
+
+module.exports.__wbg_pendingtransaction_new = function(arg0) {
     const ret = PendingTransaction.__wrap(arg0);
     return addHeapObject(ret);
 };
-imports.wbg.__wbg_transactionrecordnotification_new = function(arg0) {
-    const ret = TransactionRecordNotification.__wrap(arg0);
+
+module.exports.__wbg_accountkind_new = function(arg0) {
+    const ret = AccountKind.__wrap(arg0);
     return addHeapObject(ret);
 };
-imports.wbg.__wbg_generatorsummary_new = function(arg0) {
+
+module.exports.__wbg_generatorsummary_new = function(arg0) {
     const ret = GeneratorSummary.__wrap(arg0);
     return addHeapObject(ret);
 };
-imports.wbg.__wbg_setbinaryType_a05483ec8b59edc2 = function(arg0, arg1) {
+
+module.exports.__wbg_transactionrecordnotification_new = function(arg0) {
+    const ret = TransactionRecordNotification.__wrap(arg0);
+    return addHeapObject(ret);
+};
+
+module.exports.__wbg_setbinaryType_a05483ec8b59edc2 = function(arg0, arg1) {
     getObject(arg0).binaryType = ["blob","arraybuffer",][arg1];
 };
-imports.wbg.__wbg_oldVersion_74205b5e4698efc3 = function(arg0) {
-    const ret = getObject(arg0).oldVersion;
-    return ret;
-};
-imports.wbg.__wbg_setunique_6f46c3f803001492 = function(arg0, arg1) {
-    getObject(arg0).unique = arg1 !== 0;
-};
-imports.wbg.__wbg_openCursor_eae86c5dbc805f16 = function() { return handleError(function (arg0, arg1, arg2) {
+
+module.exports.__wbg_openCursor_eae86c5dbc805f16 = function() { return handleError(function (arg0, arg1, arg2) {
     const ret = getObject(arg0).openCursor(getObject(arg1), ["next","nextunique","prev","prevunique",][arg2]);
     return addHeapObject(ret);
 }, arguments) };
-imports.wbg.__wbg_advance_0922866a23942467 = function() { return handleError(function (arg0, arg1) {
-    getObject(arg0).advance(arg1 >>> 0);
-}, arguments) };
-imports.wbg.__wbg_publickey_new = function(arg0) {
+
+module.exports.__wbg_publickey_new = function(arg0) {
     const ret = PublicKey.__wrap(arg0);
     return addHeapObject(ret);
 };
-imports.wbg.__wbg_instanceof_Window_5012736c80a01584 = function(arg0) {
+
+module.exports.__wbg_instanceof_Window_5012736c80a01584 = function(arg0) {
     let result;
     try {
         result = getObject(arg0) instanceof Window;
@@ -13404,50 +13715,68 @@ imports.wbg.__wbg_instanceof_Window_5012736c80a01584 = function(arg0) {
     const ret = result;
     return ret;
 };
-imports.wbg.__wbg_location_af118da6c50d4c3f = function(arg0) {
+
+module.exports.__wbg_location_af118da6c50d4c3f = function(arg0) {
     const ret = getObject(arg0).location;
     return addHeapObject(ret);
 };
-imports.wbg.__wbg_protocol_787951293a197961 = function() { return handleError(function (arg0, arg1) {
+
+module.exports.__wbg_protocol_787951293a197961 = function() { return handleError(function (arg0, arg1) {
     const ret = getObject(arg1).protocol;
     const ptr1 = passStringToWasm0(ret, wasm.__wbindgen_export_0, wasm.__wbindgen_export_1);
     const len1 = WASM_VECTOR_LEN;
     getDataViewMemory0().setInt32(arg0 + 4 * 1, len1, true);
     getDataViewMemory0().setInt32(arg0 + 4 * 0, ptr1, true);
 }, arguments) };
-imports.wbg.__wbg_abort_8659d889a7877ae3 = function(arg0) {
+
+module.exports.__wbg_nodedescriptor_new = function(arg0) {
+    const ret = NodeDescriptor.__wrap(arg0);
+    return addHeapObject(ret);
+};
+
+module.exports.__wbg_abort_8659d889a7877ae3 = function(arg0) {
     getObject(arg0).abort();
 };
-imports.wbg.__wbg_setmethod_dc68a742c2db5c6a = function(arg0, arg1, arg2) {
+
+module.exports.__wbg_setmethod_dc68a742c2db5c6a = function(arg0, arg1, arg2) {
     getObject(arg0).method = getStringFromWasm0(arg1, arg2);
 };
-imports.wbg.__wbg_new_e27c93803e1acc42 = function() { return handleError(function () {
+
+module.exports.__wbg_new_e27c93803e1acc42 = function() { return handleError(function () {
     const ret = new Headers();
     return addHeapObject(ret);
 }, arguments) };
-imports.wbg.__wbg_setheaders_be10a5ab566fd06f = function(arg0, arg1) {
+
+module.exports.__wbg_setheaders_be10a5ab566fd06f = function(arg0, arg1) {
     getObject(arg0).headers = getObject(arg1);
 };
-imports.wbg.__wbg_setmode_a781aae2bd3df202 = function(arg0, arg1) {
+
+module.exports.__wbg_setmode_a781aae2bd3df202 = function(arg0, arg1) {
     getObject(arg0).mode = ["same-origin","no-cors","cors","navigate",][arg1];
 };
-imports.wbg.__wbg_setcredentials_2b67800db3f7b621 = function(arg0, arg1) {
+
+module.exports.__wbg_setcredentials_2b67800db3f7b621 = function(arg0, arg1) {
     getObject(arg0).credentials = ["omit","same-origin","include",][arg1];
 };
-imports.wbg.__wbg_setbody_734cb3d7ee8e6e96 = function(arg0, arg1) {
+
+module.exports.__wbg_setbody_734cb3d7ee8e6e96 = function(arg0, arg1) {
     getObject(arg0).body = getObject(arg1);
 };
-imports.wbg.__wbg_signal_41e46ccad44bb5e2 = function(arg0) {
+
+module.exports.__wbg_signal_41e46ccad44bb5e2 = function(arg0) {
     const ret = getObject(arg0).signal;
     return addHeapObject(ret);
 };
-imports.wbg.__wbg_setsignal_91c4e8ebd04eb935 = function(arg0, arg1) {
+
+module.exports.__wbg_setsignal_91c4e8ebd04eb935 = function(arg0, arg1) {
     getObject(arg0).signal = getObject(arg1);
 };
-imports.wbg.__wbg_append_f3a4426bb50622c5 = function() { return handleError(function (arg0, arg1, arg2, arg3, arg4) {
+
+module.exports.__wbg_append_f3a4426bb50622c5 = function() { return handleError(function (arg0, arg1, arg2, arg3, arg4) {
     getObject(arg0).append(getStringFromWasm0(arg1, arg2), getStringFromWasm0(arg3, arg4));
 }, arguments) };
-imports.wbg.__wbg_instanceof_Response_e91b7eb7c611a9ae = function(arg0) {
+
+module.exports.__wbg_instanceof_Response_e91b7eb7c611a9ae = function(arg0) {
     let result;
     try {
         result = getObject(arg0) instanceof Response;
@@ -13457,200 +13786,243 @@ imports.wbg.__wbg_instanceof_Response_e91b7eb7c611a9ae = function(arg0) {
     const ret = result;
     return ret;
 };
-imports.wbg.__wbg_status_ae8de515694c5c7c = function(arg0) {
+
+module.exports.__wbg_status_ae8de515694c5c7c = function(arg0) {
     const ret = getObject(arg0).status;
     return ret;
 };
-imports.wbg.__wbg_url_1bf85c8abeb8c92d = function(arg0, arg1) {
+
+module.exports.__wbg_url_1bf85c8abeb8c92d = function(arg0, arg1) {
     const ret = getObject(arg1).url;
     const ptr1 = passStringToWasm0(ret, wasm.__wbindgen_export_0, wasm.__wbindgen_export_1);
     const len1 = WASM_VECTOR_LEN;
     getDataViewMemory0().setInt32(arg0 + 4 * 1, len1, true);
     getDataViewMemory0().setInt32(arg0 + 4 * 0, ptr1, true);
 };
-imports.wbg.__wbg_headers_5e283e8345689121 = function(arg0) {
+
+module.exports.__wbg_headers_5e283e8345689121 = function(arg0) {
     const ret = getObject(arg0).headers;
     return addHeapObject(ret);
 };
-imports.wbg.__wbg_text_a94b91ea8700357a = function() { return handleError(function (arg0) {
+
+module.exports.__wbg_text_a94b91ea8700357a = function() { return handleError(function (arg0) {
     const ret = getObject(arg0).text();
     return addHeapObject(ret);
 }, arguments) };
-imports.wbg.__wbg_nodedescriptor_new = function(arg0) {
-    const ret = NodeDescriptor.__wrap(arg0);
-    return addHeapObject(ret);
-};
-imports.wbg.__wbg_rpcclient_new = function(arg0) {
+
+module.exports.__wbg_rpcclient_new = function(arg0) {
     const ret = RpcClient.__wrap(arg0);
     return addHeapObject(ret);
 };
-imports.wbg.__wbg_addListener_ef6c129bb87219d9 = function(arg0, arg1, arg2, arg3) {
+
+module.exports.__wbg_addListener_ef6c129bb87219d9 = function(arg0, arg1, arg2, arg3) {
     const ret = getObject(arg0).addListener(getStringFromWasm0(arg1, arg2), getObject(arg3));
     return addHeapObject(ret);
 };
-imports.wbg.__wbg_on_5d61447a91633f13 = function(arg0, arg1, arg2, arg3) {
+
+module.exports.__wbg_on_5d61447a91633f13 = function(arg0, arg1, arg2, arg3) {
     const ret = getObject(arg0).on(getStringFromWasm0(arg1, arg2), getObject(arg3));
     return addHeapObject(ret);
 };
-imports.wbg.__wbg_once_73046d9a6e68af07 = function(arg0, arg1, arg2, arg3) {
+
+module.exports.__wbg_once_73046d9a6e68af07 = function(arg0, arg1, arg2, arg3) {
     const ret = getObject(arg0).once(getStringFromWasm0(arg1, arg2), getObject(arg3));
     return addHeapObject(ret);
 };
-imports.wbg.__wbg_prependListener_c57792e09c18b9ac = function(arg0, arg1, arg2, arg3) {
+
+module.exports.__wbg_prependListener_c57792e09c18b9ac = function(arg0, arg1, arg2, arg3) {
     const ret = getObject(arg0).prependListener(getStringFromWasm0(arg1, arg2), getObject(arg3));
     return addHeapObject(ret);
 };
-imports.wbg.__wbg_prependOnceListener_56fb1130dde3be9d = function(arg0, arg1, arg2, arg3) {
+
+module.exports.__wbg_prependOnceListener_56fb1130dde3be9d = function(arg0, arg1, arg2, arg3) {
     const ret = getObject(arg0).prependOnceListener(getStringFromWasm0(arg1, arg2), getObject(arg3));
     return addHeapObject(ret);
 };
-imports.wbg.__wbg_fetch_25e3a297f7b04639 = function(arg0) {
+
+module.exports.__wbg_fetch_25e3a297f7b04639 = function(arg0) {
     const ret = fetch(getObject(arg0));
     return addHeapObject(ret);
 };
-imports.wbg.__wbg_fetch_ba7fe179e527d942 = function(arg0, arg1) {
+
+module.exports.__wbg_fetch_ba7fe179e527d942 = function(arg0, arg1) {
     const ret = getObject(arg0).fetch(getObject(arg1));
     return addHeapObject(ret);
 };
-imports.wbg.__wbg_new_ebf2727385ee825c = function() { return handleError(function () {
+
+module.exports.__wbg_new_ebf2727385ee825c = function() { return handleError(function () {
     const ret = new AbortController();
     return addHeapObject(ret);
 }, arguments) };
-imports.wbg.__wbindgen_debug_string = function(arg0, arg1) {
+
+module.exports.__wbindgen_debug_string = function(arg0, arg1) {
     const ret = debugString(getObject(arg1));
     const ptr1 = passStringToWasm0(ret, wasm.__wbindgen_export_0, wasm.__wbindgen_export_1);
     const len1 = WASM_VECTOR_LEN;
     getDataViewMemory0().setInt32(arg0 + 4 * 1, len1, true);
     getDataViewMemory0().setInt32(arg0 + 4 * 0, ptr1, true);
 };
-imports.wbg.__wbindgen_throw = function(arg0, arg1) {
+
+module.exports.__wbindgen_throw = function(arg0, arg1) {
     throw new Error(getStringFromWasm0(arg0, arg1));
 };
-imports.wbg.__wbg_queueMicrotask_48421b3cc9052b68 = function(arg0) {
+
+module.exports.__wbg_queueMicrotask_48421b3cc9052b68 = function(arg0) {
     const ret = getObject(arg0).queueMicrotask;
     return addHeapObject(ret);
 };
-imports.wbg.__wbg_queueMicrotask_12a30234db4045d3 = function(arg0) {
+
+module.exports.__wbg_queueMicrotask_12a30234db4045d3 = function(arg0) {
     queueMicrotask(getObject(arg0));
 };
-imports.wbg.__wbg_document_8554450897a855b9 = function(arg0) {
+
+module.exports.__wbg_document_8554450897a855b9 = function(arg0) {
     const ret = getObject(arg0).document;
     return isLikeNone(ret) ? 0 : addHeapObject(ret);
 };
-imports.wbg.__wbg_navigator_6210380287bf8581 = function(arg0) {
+
+module.exports.__wbg_navigator_6210380287bf8581 = function(arg0) {
     const ret = getObject(arg0).navigator;
     return addHeapObject(ret);
 };
-imports.wbg.__wbg_localStorage_90db5cb66e840248 = function() { return handleError(function (arg0) {
+
+module.exports.__wbg_localStorage_90db5cb66e840248 = function() { return handleError(function (arg0) {
     const ret = getObject(arg0).localStorage;
     return isLikeNone(ret) ? 0 : addHeapObject(ret);
 }, arguments) };
-imports.wbg.__wbg_body_b3bb488e8e54bf4b = function(arg0) {
+
+module.exports.__wbg_body_b3bb488e8e54bf4b = function(arg0) {
     const ret = getObject(arg0).body;
     return isLikeNone(ret) ? 0 : addHeapObject(ret);
 };
-imports.wbg.__wbg_createElement_5921e9eb06b9ec89 = function() { return handleError(function (arg0, arg1, arg2) {
+
+module.exports.__wbg_createElement_5921e9eb06b9ec89 = function() { return handleError(function (arg0, arg1, arg2) {
     const ret = getObject(arg0).createElement(getStringFromWasm0(arg1, arg2));
     return addHeapObject(ret);
 }, arguments) };
-imports.wbg.__wbg_innerHTML_a31692607fb7f5ac = function(arg0, arg1) {
+
+module.exports.__wbg_innerHTML_a31692607fb7f5ac = function(arg0, arg1) {
     const ret = getObject(arg1).innerHTML;
     const ptr1 = passStringToWasm0(ret, wasm.__wbindgen_export_0, wasm.__wbindgen_export_1);
     const len1 = WASM_VECTOR_LEN;
     getDataViewMemory0().setInt32(arg0 + 4 * 1, len1, true);
     getDataViewMemory0().setInt32(arg0 + 4 * 0, ptr1, true);
 };
-imports.wbg.__wbg_setinnerHTML_ea7e3c6a3c4790c6 = function(arg0, arg1, arg2) {
+
+module.exports.__wbg_setinnerHTML_ea7e3c6a3c4790c6 = function(arg0, arg1, arg2) {
     getObject(arg0).innerHTML = getStringFromWasm0(arg1, arg2);
 };
-imports.wbg.__wbg_removeAttribute_c80e298b60689065 = function() { return handleError(function (arg0, arg1, arg2) {
+
+module.exports.__wbg_removeAttribute_c80e298b60689065 = function() { return handleError(function (arg0, arg1, arg2) {
     getObject(arg0).removeAttribute(getStringFromWasm0(arg1, arg2));
 }, arguments) };
-imports.wbg.__wbg_setAttribute_d5540a19be09f8dc = function() { return handleError(function (arg0, arg1, arg2, arg3, arg4) {
+
+module.exports.__wbg_setAttribute_d5540a19be09f8dc = function() { return handleError(function (arg0, arg1, arg2, arg3, arg4) {
     getObject(arg0).setAttribute(getStringFromWasm0(arg1, arg2), getStringFromWasm0(arg3, arg4));
 }, arguments) };
-imports.wbg.__wbg_newwithstrsequenceandoptions_f700d764298e22da = function() { return handleError(function (arg0, arg1) {
+
+module.exports.__wbg_newwithstrsequenceandoptions_f700d764298e22da = function() { return handleError(function (arg0, arg1) {
     const ret = new Blob(getObject(arg0), getObject(arg1));
     return addHeapObject(ret);
 }, arguments) };
-imports.wbg.__wbg_setonmessage_7cee8e224acfa056 = function(arg0, arg1) {
+
+module.exports.__wbg_setonmessage_7cee8e224acfa056 = function(arg0, arg1) {
     getObject(arg0).onmessage = getObject(arg1);
 };
-imports.wbg.__wbg_new_25d9d4e2932d816f = function() { return handleError(function (arg0, arg1) {
+
+module.exports.__wbg_new_25d9d4e2932d816f = function() { return handleError(function (arg0, arg1) {
     const ret = new Worker(getStringFromWasm0(arg0, arg1));
     return addHeapObject(ret);
 }, arguments) };
-imports.wbg.__wbg_postMessage_37faac1bc005e5c0 = function() { return handleError(function (arg0, arg1) {
+
+module.exports.__wbg_postMessage_37faac1bc005e5c0 = function() { return handleError(function (arg0, arg1) {
     getObject(arg0).postMessage(getObject(arg1));
 }, arguments) };
-imports.wbg.__wbg_newwithstrandinit_a31c69e4cc337183 = function() { return handleError(function (arg0, arg1, arg2) {
+
+module.exports.__wbg_newwithstrandinit_a31c69e4cc337183 = function() { return handleError(function (arg0, arg1, arg2) {
     const ret = new Request(getStringFromWasm0(arg0, arg1), getObject(arg2));
     return addHeapObject(ret);
 }, arguments) };
-imports.wbg.__wbg_appendChild_ac45d1abddf1b89b = function() { return handleError(function (arg0, arg1) {
+
+module.exports.__wbg_appendChild_ac45d1abddf1b89b = function() { return handleError(function (arg0, arg1) {
     const ret = getObject(arg0).appendChild(getObject(arg1));
     return addHeapObject(ret);
 }, arguments) };
-imports.wbg.__wbg_index_c90226e82bd94b45 = function() { return handleError(function (arg0, arg1, arg2) {
+
+module.exports.__wbg_index_c90226e82bd94b45 = function() { return handleError(function (arg0, arg1, arg2) {
     const ret = getObject(arg0).index(getStringFromWasm0(arg1, arg2));
     return addHeapObject(ret);
 }, arguments) };
-imports.wbg.__wbg_settype_b6ab7b74bd1908a1 = function(arg0, arg1, arg2) {
+
+module.exports.__wbg_settype_b6ab7b74bd1908a1 = function(arg0, arg1, arg2) {
     getObject(arg0).type = getStringFromWasm0(arg1, arg2);
 };
-imports.wbg.__wbg_data_5c47a6985fefc490 = function(arg0) {
+
+module.exports.__wbg_data_5c47a6985fefc490 = function(arg0) {
     const ret = getObject(arg0).data;
     return addHeapObject(ret);
 };
-imports.wbg.__wbg_userAgent_58dedff4303aeb66 = function() { return handleError(function (arg0, arg1) {
+
+module.exports.__wbg_userAgent_58dedff4303aeb66 = function() { return handleError(function (arg0, arg1) {
     const ret = getObject(arg1).userAgent;
     const ptr1 = passStringToWasm0(ret, wasm.__wbindgen_export_0, wasm.__wbindgen_export_1);
     const len1 = WASM_VECTOR_LEN;
     getDataViewMemory0().setInt32(arg0 + 4 * 1, len1, true);
     getDataViewMemory0().setInt32(arg0 + 4 * 0, ptr1, true);
 }, arguments) };
-imports.wbg.__wbg_createObjectURL_ca544150f40fb1bf = function() { return handleError(function (arg0, arg1) {
+
+module.exports.__wbg_createObjectURL_ca544150f40fb1bf = function() { return handleError(function (arg0, arg1) {
     const ret = URL.createObjectURL(getObject(arg1));
     const ptr1 = passStringToWasm0(ret, wasm.__wbindgen_export_0, wasm.__wbindgen_export_1);
     const len1 = WASM_VECTOR_LEN;
     getDataViewMemory0().setInt32(arg0 + 4 * 1, len1, true);
     getDataViewMemory0().setInt32(arg0 + 4 * 0, ptr1, true);
 }, arguments) };
-imports.wbg.__wbg_setTimeout_9da2ed000180b082 = function() { return handleError(function (arg0, arg1) {
+
+module.exports.__wbg_setTimeout_9da2ed000180b082 = function() { return handleError(function (arg0, arg1) {
     const ret = setTimeout(getObject(arg0), arg1 >>> 0);
     return addHeapObject(ret);
 }, arguments) };
-imports.wbg.__wbg_clearTimeout_57b125c22c2e5ff4 = function() { return handleError(function (arg0) {
+
+module.exports.__wbg_clearTimeout_57b125c22c2e5ff4 = function() { return handleError(function (arg0) {
     clearTimeout(getObject(arg0));
 }, arguments) };
-imports.wbg.__wbg_requestAnimationFrame_d121ba8dd86b0059 = function(arg0) {
+
+module.exports.__wbg_requestAnimationFrame_d121ba8dd86b0059 = function(arg0) {
     const ret = requestAnimationFrame(takeObject(arg0));
     return addHeapObject(ret);
 };
-imports.wbg.__wbg_setInterval_25b5473f0ee57b43 = function() { return handleError(function (arg0, arg1) {
+
+module.exports.__wbg_setInterval_25b5473f0ee57b43 = function() { return handleError(function (arg0, arg1) {
     const ret = setInterval(getObject(arg0), arg1 >>> 0);
     return addHeapObject(ret);
 }, arguments) };
-imports.wbg.__wbg_clearInterval_e2b8baa82df892bd = function() { return handleError(function (arg0) {
+
+module.exports.__wbg_clearInterval_e2b8baa82df892bd = function() { return handleError(function (arg0) {
     clearInterval(getObject(arg0));
 }, arguments) };
-imports.wbg.__wbg_aborted_new = function(arg0) {
+
+module.exports.__wbg_aborted_new = function(arg0) {
     const ret = Aborted.__wrap(arg0);
     return addHeapObject(ret);
 };
-imports.wbg.__wbg_require_09472de69ed820a3 = function(arg0, arg1) {
+
+module.exports.__wbg_require_09472de69ed820a3 = function(arg0, arg1) {
     const ret = require(getStringFromWasm0(arg0, arg1));
     return addHeapObject(ret);
 };
-imports.wbg.__wbindgen_is_falsy = function(arg0) {
+
+module.exports.__wbindgen_is_falsy = function(arg0) {
     const ret = !getObject(arg0);
     return ret;
 };
-imports.wbg.__wbg_require_a5c3e455324dea82 = function(arg0, arg1) {
+
+module.exports.__wbg_require_a5c3e455324dea82 = function(arg0, arg1) {
     const ret = require(getStringFromWasm0(arg0, arg1));
     return addHeapObject(ret);
 };
-imports.wbg.__wbg_error_a702220199ff3bbd = function(arg0, arg1) {
+
+module.exports.__wbg_error_a702220199ff3bbd = function(arg0, arg1) {
     let deferred0_0;
     let deferred0_1;
     try {
@@ -13661,179 +14033,147 @@ imports.wbg.__wbg_error_a702220199ff3bbd = function(arg0, arg1) {
         wasm.__wbindgen_export_17(deferred0_0, deferred0_1, 1);
     }
 };
-imports.wbg.__wbg_new_107dfe3ee494dded = function() {
+
+module.exports.__wbg_new_107dfe3ee494dded = function() {
     const ret = new Error();
     return addHeapObject(ret);
 };
-imports.wbg.__wbg_stack_f5d57bffa5adaba2 = function(arg0, arg1) {
+
+module.exports.__wbg_stack_f5d57bffa5adaba2 = function(arg0, arg1) {
     const ret = getObject(arg1).stack;
     const ptr1 = passStringToWasm0(ret, wasm.__wbindgen_export_0, wasm.__wbindgen_export_1);
     const len1 = WASM_VECTOR_LEN;
     getDataViewMemory0().setInt32(arg0 + 4 * 1, len1, true);
     getDataViewMemory0().setInt32(arg0 + 4 * 0, ptr1, true);
 };
-imports.wbg.__wbg_send_5e8a6aaae2974d0e = function() { return handleError(function (arg0, arg1, arg2) {
+
+module.exports.__wbg_send_5e8a6aaae2974d0e = function() { return handleError(function (arg0, arg1, arg2) {
     getObject(arg0).send(getStringFromWasm0(arg1, arg2));
 }, arguments) };
-imports.wbg.__wbg_send_84e0256a95a66ff8 = function() { return handleError(function (arg0, arg1, arg2) {
+
+module.exports.__wbg_send_84e0256a95a66ff8 = function() { return handleError(function (arg0, arg1, arg2) {
     getObject(arg0).send(getArrayU8FromWasm0(arg1, arg2));
 }, arguments) };
-imports.wbg.__wbg_send_481678566012a815 = function() { return handleError(function (arg0, arg1) {
+
+module.exports.__wbg_send_481678566012a815 = function() { return handleError(function (arg0, arg1) {
     getObject(arg0).send(getObject(arg1));
 }, arguments) };
-imports.wbg.__wbg_new_170a6c447a0bc8cf = function() { return handleError(function (arg0, arg1) {
+
+module.exports.__wbg_new_170a6c447a0bc8cf = function() { return handleError(function (arg0, arg1) {
     const ret = new WebSocket(getStringFromWasm0(arg0, arg1));
     return addHeapObject(ret);
 }, arguments) };
-imports.wbg.__wbg_newwithnodejsconfigimpl_1645b14a91580b93 = function() { return handleError(function (arg0, arg1, arg2, arg3, arg4, arg5, arg6) {
+
+module.exports.__wbg_newwithnodejsconfigimpl_1645b14a91580b93 = function() { return handleError(function (arg0, arg1, arg2, arg3, arg4, arg5, arg6) {
     const ret = new WebSocket(getStringFromWasm0(arg0, arg1), takeObject(arg2), takeObject(arg3), takeObject(arg4), takeObject(arg5), takeObject(arg6));
     return addHeapObject(ret);
 }, arguments) };
-imports.wbg.__wbindgen_closure_wrapper977 = function(arg0, arg1, arg2) {
+
+module.exports.__wbindgen_closure_wrapper976 = function(arg0, arg1, arg2) {
     const ret = makeClosure(arg0, arg1, 290, __wbg_adapter_60);
     return addHeapObject(ret);
 };
-imports.wbg.__wbindgen_closure_wrapper979 = function(arg0, arg1, arg2) {
+
+module.exports.__wbindgen_closure_wrapper978 = function(arg0, arg1, arg2) {
     const ret = makeClosure(arg0, arg1, 290, __wbg_adapter_63);
     return addHeapObject(ret);
 };
-imports.wbg.__wbindgen_closure_wrapper5447 = function(arg0, arg1, arg2) {
-    const ret = makeMutClosure(arg0, arg1, 1665, __wbg_adapter_66);
-    return addHeapObject(ret);
-};
-imports.wbg.__wbindgen_closure_wrapper5449 = function(arg0, arg1, arg2) {
-    const ret = makeMutClosure(arg0, arg1, 1665, __wbg_adapter_69);
-    return addHeapObject(ret);
-};
-imports.wbg.__wbindgen_closure_wrapper5451 = function(arg0, arg1, arg2) {
-    const ret = makeMutClosure(arg0, arg1, 1665, __wbg_adapter_66);
-    return addHeapObject(ret);
-};
-imports.wbg.__wbindgen_closure_wrapper5453 = function(arg0, arg1, arg2) {
-    const ret = makeMutClosure(arg0, arg1, 1665, __wbg_adapter_66);
-    return addHeapObject(ret);
-};
-imports.wbg.__wbindgen_closure_wrapper5455 = function(arg0, arg1, arg2) {
-    const ret = makeMutClosure(arg0, arg1, 1665, __wbg_adapter_76);
-    return addHeapObject(ret);
-};
-imports.wbg.__wbindgen_closure_wrapper12814 = function(arg0, arg1, arg2) {
-    const ret = makeMutClosure(arg0, arg1, 5231, __wbg_adapter_79);
-    return addHeapObject(ret);
-};
-imports.wbg.__wbindgen_closure_wrapper12816 = function(arg0, arg1, arg2) {
-    const ret = makeMutClosure(arg0, arg1, 5231, __wbg_adapter_79);
-    return addHeapObject(ret);
-};
-imports.wbg.__wbindgen_closure_wrapper12818 = function(arg0, arg1, arg2) {
-    const ret = makeMutClosure(arg0, arg1, 5231, __wbg_adapter_84);
-    return addHeapObject(ret);
-};
-imports.wbg.__wbindgen_closure_wrapper12820 = function(arg0, arg1, arg2) {
-    const ret = makeMutClosure(arg0, arg1, 5231, __wbg_adapter_79);
-    return addHeapObject(ret);
-};
-imports.wbg.__wbindgen_closure_wrapper15774 = function(arg0, arg1, arg2) {
-    const ret = makeMutClosure(arg0, arg1, 6246, __wbg_adapter_89);
-    return addHeapObject(ret);
-};
-imports.wbg.__wbindgen_closure_wrapper16529 = function(arg0, arg1, arg2) {
-    const ret = makeMutClosure(arg0, arg1, 6291, __wbg_adapter_92);
-    return addHeapObject(ret);
-};
-imports.wbg.__wbindgen_closure_wrapper16531 = function(arg0, arg1, arg2) {
-    const ret = makeMutClosure(arg0, arg1, 6291, __wbg_adapter_95);
-    return addHeapObject(ret);
-};
-imports.wbg.__wbindgen_closure_wrapper16533 = function(arg0, arg1, arg2) {
-    const ret = makeMutClosure(arg0, arg1, 6291, __wbg_adapter_98);
-    return addHeapObject(ret);
-};
-imports.wbg.__wbindgen_closure_wrapper16535 = function(arg0, arg1, arg2) {
-    const ret = makeMutClosure(arg0, arg1, 6291, __wbg_adapter_101);
-    return addHeapObject(ret);
-};
-imports.wbg.__wbindgen_closure_wrapper16911 = function(arg0, arg1, arg2) {
-    const ret = makeMutClosure(arg0, arg1, 6409, __wbg_adapter_104);
-    return addHeapObject(ret);
-};
-imports.wbg.__wbindgen_closure_wrapper16913 = function(arg0, arg1, arg2) {
-    const ret = makeMutClosure(arg0, arg1, 6409, __wbg_adapter_104);
-    return addHeapObject(ret);
-};
-imports.wbg.__wbindgen_closure_wrapper16915 = function(arg0, arg1, arg2) {
-    const ret = makeMutClosure(arg0, arg1, 6409, __wbg_adapter_109);
-    return addHeapObject(ret);
-};
-imports.wbg.__wbindgen_closure_wrapper16917 = function(arg0, arg1, arg2) {
-    const ret = makeMutClosure(arg0, arg1, 6409, __wbg_adapter_104);
+
+module.exports.__wbindgen_closure_wrapper5052 = function(arg0, arg1, arg2) {
+    const ret = makeMutClosure(arg0, arg1, 1275, __wbg_adapter_66);
     return addHeapObject(ret);
 };
 
-return imports;
-}
+module.exports.__wbindgen_closure_wrapper5054 = function(arg0, arg1, arg2) {
+    const ret = makeMutClosure(arg0, arg1, 1275, __wbg_adapter_66);
+    return addHeapObject(ret);
+};
 
-function __wbg_init_memory(imports, memory) {
+module.exports.__wbindgen_closure_wrapper5056 = function(arg0, arg1, arg2) {
+    const ret = makeMutClosure(arg0, arg1, 1275, __wbg_adapter_66);
+    return addHeapObject(ret);
+};
 
-}
+module.exports.__wbindgen_closure_wrapper5058 = function(arg0, arg1, arg2) {
+    const ret = makeMutClosure(arg0, arg1, 1275, __wbg_adapter_73);
+    return addHeapObject(ret);
+};
 
-function __wbg_finalize_init(instance, module) {
-    wasm = instance.exports;
-    __wbg_init.__wbindgen_wasm_module = module;
-    cachedDataViewMemory0 = null;
-    cachedUint8ArrayMemory0 = null;
+module.exports.__wbindgen_closure_wrapper5060 = function(arg0, arg1, arg2) {
+    const ret = makeMutClosure(arg0, arg1, 1275, __wbg_adapter_76);
+    return addHeapObject(ret);
+};
 
+module.exports.__wbindgen_closure_wrapper12835 = function(arg0, arg1, arg2) {
+    const ret = makeMutClosure(arg0, arg1, 5247, __wbg_adapter_79);
+    return addHeapObject(ret);
+};
 
+module.exports.__wbindgen_closure_wrapper12837 = function(arg0, arg1, arg2) {
+    const ret = makeMutClosure(arg0, arg1, 5247, __wbg_adapter_79);
+    return addHeapObject(ret);
+};
 
-    return wasm;
-}
+module.exports.__wbindgen_closure_wrapper12839 = function(arg0, arg1, arg2) {
+    const ret = makeMutClosure(arg0, arg1, 5247, __wbg_adapter_84);
+    return addHeapObject(ret);
+};
 
-function initSync(module) {
-    if (wasm !== undefined) return wasm;
+module.exports.__wbindgen_closure_wrapper12841 = function(arg0, arg1, arg2) {
+    const ret = makeMutClosure(arg0, arg1, 5247, __wbg_adapter_79);
+    return addHeapObject(ret);
+};
 
+module.exports.__wbindgen_closure_wrapper15795 = function(arg0, arg1, arg2) {
+    const ret = makeMutClosure(arg0, arg1, 6262, __wbg_adapter_89);
+    return addHeapObject(ret);
+};
 
-    if (typeof module !== 'undefined' && Object.getPrototypeOf(module) === Object.prototype)
-    ({module} = module)
-    else
-    console.warn('using deprecated parameters for `initSync()`; pass a single object instead')
+module.exports.__wbindgen_closure_wrapper16550 = function(arg0, arg1, arg2) {
+    const ret = makeMutClosure(arg0, arg1, 6307, __wbg_adapter_92);
+    return addHeapObject(ret);
+};
 
-    const imports = __wbg_get_imports();
+module.exports.__wbindgen_closure_wrapper16552 = function(arg0, arg1, arg2) {
+    const ret = makeMutClosure(arg0, arg1, 6307, __wbg_adapter_95);
+    return addHeapObject(ret);
+};
 
-    __wbg_init_memory(imports);
+module.exports.__wbindgen_closure_wrapper16554 = function(arg0, arg1, arg2) {
+    const ret = makeMutClosure(arg0, arg1, 6307, __wbg_adapter_98);
+    return addHeapObject(ret);
+};
 
-    if (!(module instanceof WebAssembly.Module)) {
-        module = new WebAssembly.Module(module);
-    }
+module.exports.__wbindgen_closure_wrapper16556 = function(arg0, arg1, arg2) {
+    const ret = makeMutClosure(arg0, arg1, 6307, __wbg_adapter_101);
+    return addHeapObject(ret);
+};
 
-    const instance = new WebAssembly.Instance(module, imports);
+module.exports.__wbindgen_closure_wrapper16932 = function(arg0, arg1, arg2) {
+    const ret = makeMutClosure(arg0, arg1, 6425, __wbg_adapter_104);
+    return addHeapObject(ret);
+};
 
-    return __wbg_finalize_init(instance, module);
-}
+module.exports.__wbindgen_closure_wrapper16934 = function(arg0, arg1, arg2) {
+    const ret = makeMutClosure(arg0, arg1, 6425, __wbg_adapter_104);
+    return addHeapObject(ret);
+};
 
-async function __wbg_init(module_or_path) {
-    if (wasm !== undefined) return wasm;
+module.exports.__wbindgen_closure_wrapper16936 = function(arg0, arg1, arg2) {
+    const ret = makeMutClosure(arg0, arg1, 6425, __wbg_adapter_109);
+    return addHeapObject(ret);
+};
 
+module.exports.__wbindgen_closure_wrapper16938 = function(arg0, arg1, arg2) {
+    const ret = makeMutClosure(arg0, arg1, 6425, __wbg_adapter_104);
+    return addHeapObject(ret);
+};
 
-    if (typeof module_or_path !== 'undefined' && Object.getPrototypeOf(module_or_path) === Object.prototype)
-    ({module_or_path} = module_or_path)
-    else
-    console.warn('using deprecated parameters for the initialization function; pass a single object instead')
+const path = require('path').join(__dirname, 'kaspa_bg.wasm');
+const bytes = require('fs').readFileSync(path);
 
-    if (typeof module_or_path === 'undefined') {
-        module_or_path = new URL('kaspa_bg.wasm', import.meta.url);
-    }
-    const imports = __wbg_get_imports();
+const wasmModule = new WebAssembly.Module(bytes);
+const wasmInstance = new WebAssembly.Instance(wasmModule, imports);
+wasm = wasmInstance.exports;
+module.exports.__wasm = wasm;
 
-    if (typeof module_or_path === 'string' || (typeof Request === 'function' && module_or_path instanceof Request) || (typeof URL === 'function' && module_or_path instanceof URL)) {
-        module_or_path = fetch(module_or_path);
-    }
-
-    __wbg_init_memory(imports);
-
-    const { instance, module } = await __wbg_load(await module_or_path, imports);
-
-    return __wbg_finalize_init(instance, module);
-}
-
-export { initSync };
-export default __wbg_init;

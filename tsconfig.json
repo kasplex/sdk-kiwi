@@ -6,7 +6,8 @@
     "moduleResolution": "node",
     "baseUrl": ".", 
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "~wasm/*": ["./wasm/*"]
     },                                      
     /* Emit */
     "declaration": true,                              /* Generate .d.ts files from TypeScript and JavaScript files in your project. */
@@ -19,6 +20,6 @@
     
     "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "wasm"],
   "exclude": ["node_modules", "dist"]
 }

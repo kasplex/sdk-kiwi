@@ -11,12 +11,13 @@ import {
     ITransactionOutput,
     ScriptPublicKey,
 } from "./wasm/kaspa";
+
 import { Krc20Data } from "./types/interface";
 import { Base } from "./base";
 import { OP } from "./utils/enum";
 import { Transaction } from "./tx/transaction";
 import { Entries } from "./tx/entries";
-import { Script } from '../src/script/script';
+import { Script } from './script/script';
 import { BASE_KAS_TO_P2SH_ADDRESS } from "./utils/constants";
 import { getFeeByOp } from '@/utils/utils'
 import { Output } from "./tx/output";
@@ -83,9 +84,10 @@ class KRC20 {
         const address = privateKey.toPublicKey().toAddress(Base.network).toString();
         const outputs = Output.createOutputs(p2shAddress.toString(), BASE_KAS_TO_P2SH_ADDRESS);
         const commitTx = await Transaction.createTransactions(address, outputs, fee).sign([privateKey]).submit();
+        console.log('commitTx', commitTx)
         const revealEntries = Entries.revealEntries(p2shAddress, commitTx!, script.createPayToScriptHashScript());
         const getFee = getFeeByOp(data.op);
-        return this.createTransactionWithEntries(privateKey, revealEntries, [], getFee, script);
+        return this.createTransactionWithEntries(privateKey, revealEntries, [], fee, script);
     }
 
 

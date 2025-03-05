@@ -1,8 +1,10 @@
-import { Kaspa, Rpc, NetworkType, PrivateKey, Script } from '../src/index';
+// import { Kaspa, Rpc, NetworkType, PrivateKey, Script } from '../src/index';
+import Kiwi from '../src/index';
 
+await Kiwi.init(Kiwi.NetworkType.Testnet)
+const { Kaspa, NetworkType, PrivateKey, Script } = Kiwi
 // Example 1: Transfer KAS using a single private key
 async function testSingleTransfer() {
-    await Rpc.setInstance(NetworkType.Testnet).connect();
 
     let toAddress = 'kaspatest:pr6mpn7hgfa99v0rf4pf0k3c83pkmrqtd8h46fn44g9vr8c6khw2u4mn2fgy3'
     let privateKey = new PrivateKey("3da233c786bfb4cc6e7319f757a094fc2f33b4217613abe3d29ed684ee464828")
@@ -15,12 +17,11 @@ async function testSingleTransfer() {
     }
 
     // Disconnect from the RPC server
-    await Rpc.getInstance().disconnect()
+    Kiwi.rpcClient.disconnect()
 }
 
 // Example 2: Transfer KAS from a multi-signature address
 async function testMultiSigTransfer() {
-    await Rpc.setInstance(NetworkType.Testnet).connect();
 
     let publicKeys = [
         "038c765b0ef3afe5f10e5c84806b9253156fb7f7fbeb127fe8505a220952337903",
@@ -43,7 +44,7 @@ async function testMultiSigTransfer() {
     }
 
     // Disconnect from the RPC server
-    await Rpc.getInstance().disconnect()
+    Kiwi.rpcClient.disconnect()
 }
 
 // Run the examples

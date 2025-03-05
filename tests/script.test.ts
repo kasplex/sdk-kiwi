@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { Script } from '../src/script/script';
 import { createKrc20Data, networkToString } from '../src/utils/utils';
 import { OP } from '../src/utils/enum';
-import { NetworkType } from '../src/wasm/kaspa/kaspa';
+import { NetworkType } from '../src/wasm/kaspa';
 
 // Test data
 const toAddress = 'kaspatest:qpyrh5ev84kc50nrhnc3g59ujr3a3pv4jweg57rge9sydrwyz9drunfa9n4sf';
