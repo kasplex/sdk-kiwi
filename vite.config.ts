@@ -3,20 +3,20 @@ import { resolve } from 'path'
 import { viteStaticCopy } from "vite-plugin-static-copy";
 import { esbuildCommonjs } from '@originjs/vite-plugin-commonjs'
 import dts from 'vite-plugin-dts'
+import wasm from 'vite-plugin-wasm';
+import topLevelAwait from 'vite-plugin-top-level-await';
+
 
 export default defineConfig({
     base: './',
     plugins: [
-        dts(),
-        viteStaticCopy({
-            targets: [
-                {
-                    src: "src/wasm/*",
-                    dest: "src/wasm",
-                },
-            ],
-        }),
+        wasm(),
+        topLevelAwait(), // 允许 `import()` 直接解构 wasm
         esbuildCommonjs(),
+        viteStaticCopy({
+            targets: [{ src: "src/wasm", dest: "src/wasm" }], // 复制到根目录,
+        }),
+        dts()
     ],
     resolve: {
         alias: {

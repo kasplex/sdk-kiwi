@@ -406,7 +406,7 @@ module.exports.isScriptPayToPubkey = function(script) {
 * @param {NetworkType | NetworkId | string} network
 * @returns {Address | undefined}
 */
-module.exports.addressFromScriptPublicKey = function(script_public_key, network) {
+export const addressFromScriptPublicKey = function(script_public_key, network) {
     try {
         const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
         wasm.addressFromScriptPublicKey(retptr, addBorrowedObject(script_public_key), addBorrowedObject(network));
@@ -538,7 +538,7 @@ module.exports.estimateTransactions = function(settings) {
 * @param {IGeneratorSettingsObject} settings
 * @returns {Promise<ICreateTransactions>}
 */
-module.exports.createTransactions = function(settings) {
+export const createTransactions = function(settings) {
     const ret = wasm.createTransactions(addHeapObject(settings));
     return takeObject(ret);
 };
@@ -553,7 +553,7 @@ module.exports.createTransactions = function(settings) {
 * @param {number | undefined} [sig_op_count]
 * @returns {Transaction}
 */
-module.exports.createTransaction = function(utxo_entry_source, outputs, priority_fee, payload, sig_op_count) {
+export const createTransaction = function(utxo_entry_source, outputs, priority_fee, payload, sig_op_count) {
     try {
         const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
         wasm.createTransaction(retptr, addHeapObject(utxo_entry_source), addHeapObject(outputs), addHeapObject(priority_fee), isLikeNone(payload) ? 0 : addHeapObject(payload), isLikeNone(sig_op_count) ? 0xFFFFFF : sig_op_count);
@@ -790,7 +790,7 @@ module.exports.createAddress = function(key, network, ecdsa, account_kind) {
 * @param {AccountKind | undefined} [account_kind]
 * @returns {Address}
 */
-module.exports.createMultisigAddress = function(minimum_signatures, keys, network_type, ecdsa, account_kind) {
+export const createMultisigAddress = function(minimum_signatures, keys, network_type, ecdsa, account_kind) {
     try {
         const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
         let ptr0 = 0;
@@ -853,7 +853,7 @@ module.exports.signScriptHash = function(script_hash, privkey) {
 * @param {SighashType | undefined} [sighash_type]
 * @returns {HexString}
 */
-module.exports.createInputSignature = function(tx, input_index, private_key, sighash_type) {
+export const createInputSignature = function(tx, input_index, private_key, sighash_type) {
     try {
         const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
         _assertClass(tx, Transaction);
@@ -975,7 +975,7 @@ module.exports.sompiToKaspaString = function(sompi) {
 * @param {string} kaspa
 * @returns {bigint | undefined}
 */
-module.exports.kaspaToSompi = function(kaspa) {
+export const kaspaToSompi = function(kaspa) {
     const ptr0 = passStringToWasm0(kaspa, wasm.__wbindgen_export_0, wasm.__wbindgen_export_1);
     const len0 = WASM_VECTOR_LEN;
     const ret = wasm.kaspaToSompi(ptr0, len0);
@@ -986,7 +986,7 @@ module.exports.kaspaToSompi = function(kaspa) {
 * Verifies with a public key the signature of the given message
 * @category Message Signing
 */
-module.exports.verifyMessage = function(value) {
+export const verifyMessage = function(value) {
     try {
         const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
         wasm.verifyMessage(retptr, addHeapObject(value));
@@ -1008,7 +1008,7 @@ module.exports.verifyMessage = function(value) {
 * @param {ISignMessage} value
 * @returns {HexString}
 */
-module.exports.signMessage = function(value) {
+export const signMessage = function(value) {
     try {
         const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
         wasm.signMessage(retptr, addHeapObject(value));
@@ -1381,7 +1381,7 @@ module.exports.FeeSource = Object.freeze({ SenderPays:0,"0":"SenderPays",Receive
 * wRPC protocol encoding: `Borsh` or `JSON`
 * @category Transport
 */
-module.exports.Encoding = Object.freeze({ Borsh:0,"0":"Borsh",SerdeJson:1,"1":"SerdeJson", });
+export const Encoding = Object.freeze({ Borsh:0,"0":"Borsh",SerdeJson:1,"1":"SerdeJson", });
 /**
 * Specifies the type of an account address to create.
 * The address can bea receive address or a change address.
@@ -1412,12 +1412,14 @@ ScriptHash:8,"8":"ScriptHash", });
 * Kaspa Sighash types allowed by consensus
 * @category Consensus
 */
-module.exports.SighashType = Object.freeze({ All:0,"0":"All",None:1,"1":"None",Single:2,"2":"Single",AllAnyOneCanPay:3,"3":"AllAnyOneCanPay",NoneAnyOneCanPay:4,"4":"NoneAnyOneCanPay",SingleAnyOneCanPay:5,"5":"SingleAnyOneCanPay", });
+export const SighashType = Object.freeze({ All:0,"0":"All",None:1,"1":"None",Single:2,"2":"Single",AllAnyOneCanPay:3,"3":"AllAnyOneCanPay",NoneAnyOneCanPay:4,"4":"NoneAnyOneCanPay",SingleAnyOneCanPay:5,"5":"SingleAnyOneCanPay", });
 /**
 * @category Consensus
 */
-module.exports.NetworkType = Object.freeze({ Mainnet:0,"0":"Mainnet",Testnet:1,"1":"Testnet",Devnet:2,"2":"Devnet",Simnet:3,"3":"Simnet", });
-/**
+
+const NetworkType = Object.freeze({ Mainnet:0,"0":"Mainnet",Testnet:1,"1":"Testnet",Devnet:2,"2":"Devnet",Simnet:3,"3":"Simnet", });
+export { NetworkType }
+    /**
 * `ConnectionStrategy` specifies how the WebSocket `async fn connect()`
 * function should behave during the first-time connectivity phase.
 * @category WebSocket
@@ -1442,7 +1444,7 @@ module.exports.AccountsDiscoveryKind = Object.freeze({ Bip44:0,"0":"Bip44", });
 * @see {@link ScriptBuilder}
 * @category Consensus
 */
-module.exports.Opcodes = Object.freeze({ OpFalse:0,"0":"OpFalse",OpData1:1,"1":"OpData1",OpData2:2,"2":"OpData2",OpData3:3,"3":"OpData3",OpData4:4,"4":"OpData4",OpData5:5,"5":"OpData5",OpData6:6,"6":"OpData6",OpData7:7,"7":"OpData7",OpData8:8,"8":"OpData8",OpData9:9,"9":"OpData9",OpData10:10,"10":"OpData10",OpData11:11,"11":"OpData11",OpData12:12,"12":"OpData12",OpData13:13,"13":"OpData13",OpData14:14,"14":"OpData14",OpData15:15,"15":"OpData15",OpData16:16,"16":"OpData16",OpData17:17,"17":"OpData17",OpData18:18,"18":"OpData18",OpData19:19,"19":"OpData19",OpData20:20,"20":"OpData20",OpData21:21,"21":"OpData21",OpData22:22,"22":"OpData22",OpData23:23,"23":"OpData23",OpData24:24,"24":"OpData24",OpData25:25,"25":"OpData25",OpData26:26,"26":"OpData26",OpData27:27,"27":"OpData27",OpData28:28,"28":"OpData28",OpData29:29,"29":"OpData29",OpData30:30,"30":"OpData30",OpData31:31,"31":"OpData31",OpData32:32,"32":"OpData32",OpData33:33,"33":"OpData33",OpData34:34,"34":"OpData34",OpData35:35,"35":"OpData35",OpData36:36,"36":"OpData36",OpData37:37,"37":"OpData37",OpData38:38,"38":"OpData38",OpData39:39,"39":"OpData39",OpData40:40,"40":"OpData40",OpData41:41,"41":"OpData41",OpData42:42,"42":"OpData42",OpData43:43,"43":"OpData43",OpData44:44,"44":"OpData44",OpData45:45,"45":"OpData45",OpData46:46,"46":"OpData46",OpData47:47,"47":"OpData47",OpData48:48,"48":"OpData48",OpData49:49,"49":"OpData49",OpData50:50,"50":"OpData50",OpData51:51,"51":"OpData51",OpData52:52,"52":"OpData52",OpData53:53,"53":"OpData53",OpData54:54,"54":"OpData54",OpData55:55,"55":"OpData55",OpData56:56,"56":"OpData56",OpData57:57,"57":"OpData57",OpData58:58,"58":"OpData58",OpData59:59,"59":"OpData59",OpData60:60,"60":"OpData60",OpData61:61,"61":"OpData61",OpData62:62,"62":"OpData62",OpData63:63,"63":"OpData63",OpData64:64,"64":"OpData64",OpData65:65,"65":"OpData65",OpData66:66,"66":"OpData66",OpData67:67,"67":"OpData67",OpData68:68,"68":"OpData68",OpData69:69,"69":"OpData69",OpData70:70,"70":"OpData70",OpData71:71,"71":"OpData71",OpData72:72,"72":"OpData72",OpData73:73,"73":"OpData73",OpData74:74,"74":"OpData74",OpData75:75,"75":"OpData75",OpPushData1:76,"76":"OpPushData1",OpPushData2:77,"77":"OpPushData2",OpPushData4:78,"78":"OpPushData4",Op1Negate:79,"79":"Op1Negate",OpReserved:80,"80":"OpReserved",OpTrue:81,"81":"OpTrue",Op2:82,"82":"Op2",Op3:83,"83":"Op3",Op4:84,"84":"Op4",Op5:85,"85":"Op5",Op6:86,"86":"Op6",Op7:87,"87":"Op7",Op8:88,"88":"Op8",Op9:89,"89":"Op9",Op10:90,"90":"Op10",Op11:91,"91":"Op11",Op12:92,"92":"Op12",Op13:93,"93":"Op13",Op14:94,"94":"Op14",Op15:95,"95":"Op15",Op16:96,"96":"Op16",OpNop:97,"97":"OpNop",OpVer:98,"98":"OpVer",OpIf:99,"99":"OpIf",OpNotIf:100,"100":"OpNotIf",OpVerIf:101,"101":"OpVerIf",OpVerNotIf:102,"102":"OpVerNotIf",OpElse:103,"103":"OpElse",OpEndIf:104,"104":"OpEndIf",OpVerify:105,"105":"OpVerify",OpReturn:106,"106":"OpReturn",OpToAltStack:107,"107":"OpToAltStack",OpFromAltStack:108,"108":"OpFromAltStack",Op2Drop:109,"109":"Op2Drop",Op2Dup:110,"110":"Op2Dup",Op3Dup:111,"111":"Op3Dup",Op2Over:112,"112":"Op2Over",Op2Rot:113,"113":"Op2Rot",Op2Swap:114,"114":"Op2Swap",OpIfDup:115,"115":"OpIfDup",OpDepth:116,"116":"OpDepth",OpDrop:117,"117":"OpDrop",OpDup:118,"118":"OpDup",OpNip:119,"119":"OpNip",OpOver:120,"120":"OpOver",OpPick:121,"121":"OpPick",OpRoll:122,"122":"OpRoll",OpRot:123,"123":"OpRot",OpSwap:124,"124":"OpSwap",OpTuck:125,"125":"OpTuck",
+export const Opcodes = Object.freeze({ OpFalse:0,"0":"OpFalse",OpData1:1,"1":"OpData1",OpData2:2,"2":"OpData2",OpData3:3,"3":"OpData3",OpData4:4,"4":"OpData4",OpData5:5,"5":"OpData5",OpData6:6,"6":"OpData6",OpData7:7,"7":"OpData7",OpData8:8,"8":"OpData8",OpData9:9,"9":"OpData9",OpData10:10,"10":"OpData10",OpData11:11,"11":"OpData11",OpData12:12,"12":"OpData12",OpData13:13,"13":"OpData13",OpData14:14,"14":"OpData14",OpData15:15,"15":"OpData15",OpData16:16,"16":"OpData16",OpData17:17,"17":"OpData17",OpData18:18,"18":"OpData18",OpData19:19,"19":"OpData19",OpData20:20,"20":"OpData20",OpData21:21,"21":"OpData21",OpData22:22,"22":"OpData22",OpData23:23,"23":"OpData23",OpData24:24,"24":"OpData24",OpData25:25,"25":"OpData25",OpData26:26,"26":"OpData26",OpData27:27,"27":"OpData27",OpData28:28,"28":"OpData28",OpData29:29,"29":"OpData29",OpData30:30,"30":"OpData30",OpData31:31,"31":"OpData31",OpData32:32,"32":"OpData32",OpData33:33,"33":"OpData33",OpData34:34,"34":"OpData34",OpData35:35,"35":"OpData35",OpData36:36,"36":"OpData36",OpData37:37,"37":"OpData37",OpData38:38,"38":"OpData38",OpData39:39,"39":"OpData39",OpData40:40,"40":"OpData40",OpData41:41,"41":"OpData41",OpData42:42,"42":"OpData42",OpData43:43,"43":"OpData43",OpData44:44,"44":"OpData44",OpData45:45,"45":"OpData45",OpData46:46,"46":"OpData46",OpData47:47,"47":"OpData47",OpData48:48,"48":"OpData48",OpData49:49,"49":"OpData49",OpData50:50,"50":"OpData50",OpData51:51,"51":"OpData51",OpData52:52,"52":"OpData52",OpData53:53,"53":"OpData53",OpData54:54,"54":"OpData54",OpData55:55,"55":"OpData55",OpData56:56,"56":"OpData56",OpData57:57,"57":"OpData57",OpData58:58,"58":"OpData58",OpData59:59,"59":"OpData59",OpData60:60,"60":"OpData60",OpData61:61,"61":"OpData61",OpData62:62,"62":"OpData62",OpData63:63,"63":"OpData63",OpData64:64,"64":"OpData64",OpData65:65,"65":"OpData65",OpData66:66,"66":"OpData66",OpData67:67,"67":"OpData67",OpData68:68,"68":"OpData68",OpData69:69,"69":"OpData69",OpData70:70,"70":"OpData70",OpData71:71,"71":"OpData71",OpData72:72,"72":"OpData72",OpData73:73,"73":"OpData73",OpData74:74,"74":"OpData74",OpData75:75,"75":"OpData75",OpPushData1:76,"76":"OpPushData1",OpPushData2:77,"77":"OpPushData2",OpPushData4:78,"78":"OpPushData4",Op1Negate:79,"79":"Op1Negate",OpReserved:80,"80":"OpReserved",OpTrue:81,"81":"OpTrue",Op2:82,"82":"Op2",Op3:83,"83":"Op3",Op4:84,"84":"Op4",Op5:85,"85":"Op5",Op6:86,"86":"Op6",Op7:87,"87":"Op7",Op8:88,"88":"Op8",Op9:89,"89":"Op9",Op10:90,"90":"Op10",Op11:91,"91":"Op11",Op12:92,"92":"Op12",Op13:93,"93":"Op13",Op14:94,"94":"Op14",Op15:95,"95":"Op15",Op16:96,"96":"Op16",OpNop:97,"97":"OpNop",OpVer:98,"98":"OpVer",OpIf:99,"99":"OpIf",OpNotIf:100,"100":"OpNotIf",OpVerIf:101,"101":"OpVerIf",OpVerNotIf:102,"102":"OpVerNotIf",OpElse:103,"103":"OpElse",OpEndIf:104,"104":"OpEndIf",OpVerify:105,"105":"OpVerify",OpReturn:106,"106":"OpReturn",OpToAltStack:107,"107":"OpToAltStack",OpFromAltStack:108,"108":"OpFromAltStack",Op2Drop:109,"109":"Op2Drop",Op2Dup:110,"110":"Op2Dup",Op3Dup:111,"111":"Op3Dup",Op2Over:112,"112":"Op2Over",Op2Rot:113,"113":"Op2Rot",Op2Swap:114,"114":"Op2Swap",OpIfDup:115,"115":"OpIfDup",OpDepth:116,"116":"OpDepth",OpDrop:117,"117":"OpDrop",OpDup:118,"118":"OpDup",OpNip:119,"119":"OpNip",OpOver:120,"120":"OpOver",OpPick:121,"121":"OpPick",OpRoll:122,"122":"OpRoll",OpRot:123,"123":"OpRot",OpSwap:124,"124":"OpSwap",OpTuck:125,"125":"OpTuck",
 /**
 * Splice opcodes.
 */
@@ -4279,7 +4281,7 @@ const MnemonicFinalization = (typeof FinalizationRegistry === 'undefined')
 * BIP39 mnemonic phrases: sequences of words representing cryptographic keys.
 * @category Wallet SDK
 */
-class Mnemonic {
+export class Mnemonic {
 
     static __wrap(ptr) {
         ptr = ptr >>> 0;
@@ -4446,7 +4448,6 @@ class Mnemonic {
         }
     }
 }
-module.exports.Mnemonic = Mnemonic;
 
 const NetServerOptionsFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
@@ -4658,7 +4659,7 @@ class NetworkId {
         }
     }
 }
-module.exports.NetworkId = NetworkId;
+export { NetworkId } ;
 
 const NodeDescriptorFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
@@ -6005,7 +6006,7 @@ class PrivateKey {
         }
     }
 }
-module.exports.PrivateKey = PrivateKey;
+export { PrivateKey };
 
 const PrivateKeyGeneratorFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
@@ -6350,7 +6351,7 @@ class PublicKey {
         return takeObject(ret);
     }
 }
-module.exports.PublicKey = PublicKey;
+export { PublicKey };
 
 const PublicKeyGeneratorFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
@@ -7113,7 +7114,7 @@ class Resolver {
         }
     }
 }
-module.exports.Resolver = Resolver;
+export { Resolver };
 
 const RpcClientFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
@@ -8330,7 +8331,7 @@ class RpcClient {
         }
     }
 }
-module.exports.RpcClient = RpcClient;
+export { RpcClient };
 
 const ScriptBuilderFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
@@ -8630,7 +8631,7 @@ class ScriptBuilder {
         }
     }
 }
-module.exports.ScriptBuilder = ScriptBuilder;
+export { ScriptBuilder };
 
 const ScriptPublicKeyFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
@@ -9363,7 +9364,7 @@ class Transaction {
         }
     }
 }
-module.exports.Transaction = Transaction;
+export { Transaction };
 
 const TransactionInputFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
@@ -12563,7 +12564,7 @@ class XPrv {
         }
     }
 }
-module.exports.XPrv = XPrv;
+export { XPrv } ;
 
 const XPubFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }

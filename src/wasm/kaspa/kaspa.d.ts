@@ -5599,6 +5599,7 @@ export class Mnemonic {
 */
   phrase: string;
 }
+
 /**
 */
 export class NetServerOptions {

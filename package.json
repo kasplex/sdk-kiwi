@@ -28,12 +28,15 @@
     "@typescript-eslint/eslint-plugin": "^8.24.1",
     "@typescript-eslint/parser": "^8.24.1",
     "eslint": "^9.20.1",
+    "terser": "^5.39.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.3",
     "vite": "^6.1.1",
     "vite-plugin-commonjs": "^0.10.4",
     "vite-plugin-dts": "^4.5.0",
     "vite-plugin-static-copy": "^2.3.0",
+    "vite-plugin-top-level-await": "^1.5.0",
+    "vite-plugin-wasm": "^3.4.1",
     "vitest": "^3.0.6"
   },
   "dependencies": {

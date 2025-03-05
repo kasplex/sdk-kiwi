@@ -3,7 +3,7 @@
     "target": "ES2021",
     "module": "CommonJS",                                
     "rootDir": "./",  
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "baseUrl": ".", 
     "paths": {
       "@/*": ["./src/*"],
