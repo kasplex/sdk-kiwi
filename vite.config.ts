@@ -14,6 +14,7 @@ export default defineConfig({
         esbuildCommonjs(),
         dts({
             insertTypesEntry: true,
+            outputDir: resolve(__dirname, 'dist/types'),
         }),
         {
             name: 'vite-plugin-static-copy',
@@ -21,9 +22,8 @@ export default defineConfig({
                 console.log('Build started');
             },
             writeBundle() {
-                console.log('Copying static files...');
                 const src = resolve(__dirname, 'src/wasm');
-                const dest = resolve(__dirname, 'dist/src/wasm');
+                const dest = resolve(__dirname, 'dist/wasm');
                 copy(src, dest, (err) => {
                     if (err) {
                         console.error('Error copying files:', err);
@@ -44,13 +44,22 @@ export default defineConfig({
         emptyOutDir: true,
         minify: "terser",
         lib: {
-            entry: resolve(__dirname, './src/index.ts'),
+            entry: {
+                index: 'src/index.ts',
+                kiwi: 'src/kiwi.ts',
+            },
             name: 'sdkKiwi',
-            fileName: 'sdk-kiwi',
             formats: ["es", "cjs"],
+            fileName: (format, entryName) => {
+                if (format === 'es') return `${entryName}.js`;
+                if (format === 'cjs') return `${entryName}.cjs`;
+                return `${entryName}.${format}.js`;
+            }
         },
         rollupOptions: {
+            external: ['node:url'], 
             output: {
+                dir: resolve(__dirname, 'dist'),
                 format: "cjs",
                 inlineDynamicImports: false,
                 globals: {
