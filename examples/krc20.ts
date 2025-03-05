@@ -1,4 +1,4 @@
-import { Rpc, Krc20Data, KRC20, NetworkType, Utils, KiwiEnum } from '../src/index';
+import { Rpc, KRC20, NetworkType, Utils, KiwiEnum } from '../src/index';
 
 
 const _privateKey = "3da233c786bfb4cc6e7319f757a094fc2f33b4217613abe3d29ed684ee464828"
@@ -11,6 +11,7 @@ async function testKrc20Mint() {
             op: KiwiEnum.OP.Mint,
             tick: 'SNOWDN',
         })
+
         let txid = await KRC20.mint(_privateKey, krc20data, 100000n)
         console.log("test net server info:", txid);
 

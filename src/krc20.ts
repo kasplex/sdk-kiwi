@@ -12,11 +12,11 @@ import {
     ScriptPublicKey,
 } from "./wasm/kaspa";
 import { Krc20Data } from "./types/interface";
-import { Base } from "./base";
+import { Kiwi } from "./kiwi";
 import { OP } from "./utils/enum";
 import { Transaction } from "./tx/transaction";
 import { Entries } from "./tx/entries";
-import { Script } from '../src/script/script';
+import { Script } from './script/script';
 import { BASE_KAS_TO_P2SH_ADDRESS } from "./utils/constants";
 import { getFeeByOp } from '@/utils/utils'
 import { Output } from "./tx/output";
@@ -39,7 +39,7 @@ class KRC20 {
      */
     private static createP2SHAddress(script: ScriptBuilder): Address {
         const scriptPublicKey = script.createPayToScriptHashScript();
-        return addressFromScriptPublicKey(scriptPublicKey, Base.network)!;
+        return addressFromScriptPublicKey(scriptPublicKey, Kiwi.network)!;
     }
 
     /**
@@ -58,7 +58,7 @@ class KRC20 {
         fee: bigint,
         script?: ScriptBuilder
     ) {
-        const address = privateKey.toPublicKey().toAddress(Base.network).toString();
+        const address = privateKey.toPublicKey().toAddress(Kiwi.network).toString();
         const tx = await Transaction.createTransactionsWithEntries(entries, outputs, address, fee);
         if (script) {
             tx.sign([privateKey], script);
@@ -80,7 +80,7 @@ class KRC20 {
         const privateKey = new PrivateKey(privateKeyStr);
         const script = this.createScript(privateKey, data);
         const p2shAddress = this.createP2SHAddress(script);
-        const address = privateKey.toPublicKey().toAddress(Base.network).toString();
+        const address = privateKey.toPublicKey().toAddress(Kiwi.network).toString();
         const outputs = Output.createOutputs(p2shAddress.toString(), BASE_KAS_TO_P2SH_ADDRESS);
         const commitTx = await Transaction.createTransactions(address, outputs, fee).sign([privateKey]).submit();
         const revealEntries = Entries.revealEntries(p2shAddress, commitTx!, script.createPayToScriptHashScript());
@@ -201,8 +201,8 @@ class KRC20 {
         const _privateKey = new PrivateKey(privateKey);
         const script = Script.krc20Script(_privateKey.toPublicKey().toXOnlyPublicKey().toString(), data);
         const scriptPublicKey = script.createPayToScriptHashScript();
-        const p2shAddress = addressFromScriptPublicKey(scriptPublicKey, Base.network)!;
-        const address = _privateKey.toPublicKey().toAddress(Base.network).toString();
+        const p2shAddress = addressFromScriptPublicKey(scriptPublicKey, Kiwi.network)!;
+        const address = _privateKey.toPublicKey().toAddress(Kiwi.network).toString();
         const entries = await Entries.entries(p2shAddress.toString());
         const enterAmount = this.getEnterAmount(entries, hash)
         const output = Output.createOutputs(address, amount);
@@ -224,7 +224,7 @@ class KRC20 {
      */
     public static async revealPskt(buyPrivateKey: string, signData: string, hash: string, fee: bigint = 0n) {
         const _buyPrivateKey = new PrivateKey(buyPrivateKey);
-        const address = _buyPrivateKey.toPublicKey().toAddress(Base.network).toString();
+        const address = _buyPrivateKey.toPublicKey().toAddress(Kiwi.network).toString();
         const tx = KaspaTransaction.deserializeFromSafeJSON(signData);
         const txInputs = tx.inputs[0];
         const txOutput = tx.outputs[0];
@@ -233,7 +233,7 @@ class KRC20 {
         const buyEntries = await Entries.revealEntries(utxoAddress!, hash, scriptPublicKey, amount, entries[0].blockDaaScore)
         entries.unshift(buyEntries[0] as UtxoEntryReference);
         const outputScriptPublicKey = this.getScriptPublicKey(txOutput);
-        const receiveAddress = addressFromScriptPublicKey(outputScriptPublicKey, Base.network)!
+        const receiveAddress = addressFromScriptPublicKey(outputScriptPublicKey, Kiwi.network)!
         const outputs = Output.createOutputs(receiveAddress.toString(), tx.outputs[0].value);
         return await Transaction.createTransactionsWithEntries(entries, outputs, address, fee, entries as []).sign([_buyPrivateKey], txInputs.signatureScript, true).submit()
     }

@@ -12,7 +12,7 @@ import {
 } from "@/wasm/kaspa";
 import { networkToString } from "@/utils/utils";
 import { Rpc } from "@/rpc/client";
-import { Base } from "@/base";
+import { Kiwi } from "@/kiwi";
 
 class PendingTransaction {
     private transaction: Promise<ICreateTransactions>;
@@ -46,7 +46,7 @@ class PendingTransaction {
             outputs,
             changeAddress: address,
             priorityFee: fee,
-            networkId: networkToString(Base.network),
+            networkId: networkToString(Kiwi.network),
             sigOpCount,
         });
     }

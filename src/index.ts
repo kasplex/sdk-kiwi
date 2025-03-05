@@ -7,11 +7,11 @@ import { Kaspa } from "./kaspa";
 import { Script } from "./script/script";
 import { Transaction } from "./tx/transaction";
 import { KRC20 } from "./krc20";
-import { Base } from "./base";
+import { Kiwi } from "./kiwi";
 import {NetworkType, PrivateKey} from "@/wasm/kaspa";
 import * as KiwiInterface from './types/interface';
 import * as KiwiEnum from "./utils/enum";
 import * as Utils from "./utils/utils";
 
-export { Mnemonic, Wallet, Rpc, NetworkType, KasplexApi, Kaspa, PrivateKey, Script, KaspaApi, Base, Transaction, KRC20, KiwiInterface, KiwiEnum, Utils };
+export { Mnemonic, Wallet, Rpc, NetworkType, KasplexApi, Kaspa, PrivateKey, Script, KaspaApi, Kiwi, Transaction, KRC20, KiwiInterface, KiwiEnum, Utils };
 

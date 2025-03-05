@@ -2,14 +2,14 @@ import {
     Address,
     PrivateKey, ScriptBuilder,
 } from "@/wasm/kaspa";
-import { Base } from "@/base";
+import { Kiwi } from "@/kiwi";
 import {Transaction} from "./tx/transaction";
 import { Output } from "./tx/output";
 
 class Kaspa {
 
     public static async transferKas(privateKey: PrivateKey, address: string | Address, amount: bigint, fee?: bigint | undefined) {
-        const fromAddress = privateKey.toKeypair().toAddress(Base.network).toString()
+        const fromAddress = privateKey.toKeypair().toAddress(Kiwi.network).toString()
         const outputs = Output.createOutputs(address.toString(), amount)
         return Transaction.createTransactions(fromAddress, outputs, fee).sign([privateKey]).submit()
     }

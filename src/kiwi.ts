@@ -1,14 +1,12 @@
 import { NetworkType } from "@/wasm/kaspa";
 
-class Base {
+class Kiwi {
 
     public static network: NetworkType = NetworkType.Testnet;
 
-    constructor() {}
-
     public static setNetwork(network: NetworkType) {
-        Base.network = network
+        Kiwi.network = network
     }
 }
 
-export { Base, NetworkType };
+export { Kiwi, NetworkType };
