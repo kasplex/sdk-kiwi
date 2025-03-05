@@ -1,7 +1,8 @@
 import { httpClient } from '@/utils/http';
 import { BASE_URL_KASPA } from '@/utils/constants';
-import { Params } from '@/types/interface'
-
+interface Params {
+    [key: string]: string | number | boolean | Array<string>;
+}
 class KaspaApi {
     private static readonly baseUrl: string = BASE_URL_KASPA;
 
