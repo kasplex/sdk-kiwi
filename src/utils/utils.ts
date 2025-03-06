@@ -2,7 +2,7 @@ import { NetworkType, Opcodes, kaspaToSompi } from "@/wasm/kaspa/kaspa"
 import { MIN_PUSHDATA } from './constants'
 import { Krc20Data } from '../types/interface'
 import { OP } from "./enum";
-import {AddressVersion, AddressPrefix} from './enum';
+import { AddressPrefix } from './enum';
 
 /**
  * Converts a NetworkType to its corresponding network ID string.

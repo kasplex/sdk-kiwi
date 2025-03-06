@@ -4,7 +4,7 @@ import {
     IUtxoEntry,
     UtxoEntryReference,
     UtxoContext,
-    PaymentOutput, createTransaction, HexString,
+    HexString,
 } from "@/wasm/kaspa";
 import { PendingTransaction } from "./pendingTransaction";
 import { RawTransaction } from "./rawTransaction";

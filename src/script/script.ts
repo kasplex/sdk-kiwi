@@ -1,6 +1,9 @@
 import {
-    Opcodes, PublicKey, ScriptBuilder,
-    createMultisigAddress, addressFromScriptPublicKey, NetworkType
+    Opcodes,
+    PublicKey,
+    ScriptBuilder,
+    createMultisigAddress,
+    NetworkType,
 } from "@/wasm/kaspa/kaspa";
 import { Krc20Data } from '@/types/interface';
 import { KASPLEX } from '@/utils/constants';

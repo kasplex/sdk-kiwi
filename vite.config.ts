@@ -1,9 +1,9 @@
 import { defineConfig } from 'vite'
 import { resolve } from 'path'
 import dts from 'vite-plugin-dts'
-import { esbuildCommonjs } from '@originjs/vite-plugin-commonjs'
 import wasm from 'vite-plugin-wasm';
 import topLevelAwait from 'vite-plugin-top-level-await';
+import commonjs from 'rollup-plugin-commonjs';
 import { copy } from 'fs-extra';
 
 export default defineConfig({
@@ -11,8 +11,10 @@ export default defineConfig({
     plugins: [
         wasm(),
         topLevelAwait(),
-        esbuildCommonjs(),
         dts(),
+        commonjs({
+            include: ['src/wasm/kaspa/*'],
+        }),
         {
             name: 'vite-plugin-static-copy',
             buildStart() {
@@ -20,7 +22,7 @@ export default defineConfig({
             },
             writeBundle() {
                 const src = resolve(__dirname, 'src/wasm');
-                const dest = resolve(__dirname, 'dist/src/wasm');
+                const dest = resolve(__dirname, 'wasm');
                 copy(src, dest, (err) => {
                     if (err) {
                         console.error('Error copying files:', err);
@@ -57,6 +59,10 @@ export default defineConfig({
             format: {
                 comments: false,
             },
+            compress: {
+                drop_console: process.env.NODE_ENV === 'production',
+                drop_debugger: process.env.NODE_ENV === 'production', 
+            }
         },
         rollupOptions: {
             external: [
@@ -64,6 +70,10 @@ export default defineConfig({
                 'examples/**/*',
                 'tests/**/*'
             ],
+            input: {
+                index: resolve(__dirname, 'src/index.ts'),
+                kiwi: resolve(__dirname, 'src/kiwi.ts'),
+            },
             output: {
                 dir: resolve(__dirname, 'dist'),
                 format: "cjs",

@@ -21,6 +21,6 @@
     "esModuleInterop": true,
     "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
   },
-  "include": ["./src/**/*", "./wasm/kaspa"],
+  "include": ["./src/index.ts", "./src/kiwi.ts", "./wasm/kaspa"],
   "exclude": ["node_modules", "wasm","examples", "tests", "vite.config.d.ts"]
 }

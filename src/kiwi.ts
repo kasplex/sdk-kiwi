@@ -3,9 +3,12 @@ import { NetworkType } from "@/wasm/kaspa";
 class Kiwi {
 
     public static network: NetworkType = NetworkType.Testnet;
-
-    constructor() {}
-
+    
+    /**
+     * Sets the network type for the Kiwi class.
+     * 
+     * @param {NetworkType} network - The network type to set (e.g., Mainnet, Testnet).
+     */
     public static setNetwork(network: NetworkType) {
         Kiwi.network = network
     }
