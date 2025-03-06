@@ -125,7 +125,7 @@ class Script {
      * @param ecdsa - Whether to use ECDSA (optional).
      * @returns The generated address.
      */
-    public static redeemMultiSignAddress(require: number, publicKeys: string[],  networkType: NetworkType, ecdsa?: boolean) {
+    public static redeemMultiSignAddress(require: number, publicKeys: string[], networkType: NetworkType, ecdsa?: boolean) {
         const script = new ScriptBuilder().addOp(Opcodes.OpReserved + require);
         publicKeys.forEach(pk => {
             script.addData(ecdsa ? pk : new PublicKey(pk).toXOnlyPublicKey().toString());

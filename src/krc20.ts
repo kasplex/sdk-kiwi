@@ -1,3 +1,4 @@
+import { add } from './../node_modules/@types/node/module.d';
 import {
     PrivateKey,
     addressFromScriptPublicKey,
@@ -7,18 +8,20 @@ import {
     SighashType,
     type UtxoEntryReference,
     type Address,
-    type ScriptBuilder,
+    ScriptBuilder,
     ITransactionOutput,
     ScriptPublicKey,
+    kaspaToSompi,
 } from "./wasm/kaspa";
 
 import { Krc20Data } from "./types/interface";
-import { Kiwi } from "./kiwi";
+import Kiwi from "./kiwi";
 import { OP } from "./utils/enum";
 import { Transaction } from "./tx/transaction";
 import { Entries } from "./tx/entries";
 import { Script } from './script/script';
 import { BASE_KAS_TO_P2SH_ADDRESS } from "./utils/constants";
+import { Address as AddressUtil } from "./utils/address";
 import { getFeeByOp } from '@/utils/utils'
 import { Output } from "./tx/output";
 
@@ -57,14 +60,12 @@ class KRC20 {
         entries: any[],
         outputs: any[],
         fee: bigint,
-        script?: ScriptBuilder
+        script: ScriptBuilder
     ) {
         const address = privateKey.toPublicKey().toAddress(Kiwi.network).toString();
-        const tx = await Transaction.createTransactionsWithEntries(entries, outputs, address, fee);
-        if (script) {
-            tx.sign([privateKey], script);
-        }
-        return tx.submit();
+        return await Transaction.createTransactionsWithEntries(entries, outputs, address, fee)
+            .sign([privateKey], script)
+            .submit();
     }
 
     /**
@@ -82,12 +83,17 @@ class KRC20 {
         const script = this.createScript(privateKey, data);
         const p2shAddress = this.createP2SHAddress(script);
         const address = privateKey.toPublicKey().toAddress(Kiwi.network).toString();
+        if(data.to) {
+            if(!AddressUtil.validate(data.to)) {
+                throw new Error("Invalid 'to' address");
+            }
+        }
         const outputs = Output.createOutputs(p2shAddress.toString(), BASE_KAS_TO_P2SH_ADDRESS);
         const commitTx = await Transaction.createTransactions(address, outputs, fee).sign([privateKey]).submit();
-        console.log('commitTx', commitTx)
+        
         const revealEntries = Entries.revealEntries(p2shAddress, commitTx!, script.createPayToScriptHashScript());
         const getFee = getFeeByOp(data.op);
-        return this.createTransactionWithEntries(privateKey, revealEntries, [], fee, script);
+        return this.createTransactionWithEntries(privateKey, revealEntries, [], getFee, script);
     }
 
 
@@ -175,7 +181,7 @@ class KRC20 {
 
     /**
      * Sends KRC20 tokens to another address.
-     * @param privateKey - The private key for signing the transaction.
+     * @param privateKeyStr - The private key for signing the transaction.
      * @param data - The KRC20 data containing send details.
      * @param fee - The transaction fee.
      * @returns The submitted reveal transaction.
@@ -184,10 +190,11 @@ class KRC20 {
         if (data.op !== OP.Send) {
             throw new Error("Invalid input: 'op' must be 'send'");
         }
-        const signData = await this.signHalf(privateKeyStr, data, hash, amount!);
+        const signData = await this.signPartiaHalf(privateKeyStr, data, hash, amount!);
         if (!signData) {
             throw new Error("Invalid input: 'signData' must be provided");
         }
+        console.log('signData', signData)
         return await this.revealPskt(buyPrivateKey, signData, hash, fee);
     }
 
@@ -199,7 +206,7 @@ class KRC20 {
      * @param amount - The amount.
      * @returns The serialized transaction.
      */
-    public static async signHalf(privateKey: string, data: Krc20Data, hash: string, amount: bigint) {
+    public static async signPartiaHalf(privateKey: string, data: Krc20Data, hash: string, amount: bigint) {
         const _privateKey = new PrivateKey(privateKey);
         const script = Script.krc20Script(_privateKey.toPublicKey().toXOnlyPublicKey().toString(), data);
         const scriptPublicKey = script.createPayToScriptHashScript();
@@ -218,7 +225,7 @@ class KRC20 {
 
     /**
      * Reveals a partially signed transaction.
-     * @param privateKey - The private key.
+     * @param buyPrivateKey - The private key.
      * @param signData - The serialized transaction data.
      * @param hash - The transaction hash.
      * @param fee - The transaction fee.
@@ -237,7 +244,23 @@ class KRC20 {
         const outputScriptPublicKey = this.getScriptPublicKey(txOutput);
         const receiveAddress = addressFromScriptPublicKey(outputScriptPublicKey, Kiwi.network)!
         const outputs = Output.createOutputs(receiveAddress.toString(), tx.outputs[0].value);
-        return await Transaction.createTransactionsWithEntries(entries, outputs, address, fee, entries as []).sign([_buyPrivateKey], txInputs.signatureScript, true).submit()
+        console.log('outputs', outputs)
+        return await Transaction.createTransactionsWithEntries(entries, outputs, address, fee, entries as []).signReveal([_buyPrivateKey], txInputs.signatureScript).submit()
+    }
+
+
+    public static async transferMulti(require: number, publicKeysStr: string[], data: Krc20Data, privateKeys: string[] ,ecdsa?: boolean, fee?: bigint) {
+        const redeemScript = Script.multiSignTx(publicKeysStr, require, ecdsa || false);
+        const address = Script.multiSignAddress(require, publicKeysStr, Kiwi.network, ecdsa || false);
+        const scriptAddress = Script.multiSignTxKrc20Script(publicKeysStr, data, require, ecdsa || false)
+        const scriptPublicKey = scriptAddress.createPayToScriptHashScript()
+        const P2SHAddress = addressFromScriptPublicKey(scriptPublicKey, Kiwi.network)!;
+        const scriptOp = new ScriptBuilder().addData(scriptAddress.toString())
+        const _privateKeys = privateKeys.map(pk => new PrivateKey(pk))
+        const outputs = Output.createOutputs(P2SHAddress.toString(), kaspaToSompi("0.3")!);
+        const commitTx = await Transaction.createTransactions(address, outputs, 0n).multiSign(_privateKeys, redeemScript).submit();
+        const revealEntries = Entries.revealEntries(P2SHAddress, commitTx!, scriptPublicKey);
+        return await Transaction.createTransactionsWithEntries(revealEntries, [], address, kaspaToSompi("0.001"), revealEntries as []).sign(_privateKeys, scriptOp).submit();
     }
 
 }

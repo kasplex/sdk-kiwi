@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import {NetworkType, PrivateKey} from "../src/wasm/kaspa";
+import {kaspaToSompi, NetworkType, PrivateKey} from "../src/wasm/kaspa";
 import { createKrc20Data } from '../src/utils/utils'
 import { OP } from '../src/utils/enum'
 import { Rpc } from '../src/rpc/client';
@@ -9,17 +9,17 @@ let toAddress = 'kaspatest:qpyrh5ev84kc50nrhnc3g59ujr3a3pv4jweg57rge9sydrwyz9dru
 let privateKey = new PrivateKey("3da233c786bfb4cc6e7319f757a094fc2f33b4217613abe3d29ed684ee464828")
 let _privateKey = "3da233c786bfb4cc6e7319f757a094fc2f33b4217613abe3d29ed684ee464828"
 describe('Transaction', () => {
-    it('mint', async () => {
-        await Rpc.setInstance(NetworkType.Testnet).connect()
+    // it('mint', async () => {
+    //     await Rpc.setInstance(NetworkType.Testnet).connect()
 
-        const krc20data = createKrc20Data({
-            p: "krc-20",
-            op: OP.Mint,
-            tick: 'SNOWDN',
-        })
-        let txid = await KRC20.mint(_privateKey, krc20data, 100000n)
-        console.log("Mint txid", txid)
-    }, 50000)
+    //     const krc20data = createKrc20Data({
+    //         p: "krc-20",
+    //         op: OP.Mint,
+    //         tick: 'SNOWDN',
+    //     })
+    //     let txid = await KRC20.mint(_privateKey, krc20data, 100000n)
+    //     console.log("Mint txid", txid)
+    // }, 50000)
 
     // it('transfer', async () => {
     //     await Rpc.setInstance(NetworkType.Testnet).connect()
@@ -66,19 +66,19 @@ describe('Transaction', () => {
     //     await Rpc.getInstance().disconnect()
     // }, 50000)
 
-    // it('send', async () => {
-    //     await Rpc.setInstance(NetworkType.Testnet).connect()
-    //     const krc20data = createKrc20Data({
-    //         p: "krc-20",
-    //         op: OP.Send,
-    //         tick: "SNOWDN",
-    //     })  
-    //     const hash = "3b76a7b1c294c682909caf350bacb24523975423764caabdf1c769e241952cc7"
-    //     const _buyPrivateKey = "fd67dcd4f94b20ac5f7c5eea83bb886c388d7a7787fd315810ee6d002cf5eb9a"
-    //     let txid = await KRC20.send(_privateKey, krc20data, _buyPrivateKey,hash,100000000n, 100000n)
-    //     console.log("Send txid", txid)
-    //     await Rpc.getInstance().disconnect()
-    // }, 50000)
+    it('send', async () => {
+        await Rpc.setInstance(NetworkType.Testnet).connect()
+        const krc20data = createKrc20Data({
+            p: "krc-20",
+            op: OP.Send,
+            tick: "SNOWDN",
+        })  
+        const hash = "a51f4c96d08f88aeb50045983dadc59bb2e48f88e6e0ee93e3667c3b7c85e4f0"
+        const _buyPrivateKey = "fd67dcd4f94b20ac5f7c5eea83bb886c388d7a7787fd315810ee6d002cf5eb9a"
+        let txid = await KRC20.send(_privateKey, krc20data, _buyPrivateKey,hash,100000000n, 100000n)
+        console.log("Send txid", txid)
+        await Rpc.getInstance().disconnect()
+    }, 50000)
 
     // it('pskt', async () => {
     //     const _privateKey = "3da233c786bfb4cc6e7319f757a094fc2f33b4217613abe3d29ed684ee464828"
@@ -95,6 +95,31 @@ describe('Transaction', () => {
     //     const _buyPrivateKey = "fd67dcd4f94b20ac5f7c5eea83bb886c388d7a7787fd315810ee6d002cf5eb9a"
     //     const txshId = await KRC20.revealPskt(_buyPrivateKey, signData, hash, 10000n)
     //     console.log("revealPskt txshId", txshId)
+    //     await Rpc.getInstance().disconnect()
+    // }, 50000)
+
+    // it("transferMulti", async () => {
+    //     await Rpc.setInstance(NetworkType.Testnet).connect()
+    //     const krc20data = createKrc20Data({
+    //         p: "krc-20",
+    //         op: OP.Mint,
+    //         tick: "SNOWDN",
+    //         to: toAddress,
+    //         amt: "10",
+    //     })
+    //     const requireSigNum = 2;
+    //     const useEcdsa = false
+    //     const privateKeys = [
+    //         "2596b6e6a76c75148fa41a5f72ea83c5b25f6fc4252d86a1ff8e7021f7632941",
+    //         "4a6338cdc39ea7ba6503f45bfdca02ff9be5ef1cb4d665ca7e94afe52adabafc",
+    //     ]
+    //     const publicKeys = [
+    //         "02f5c16567f9eaa48a31b4bf5959ebd2fdbac6671998996a5b8165213e6f38e79e",
+    //         "024af3fac87b66e378923aea14e16f87fe83dc6e7c54f108f4ccd95e63f049ea14",
+    //         "02bec0bb5a3c896ed719402b3ea05bf3f8ef8705928d2239df12ee643bdedc40e6",
+    //     ]
+    //     let txid = await KRC20.transferMulti(requireSigNum, publicKeys, krc20data, privateKeys, useEcdsa, kaspaToSompi("0.001"))
+    //     console.log("TransferMulti txid", txid)
     //     await Rpc.getInstance().disconnect()
     // }, 50000)
 

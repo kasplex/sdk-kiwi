@@ -1,19 +1,29 @@
 import { httpClient } from '@/utils/http';
 import { BASE_URL_KASPA } from '@/utils/constants';
-interface Params {
-    [key: string]: string | number | boolean | Array<string>;
-}
+import { Params } from '@/types/interface';
+import { NetworkType } from "@/wasm/kaspa";
+import Kiwi from "@/kiwi";
+
 class KaspaApi {
     private static readonly baseUrl: string = BASE_URL_KASPA;
 
-    /** -----Kaspa addresses----- */
-
+    /**
+     * Determines the appropriate API base URL based on the network type.
+     * @returns {string} - The base API URL.
+     */
+    private static getBaseUrl(): string {
+        const url = Kiwi.network === NetworkType.Mainnet ? BASE_URL_KASPA : '';
+        if (!url) {
+            throw new Error("The current testing environment cannot call related interfaces.");
+        }
+        return url;
+    }
     /**
      * Get balance for a specific Kaspa address.
      * @param kaspaAddress The Kaspa wallet address
      */
     public static getBalance(kaspaAddress: string) {
-        return httpClient.get(`${this.baseUrl}/addresses/${kaspaAddress}/balance`);
+        return httpClient.get(`${this.getBaseUrl()}/addresses/${kaspaAddress}/balance`);
     }
 
     /**
@@ -21,7 +31,7 @@ class KaspaApi {
      * @param params List of addresses
      */
     public static postBalance(params: Params) {
-        return httpClient.post(`${this.baseUrl}/addresses/balances`, params);
+        return httpClient.post(`${this.getBaseUrl()}/addresses/balances`, params);
     }
 
     /**
@@ -29,7 +39,7 @@ class KaspaApi {
      * @param kaspaAddress The Kaspa wallet address
      */
     public static getUtxo(kaspaAddress: string) {
-        return httpClient.get(`${this.baseUrl}/addresses/${kaspaAddress}/utxos`);
+        return httpClient.get(`${this.getBaseUrl()}/addresses/${kaspaAddress}/utxos`);
     }
 
     /**
@@ -37,7 +47,7 @@ class KaspaApi {
      * @param params List of addresses
      */
     public static postUtxos(params: Params) {
-        return httpClient.post(`${this.baseUrl}/addresses/utxos`, params);
+        return httpClient.post(`${this.getBaseUrl()}/addresses/utxos`, params);
     }
 
     /**
@@ -45,85 +55,85 @@ class KaspaApi {
      * @param kaspaAddress The Kaspa wallet address
      */
     public static getTransactionsCount(kaspaAddress: string) {
-        return httpClient.get(`${this.baseUrl}/addresses/${kaspaAddress}/transactions-count`);
+        return httpClient.get(`${this.getBaseUrl()}/addresses/${kaspaAddress}/transactions-count`);
     }
 
-    /** -----Kaspa network info----- */
+
     /** Get BlockDAG info */
     public static getInfoBlockdag() {
-        return httpClient.get(`${this.baseUrl}/info/blockdag`);
+        return httpClient.get(`${this.getBaseUrl()}/info/blockdag`);
     }
 
     public static getInfoCoinsupply() {
-        return httpClient.get(`${this.baseUrl}/info/coinsupply`);
+        return httpClient.get(`${this.getBaseUrl()}/info/coinsupply`);
     }
 
     public static getInfoCoinsupplyCirculating() {
-        return httpClient.get(`${this.baseUrl}/info/coinsupply/circulating`);
+        return httpClient.get(`${this.getBaseUrl()}/info/coinsupply/circulating`);
     }
-    
+
     public static getInfoCoinsupplyTotal() {
-        return httpClient.get(`${this.baseUrl}/info/coinsupply/total`);
+        return httpClient.get(`${this.getBaseUrl()}/info/coinsupply/total`);
     }
     public static getInfoKaspad() {
-        return httpClient.get(`${this.baseUrl}/info/kaspad`);
+        return httpClient.get(`${this.getBaseUrl()}/info/kaspad`);
     }
     public static getInfoNetwork() {
-        return httpClient.get(`${this.baseUrl}/info/network`);
+        return httpClient.get(`${this.getBaseUrl()}/info/network`);
     }
     public static getInfoFeeEstimate() {
-        return httpClient.get(`${this.baseUrl}/info/fee-estimate`);
+        return httpClient.get(`${this.getBaseUrl()}/info/fee-estimate`);
     }
     public static getInfoPrice() {
-        return httpClient.get(`${this.baseUrl}/info/price`);
+        return httpClient.get(`${this.getBaseUrl()}/info/price`);
     }
 
     public static getInfoBlockReward() {
-        return httpClient.get(`${this.baseUrl}/info/blockreward`);
+        return httpClient.get(`${this.getBaseUrl()}/info/blockreward`);
     }
     public static getInfoHalving() {
-        return httpClient.get(`${this.baseUrl}/info/halving`);
+        return httpClient.get(`${this.getBaseUrl()}/info/halving`);
     }
 
     public static getInfoHashRate() {
-        return httpClient.get(`${this.baseUrl}/info/hashrate`);
+        return httpClient.get(`${this.getBaseUrl()}/info/hashrate`);
     }
 
     public static getInfoHashRateMax() {
-        return httpClient.get(`${this.baseUrl}/info/hashrate/max`);
+        return httpClient.get(`${this.getBaseUrl()}/info/hashrate/max`);
     }
     public static getInfoHealth() {
-        return httpClient.get(`${this.baseUrl}/info/health`);
+        return httpClient.get(`${this.getBaseUrl()}/info/health`);
     }
 
     public static getInfoMarketcap() {
-        return httpClient.get(`${this.baseUrl}/info/marketcap`);
+        return httpClient.get(`${this.getBaseUrl()}/info/marketcap`);
     }
 
-    /** -----Kaspa blocks----- */
+
     /**
      * Get block details by block ID.
      * @param blockId The block identifier
      */
     public static getBlocksBlockId(blockId: string) {
-        return httpClient.get(`${this.baseUrl}/blocks/${blockId}`);
+        return httpClient.get(`${this.getBaseUrl()}/blocks/${blockId}`);
     }
 
     public static getBlocks() {
-        return httpClient.get(`${this.baseUrl}/blocks`);
+        return httpClient.get(`${this.getBaseUrl()}/blocks`);
     }
 
     public static getBlocksFromBluescore() {
-        return httpClient.get(`${this.baseUrl}/blocks-from-bluescore`);
+        return httpClient.get(`${this.getBaseUrl()}/blocks-from-bluescore`);
     }
 
-    /** -----Kaspa transactions----- */
+
     /**
      * Get transaction details by transaction ID.
      * @param transactionId The transaction identifier
      */
     public static getTransactionsId(transactionId: string) {
-        return httpClient.get(`${this.baseUrl}/transactions/${transactionId}`);
+        return httpClient.get(`${this.getBaseUrl()}/transactions/${transactionId}`);
     }
 
     /**
@@ -131,7 +141,7 @@ class KaspaApi {
      * @param params The search query parameters
      */
     public static postTransactionsSearch(params: Params) {
-        return httpClient.post(`${this.baseUrl}/transactions/search`, params);
+        return httpClient.post(`${this.getBaseUrl()}/transactions/search`, params);
     }
 
     /**
@@ -139,7 +149,7 @@ class KaspaApi {
      * @param params The transaction data
      */
     public static postTransactions(params: Params) {
-        return httpClient.post(`${this.baseUrl}/transactions`, params);
+        return httpClient.post(`${this.getBaseUrl()}/transactions`, params);
     }
 
     /**
@@ -147,8 +157,8 @@ class KaspaApi {
      * @param params The batch transaction data
      */
     public static postTransactionsMass(params: Params) {
-        return httpClient.post(`${this.baseUrl}/transactions/mass`, params);
+        return httpClient.post(`${this.getBaseUrl()}/transactions/mass`, params);
     }
 }
 
-export { KaspaApi, Params };
+export { KaspaApi };

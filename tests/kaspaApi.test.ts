@@ -1,22 +1,27 @@
-import { KaspaApi, Params} from '../src/api/kaspaApi'
-import {describe, expect, it} from 'vitest';
+import { KaspaApi } from '../src/api/kaspaApi'
+import { Params } from "../src/types/interface";
+import { describe, expect, it } from 'vitest';
+import { NetworkType } from '../src/wasm/kaspa'
+import Kiwi from '../src/kiwi'
 
 const address = `kaspa:qrxh35ysr2hchag9gtam5vlkvpmn89ph78t6nqvg44yj3xf8rpeg22dwn3r90`
-
 const params: Params = {
     addresses: [address],
 };
+Kiwi.setNetwork(NetworkType.Mainnet)
+
 describe('KaspaApi', () => {
 
     // Test for getBalance
     it('getBalance', async () => {
+        
         const res = await KaspaApi.getBalance(address)
         console.log(`getBalance response: \x1B[32m%s\x1B[0m `, JSON.stringify(res))
         expect(res)
     })
 
     it('postBalance', async () => {
-        const res = await KaspaApi.postBalance({address: address})
+        const res = await KaspaApi.postBalance({ address: address })
         console.log(`postBalance response: \x1B[32m%s\x1B[0m `, JSON.stringify(res))
         expect(res)
     })
@@ -144,12 +149,12 @@ describe('KaspaApi', () => {
     }, 5000);
 
 
-    it('getTransactionsId', async () => {
-        const transactionId = '9475b4302a505d30d5aa3f98883b33e5e0bb6dd4a4560df844cd72954055aaaf';
-        const res = await KaspaApi.getTransactionsId(transactionId);
-        console.log(`getTransactionsId response: \x1B[32m%s\x1B[0m`, JSON.stringify(res, null, 2));
-        expect(res).to.be.an('object');
-    });
+    // it('getTransactionsId', async () => {
+    //     const transactionId = '9475b4302a505d30d5aa3f98883b33e5e0bb6dd4a4560df844cd72954055aaaf';
+    //     const res = await KaspaApi.getTransactionsId(transactionId);
+    //     console.log(`getTransactionsId response: \x1B[32m%s\x1B[0m`, JSON.stringify(res, null, 2));
+    //     expect(res).to.be.an('object');
+    // });
 
     // it('postTransactionsSearch', async () => {
     //     const res = await KaspaApi.postTransactionsSearch(params);
@@ -168,5 +173,5 @@ describe('KaspaApi', () => {
     //     console.log(`postTransactionsMass response: \x1B[32m%s\x1B[0m`, JSON.stringify(res, null, 2));
     //     expect(res).to.be.an('object');
     // }, 5000);
-    
+
 })

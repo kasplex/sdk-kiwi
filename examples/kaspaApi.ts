@@ -1,6 +1,4 @@
-import Kiwi from '../src/index';
-
-const { KaspaApi } = Kiwi
+import { KaspaApi } from '../src/index';
 
 async function testKaspaApi() {
     try {

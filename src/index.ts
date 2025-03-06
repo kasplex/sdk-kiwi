@@ -9,4 +9,5 @@ export * from "./tx/transaction";
 export * from "./krc20";
 export * from "./utils/enum";
 export * from "./utils/utils";
-export type { NetworkType, PrivateKey } from "@/wasm/kaspa";
+export * from './kiwi'
+export { NetworkType, PrivateKey } from "@/wasm/kaspa";

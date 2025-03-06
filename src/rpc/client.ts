@@ -23,6 +23,10 @@ class Rpc {
      * @returns The singleton instance of Rpc.
      */
     public static setInstance(network: NetworkType = NetworkType.Mainnet, url: string = ""): Rpc {
+        if (Rpc.instance) {
+            console.log("Rpc instance already exists. Returning existing instance.");
+            return Rpc.instance;
+        }
         Rpc.instance = new Rpc(network, url);
         return Rpc.instance;
     }
@@ -43,6 +47,10 @@ class Rpc {
      * Establishes a connection to the RPC server.
      */
     public async connect(): Promise<void> {
+        if(this.client.isConnected) {
+            console.log("Already connected to the RPC server.");
+            return;
+        }
         await this.client.connect();
     }
 
@@ -50,6 +58,10 @@ class Rpc {
      * Disconnects from the RPC server.
      */
     public async disconnect(): Promise<void> {
+        if (this.client.isConnected) {
+            console.log("Already disconnected from the RPC server.");
+            return;
+        }
         await this.client.disconnect();
     }
 

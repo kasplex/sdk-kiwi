@@ -1,5 +1,4 @@
-import Kiwi from '../src/index';
-const { Mnemonic } = Kiwi
+import { Mnemonic } from '../src/index';
 
 // Example 1: Generate a 12-word mnemonic
 const mnemonic12 = Mnemonic.random(12);
