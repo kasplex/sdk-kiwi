@@ -11,4 +11,4 @@ class Kiwi {
     }
 }
 
-export default Kiwi;
+export { Kiwi };

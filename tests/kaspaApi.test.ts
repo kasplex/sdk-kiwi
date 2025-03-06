@@ -2,7 +2,7 @@ import { KaspaApi } from '../src/api/kaspaApi'
 import { Params } from "../src/types/interface";
 import { describe, expect, it } from 'vitest';
 import { NetworkType } from '../src/wasm/kaspa'
-import Kiwi from '../src/kiwi'
+import { Kiwi } from '../src/kiwi'
 
 const address = `kaspa:qrxh35ysr2hchag9gtam5vlkvpmn89ph78t6nqvg44yj3xf8rpeg22dwn3r90`
 const params: Params = {

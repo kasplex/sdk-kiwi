@@ -139,12 +139,11 @@ class PendingTransaction {
         return this;
     }
 
-    private signPskt(privateKeys: PrivateKey[], script: ScriptBuilder): this  {
+    public signPskt(privateKeys: PrivateKey[], script: ScriptBuilder): this  {
         const privateKey = privateKeys.shift();
         if (!privateKey) return this;
         this.transaction = this.transaction.then(async transactions => {
-            transactions.transactions.forEach(transaction => {
-                let index = 0;
+            transactions.transactions.forEach((transaction, index) => {
                 transaction.fillInput(index, script.toString());
                 transaction.sign([privateKey], false);
             });

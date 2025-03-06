@@ -118,22 +118,22 @@ class Script {
     }
 
     /**
-     * Generates a redeem multi-signature address.
-     * @param publicKeys - An array of public keys.
-     * @param require - The number of required signatures.
-     * @param networkType - The networkType type.
-     * @param ecdsa - Whether to use ECDSA (optional).
-     * @returns The generated address.
+     * Redeems a multi-signature address by constructing the appropriate script.
+     * 
+     * @param require - The number of required signatures to unlock the funds.
+     * @param publicKeys - An array of public keys involved in the multi-signature address.
+     * @param networkType - The network type (e.g., mainnet, testnet) for address generation.
+     * @param ecdsa - Optional flag to indicate whether to use ECDSA signatures (default is Schnorr signatures).
+     * @returns A `ScriptBuilder` instance containing the constructed multi-signature script.
      */
-    public static redeemMultiSignAddress(require: number, publicKeys: string[], networkType: NetworkType, ecdsa?: boolean) {
+    public static redeemMultiSignAddress(require: number, publicKeys: string[], ecdsa?: boolean) {
         const script = new ScriptBuilder().addOp(Opcodes.OpReserved + require);
         publicKeys.forEach(pk => {
             script.addData(ecdsa ? pk : new PublicKey(pk).toXOnlyPublicKey().toString());
         });
-        let _script = script
-            .addOp(Opcodes.OpReserved + publicKeys.length)
+        script.addOp(Opcodes.OpReserved + publicKeys.length)
             .addOp(ecdsa ? Opcodes.OpCheckMultiSigECDSA : Opcodes.OpCheckMultiSig)
-        return addressFromScriptPublicKey(_script.createPayToScriptHashScript(), networkType);
+        return new ScriptBuilder().addData(script.toString())
     }
 }
 

@@ -2,7 +2,7 @@ import {
     Address,
     PrivateKey, ScriptBuilder,
 } from "@/wasm/kaspa";
-import Kiwi from "@/kiwi";
+import { Kiwi } from "@/kiwi";
 import {Transaction} from "./tx/transaction";
 import { Output } from "./tx/output";
 
