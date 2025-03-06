@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite'
 import { resolve } from 'path'
-import { esbuildCommonjs } from '@originjs/vite-plugin-commonjs'
 import dts from 'vite-plugin-dts'
+import { esbuildCommonjs } from '@originjs/vite-plugin-commonjs'
 import wasm from 'vite-plugin-wasm';
 import topLevelAwait from 'vite-plugin-top-level-await';
 import { copy } from 'fs-extra';
@@ -12,10 +12,7 @@ export default defineConfig({
         wasm(),
         topLevelAwait(),
         esbuildCommonjs(),
-        dts({
-            insertTypesEntry: true,
-            outputDir: resolve(__dirname, 'dist/types'),
-        }),
+        dts(),
         {
             name: 'vite-plugin-static-copy',
             buildStart() {
@@ -23,7 +20,7 @@ export default defineConfig({
             },
             writeBundle() {
                 const src = resolve(__dirname, 'src/wasm');
-                const dest = resolve(__dirname, 'dist/wasm');
+                const dest = resolve(__dirname, 'dist/src/wasm');
                 copy(src, dest, (err) => {
                     if (err) {
                         console.error('Error copying files:', err);
@@ -45,8 +42,8 @@ export default defineConfig({
         minify: "terser",
         lib: {
             entry: {
-                index: 'src/index.ts',
-                kiwi: 'src/kiwi.ts',
+                index: resolve(__dirname, 'src/index.ts'),
+                kiwi: resolve(__dirname, 'src/kiwi.ts'),
             },
             name: 'sdkKiwi',
             formats: ["es", "cjs"],
@@ -56,8 +53,17 @@ export default defineConfig({
                 return `${entryName}.${format}.js`;
             }
         },
+        terserOptions: {
+            format: {
+                comments: false,
+            },
+        },
         rollupOptions: {
-            external: ['node:url'], 
+            external: [
+                'src/wasm/**/*',
+                'examples/**/*',
+                'tests/**/*'
+            ],
             output: {
                 dir: resolve(__dirname, 'dist'),
                 format: "cjs",
@@ -66,7 +72,7 @@ export default defineConfig({
                     liteMove: 'sdk-kiwi'
                 },
                 manualChunks(id) {
-                    if (id.includes('wasm')) {
+                    if (id.includes('wasm') || id.includes('examples/') || id.includes('tests/')) {
                         return 'wasm';
                     }
                 },

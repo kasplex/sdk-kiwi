@@ -1,6 +1,7 @@
 {
   "name": "sdk-kiwi",
   "version": "1.0.0",
+  "sideEffects": false,
   "description": "",
   "main": "dist/index.js",
   "module": "dist/index.js",

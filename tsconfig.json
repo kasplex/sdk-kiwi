@@ -5,10 +5,9 @@
     "rootDir": "./",  
     "moduleResolution": "Node",
     "baseUrl": ".", 
-    "outDir": "dist",
+    "outDir": "./dist",
     "paths": {
       "@/*": ["./src/*"],
-      "~wasm/*": ["./wasm/*"]
     },                                      
     /* Emit */
     "declaration": true,                              /* Generate .d.ts files from TypeScript and JavaScript files in your project. */
@@ -22,6 +21,6 @@
     "esModuleInterop": true,
     "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
   },
-  "include": ["src"],
-  "exclude": ["node_modules", "dist"]
+  "include": ["./src/**/*", "./wasm/kaspa"],
+  "exclude": ["node_modules", "wasm","examples", "tests", "vite.config.d.ts"]
 }

@@ -1,4 +1,4 @@
-import Kiwi from '../src/index';
+import { Kiwi } from '../src/kiwi';
 
 await Kiwi.init(Kiwi.NetworkType.Testnet)
 
