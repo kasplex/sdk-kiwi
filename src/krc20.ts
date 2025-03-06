@@ -188,6 +188,7 @@ class KRC20 {
         if (!signData) {
             throw new Error("Invalid input: 'signData' must be provided");
         }
+        console.log("signData2", signData)
         return await this.revealPskt(buyPrivateKey, signData, hash, fee);
     }
 
@@ -209,10 +210,8 @@ class KRC20 {
         const enterAmount = this.getEnterAmount(entries, hash)
         const output = Output.createOutputs(address, amount);
         const revealEntries = Entries.revealEntries(p2shAddress, hash, scriptPublicKey, enterAmount);
-        const tx = createTransaction(revealEntries, output, 0n, "", 1);
-        let signature = createInputSignature(tx, 0, _privateKey, SighashType.SingleAnyOneCanPay);
-        tx.inputs[0].signatureScript = script.encodePayToScriptHashSignatureScript(signature)
-        return tx.serializeToSafeJSON();
+        return Transaction.createTransaction(revealEntries, output, 0n, "", 1)
+            .sign(_privateKey, script, SighashType.SingleAnyOneCanPay).toJson()
     }
 
 

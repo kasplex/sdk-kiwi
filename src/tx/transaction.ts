@@ -4,9 +4,10 @@ import {
     IUtxoEntry,
     UtxoEntryReference,
     UtxoContext,
-    PaymentOutput,
+    PaymentOutput, createTransaction, HexString,
 } from "@/wasm/kaspa";
 import { PendingTransaction } from "./pendingTransaction";
+import { RawTransaction } from "./rawTransaction";
 
 class Transaction {
     /**
@@ -30,6 +31,26 @@ class Transaction {
     }
 
     /**
+     * creates a transaction.
+     *
+     * @param entries - A list of UTXOs to be used in the transaction.
+     * @param outputs - Payment outputs for the transaction.
+     * @param priorityFee - (Optional) Transaction fee.
+     * @param payload - (Optional) payload in the transaction.
+     * @param sigOpCount - (Optional) Number of signature operations to include.
+     * @returns A `RawTransaction` instance.
+     */
+    public static createTransaction(
+        entries: IUtxoEntry[],
+        outputs: IPaymentOutput[],
+        priorityFee: bigint,
+        payload?: HexString | Uint8Array,
+        sigOpCount?: number
+    ) {
+        return RawTransaction.createTransaction(entries, outputs, priorityFee, payload, sigOpCount);
+    }
+
+    /**
      * Creates a new transaction using a predefined set of UTXO entries instead of fetching them dynamically.
      *
      * @param entries - A list of UTXOs to be used in the transaction.
@@ -42,7 +63,7 @@ class Transaction {
      */
     public static createTransactionsWithEntries(
         entries: IUtxoEntry[] | UtxoEntryReference[] | UtxoContext,
-        outputs: PaymentOutput | IPaymentOutput[],
+        outputs: IPaymentOutput[],
         address: string | Address,
         fee?: bigint,
         priorityEntries?: [],
