@@ -5,8 +5,6 @@ import { NetworkType } from "@/wasm/kaspa";
 import { Kiwi } from "@/kiwi";
 
 class KaspaApi {
-    private static readonly baseUrl: string = BASE_URL_KASPA;
-
     /**
      * Determines the appropriate API base URL based on the network type.
      * @returns {string} - The base API URL.

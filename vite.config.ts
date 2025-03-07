@@ -4,7 +4,9 @@ import dts from 'vite-plugin-dts'
 import wasm from 'vite-plugin-wasm';
 import topLevelAwait from 'vite-plugin-top-level-await';
 import commonjs from 'rollup-plugin-commonjs';
-import { copy } from 'fs-extra';
+import typescript from '@rollup/plugin-typescript';
+import { copy } from 'vite-plugin-copy';
+import alias from 'rollup-plugin-alias';
 
 export default defineConfig({
     base: './',
@@ -15,23 +17,16 @@ export default defineConfig({
         commonjs({
             include: ['src/wasm/kaspa/*'],
         }),
-        {
-            name: 'vite-plugin-static-copy',
-            buildStart() {
-                console.log('Build started');
-            },
-            writeBundle() {
-                const src = resolve(__dirname, 'src/wasm');
-                const dest = resolve(__dirname, 'wasm');
-                copy(src, dest, (err) => {
-                    if (err) {
-                        console.error('Error copying files:', err);
-                    } else {
-                        console.log('Files copied successfully');
-                    }
-                });
-            }
-        }
+        copy({
+            targets: [
+                { src: 'src/wasm', dest: 'wasm' }
+            ]
+        }),
+        alias({
+            entries: [
+                { find: '@', replacement: resolve(__dirname, './') },
+            ],
+        }),
     ],
     resolve: {
         alias: {
@@ -39,16 +34,16 @@ export default defineConfig({
         },
     },
     build: {
-        outDir: './dist',
+        outDir: 'dist',
         emptyOutDir: true,
         minify: "terser",
+        target: "esnext",
         lib: {
             entry: {
                 index: resolve(__dirname, 'src/index.ts'),
                 kiwi: resolve(__dirname, 'src/kiwi.ts'),
             },
             name: 'sdkKiwi',
-            formats: ["es", "cjs"],
             fileName: (format, entryName) => {
                 if (format === 'es') return `${entryName}.js`;
                 if (format === 'cjs') return `${entryName}.cjs`;
@@ -61,33 +56,20 @@ export default defineConfig({
             },
             compress: {
                 drop_console: process.env.NODE_ENV === 'production',
-                drop_debugger: process.env.NODE_ENV === 'production', 
+                drop_debugger: process.env.NODE_ENV === 'production',
             }
         },
         rollupOptions: {
-            external: [
-                'src/wasm/**/*',
-                'examples/**/*',
-                'tests/**/*'
-            ],
-            input: {
-                index: resolve(__dirname, 'src/index.ts'),
-                kiwi: resolve(__dirname, 'src/kiwi.ts'),
-            },
-            output: {
-                dir: resolve(__dirname, 'dist'),
-                format: "cjs",
-                inlineDynamicImports: false,
-                globals: {
-                    liteMove: 'sdk-kiwi'
-                },
-                manualChunks(id) {
-                    if (id.includes('wasm') || id.includes('examples/') || id.includes('tests/')) {
-                        return 'wasm';
-                    }
-                },
-                
-            }
+            plugins: [
+                typescript({
+                    target: 'es2020',
+                    rootDir: resolve(__dirname, 'src'),
+                    declaration: true,
+                    declarationDir: resolve(__dirname, 'dist'),
+                    exclude: [resolve(__dirname, 'node_modules/**'), resolve(__dirname, 'test/**')],
+                    allowSyntheticDefaultImports: true
+                })
+            ]
         },
     }
 })

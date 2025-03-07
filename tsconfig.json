@@ -1,26 +1,29 @@
 {
   "compilerOptions": {
     "target": "ES2021",
-    "module": "ESNext",                                
-    "rootDir": "./",  
-    "moduleResolution": "Node",
-    "baseUrl": ".", 
-    "outDir": "./dist",
+    "useDefineForClassFields": true,
+    "module": "ESNext",
+    "lib": [
+      "ES2021",
+      "DOM",
+      "DOM.Iterable"
+    ],
     "paths": {
       "@/*": ["./src/*"],
-    },                                      
-    /* Emit */
-    "declaration": true,                              /* Generate .d.ts files from TypeScript and JavaScript files in your project. */
-    "declarationMap": true, 
-    "emitDeclarationOnly": true,                      /* Only output d.ts files and not JavaScript files. */
-    "declarationDir": "dist",                           /* Specify the output directory for generated declaration files. */
-    "forceConsistentCasingInFileNames": true,            /* Ensure that casing is correct in imports. */
-
-    /* Type Checking */
-    "strict": true,                                      /* Enable all strict type-checking options. */
-    "esModuleInterop": true,
-    "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
+    }, 
+    "skipLibCheck": true,
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true
   },
-  "include": ["./src/index.ts", "./src/kiwi.ts", "./wasm/kaspa"],
-  "exclude": ["node_modules", "wasm","examples", "tests", "vite.config.d.ts"]
+  "include": [
+    "src",
+  ]
 }
