@@ -1,28 +1,30 @@
-import {describe, it, expect} from 'vitest';
+import { describe, expect, test } from 'bun:test';
 import {Mnemonic} from '../src/address/mnemonic';
+import { loadKaspaWasm } from "../src/init";
+await loadKaspaWasm()
 
 describe('mnemonic function tests', () => {
 
-    it('should generate a mnemonic string with 12 words', () => {
+    test('should generate a mnemonic string with 12 words', () => {
         const mnemonicStr = Mnemonic.random(12);
         console.log(mnemonicStr)
         const words = mnemonicStr.split(' ');
         expect(words.length).toBe(12);
     });
 
-    it('should generate a mnemonic string with 24 words', () => {
+    test('should generate a mnemonic string with 24 words', () => {
         const mnemonicStr = Mnemonic.random(24);
         const words = mnemonicStr.split(' ');
         expect(words.length).toBe(24);
     });
 
-    it('validate a mnemonic string is true', () => {
+    test('validate a mnemonic string is true', () => {
         const mn = "deal hood now figure talk vote female behind absurd symptom fiber film";
         const res = Mnemonic.validate(mn);
         expect(res).toBe(true);
     });
 
-    it('validate a mnemonic string is false', () => {
+    test('validate a mnemonic string is false', () => {
         const mn_with_error_words = "deal hood now figure talk vote female behind absurd symptom fiber filmsss";
         let res = Mnemonic.validate(mn_with_error_words);
         expect(res).toBe(false);

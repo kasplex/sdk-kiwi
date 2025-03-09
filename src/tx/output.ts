@@ -1,4 +1,4 @@
-import { IPaymentOutput } from '@/wasm/kaspa'
+import { IPaymentOutput } from '../../wasm/kaspa/kaspa'
 class Output {
     /**
      * Creates an array of payment outputs for a given address and amount.

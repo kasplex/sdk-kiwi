@@ -9,7 +9,7 @@ import {
     kaspaToSompi,
     type UtxoEntryReference,
     type Address,
-} from "./wasm/kaspa";
+} from "../wasm/kaspa/kaspa";
 
 import { Krc20Data } from "./types/interface";
 import { Kiwi } from "./kiwi";
@@ -19,7 +19,7 @@ import { Entries } from "./tx/entries";
 import { Script } from './script/script';
 import { BASE_KAS_TO_P2SH_ADDRESS } from "./utils/constants";
 import { Address as AddressUtil } from "./utils/address";
-import { getFeeByOp } from '@/utils/utils'
+import { getFeeByOp } from './utils/utils'
 import { Output } from "./tx/output";
 class KRC20 {
     /**

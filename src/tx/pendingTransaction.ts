@@ -9,10 +9,10 @@ import {
     PaymentOutput,
     ICreateTransactions,
     ScriptBuilder
-} from "@/wasm/kaspa";
-import { networkToString } from "@/utils/utils";
-import { Rpc } from "@/rpc/client";
-import { Kiwi } from "@/kiwi";
+} from "../../wasm/kaspa/kaspa";
+import { networkToString } from "../utils/utils";
+import { Rpc } from "../rpc/client";
+import { Kiwi } from "../kiwi";
 
 class PendingTransaction {
     private transaction: Promise<ICreateTransactions>;

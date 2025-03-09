@@ -1,6 +1,6 @@
-import { Rpc } from "@/rpc/client"
-import { Address, ScriptPublicKey, IUtxoEntry, UtxoEntryReference } from "@/wasm/kaspa";
-import { U64_MAX_VALUE, BASE_KAS_TO_P2SH_ADDRESS } from "@/utils/constants";
+import { Rpc } from "../rpc/client"
+import { Address, ScriptPublicKey, IUtxoEntry, UtxoEntryReference } from "../../wasm/kaspa/kaspa";
+import { U64_MAX_VALUE, BASE_KAS_TO_P2SH_ADDRESS } from "../utils/constants";
 
 class Entries {
     /**

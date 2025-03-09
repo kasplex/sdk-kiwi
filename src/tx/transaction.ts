@@ -5,7 +5,7 @@ import {
     UtxoEntryReference,
     UtxoContext,
     HexString,
-} from "@/wasm/kaspa";
+} from "../../wasm/kaspa/kaspa";
 import { PendingTransaction } from "./pendingTransaction";
 import { RawTransaction } from "./rawTransaction";
 

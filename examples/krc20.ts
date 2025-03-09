@@ -1,23 +1,21 @@
-import { Rpc, OP, createKrc20Data, KRC20 } from '../src/index';
+import { Rpc, OP, createKrc20Data, KRC20, NetworkType, loadKaspaWasm } from '../dist/index';
+await loadKaspaWasm();
 
-const rpcClient = Rpc.getInstance();
 const _toAddress = 'kaspatest:qpyrh5ev84kc50nrhnc3g59ujr3a3pv4jweg57rge9sydrwyz9drunfa9n4sf'
 const _privateKey = "fd67dcd4f94b20ac5f7c5eea83bb886c388d7a7787fd315810ee6d002cf5eb9a"
 
 async function testKrc20Mint() {
     try {
-        await rpcClient.connect();
+        await Rpc.setInstance(NetworkType.Mainnet).connect()
         const krc20data = createKrc20Data({
             p: "krc-20",
             op: OP.Mint,
             tick: 'SNOWDN',
         })
-
         let txid = await KRC20.mint(_privateKey, krc20data, 100000n)
         console.log("Mint txsh:", txid);
-
-        rpcClient.disconnect()
-        // await Rpc.getInstance().disconnect()
+        Rpc.getInstance().disconnect()
+        
     } catch (error) {
         console.error("Error testing krc20 Mint:", error);
     }
@@ -25,6 +23,7 @@ async function testKrc20Mint() {
 
 async function testKrc20Deploy() {
     try {
+        await Rpc.setInstance(NetworkType.Mainnet).connect()
         const deploydata = createKrc20Data({
             p: "krc-20",
             op: OP.Deploy,
@@ -40,7 +39,7 @@ async function testKrc20Deploy() {
         console.log("Deploy txsh", txid);
 
         // Disconnect from the RPC server
-        rpcClient.disconnect()
+        Rpc.getInstance().disconnect()
     } catch (error) {
         console.error("Error testing krc20 Deploy:", error);
     }
@@ -48,6 +47,7 @@ async function testKrc20Deploy() {
 
 async function testKrc20Transfer() {
     try {
+        await Rpc.setInstance(NetworkType.Mainnet).connect()
         const krc20data = createKrc20Data({
             p: "krc-20",
             op: OP.Transfer,
@@ -59,7 +59,7 @@ async function testKrc20Transfer() {
         console.log("Deploy txsh", txid);
 
         // Disconnect from the RPC server
-        rpcClient.disconnect()
+        Rpc.getInstance().disconnect()
     } catch (error) {
         console.error("Error testing krc20 transfer:", error);
     }
@@ -67,6 +67,7 @@ async function testKrc20Transfer() {
 
 async function testKrc20List() {
     try {
+        await Rpc.setInstance(NetworkType.Mainnet).connect()
         const listData = createKrc20Data({
             p: "krc-20",
             op: OP.List,
@@ -77,14 +78,14 @@ async function testKrc20List() {
         console.log("Deploy txsh", txid);
 
         // Disconnect from the RPC server
-        rpcClient.disconnect()
+        Rpc.getInstance().disconnect()
     } catch (error) {
         console.error("Error testing krc20 list:", error);
     }
 }
 
 // Run the test
-testKrc20Mint();
+// await testKrc20Mint();
 // testKrc20Deploy();
 // testKrc20List()
 // testKrc20Transfer()

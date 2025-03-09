@@ -1,4 +1,4 @@
-import { NetworkType } from "@/wasm/kaspa";
+import { NetworkType } from "../wasm/kaspa/kaspa";
 
 class Kiwi {
 
@@ -13,5 +13,4 @@ class Kiwi {
         Kiwi.network = network
     }
 }
-
 export { Kiwi };

@@ -8,7 +8,7 @@ import {
     Transaction,
     createInputSignature,
     SighashType
-} from "@/wasm/kaspa";
+} from "../../wasm/kaspa/kaspa";
 
 /**
  * Represents a raw Kaspa transaction, providing methods for creation and signing.

@@ -1,8 +1,10 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect, test } from 'bun:test';
 import { Script } from '../src/script/script';
 import { createKrc20Data, networkToString } from '../src/utils/utils';
 import { OP } from '../src/utils/enum';
-import { NetworkType } from '../src/wasm/kaspa';
+import { NetworkType } from '../wasm/kaspa/kaspa';
+import { loadKaspaWasm } from "../src/init";
+await loadKaspaWasm()
 
 // Test data
 const toAddress = 'kaspatest:qpyrh5ev84kc50nrhnc3g59ujr3a3pv4jweg57rge9sydrwyz9drunfa9n4sf';
@@ -15,7 +17,7 @@ const publicKeys = [
 
 describe('Script', () => {
 
-    it('should create a script with krc20Script', () => {
+    test('should create a script with krc20Script', () => {
         const krc20Data = createKrc20Data({
             p: 'krc-20',
             op: OP.Mint,
@@ -26,13 +28,13 @@ describe('Script', () => {
         expect(getScript).toBeDefined();
     });
 
-    it('should create a script with multiSignAddress',  () => {
+    test('should create a script with multiSignAddress',  () => {
         const address = Script.multiSignAddress(2, publicKeys, NetworkType.Testnet, false);
         console.log('multiSignAddress:', address.toString());
         expect(address).toBeDefined();
     });
 
-    it('should create a script with lockTimeScript',  () => {
+    test('should create a script with lockTimeScript',  () => {
         const krc20Data = createKrc20Data({
             p: 'krc-20',
             op: OP.Transfer,
@@ -45,7 +47,7 @@ describe('Script', () => {
         expect(getScript).toBeDefined();
     });
 
-    it('should create a script with redeemScript', () => {
+    test('should create a script with redeemScript', () => {
         const krc20Data = createKrc20Data({
             p: 'krc-20',
             op: OP.Mint,
@@ -56,8 +58,8 @@ describe('Script', () => {
         expect(getScript).toBeDefined();
     });
 
-    it('should create a script with redeemMultiSignAddress', () => {
-        const getScript = Script.redeemMultiSignAddress(2, publicKeys, NetworkType.Testnet);
+    test('should create a script with redeemMultiSignAddress', () => {
+        const getScript = Script.redeemMultiSignAddress(2, publicKeys, false);
         console.log('redeemMultiSignAddress:', getScript);
         expect(getScript).toBeDefined();
     });

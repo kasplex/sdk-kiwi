@@ -1,9 +1,9 @@
 import { Kaspa, Rpc, NetworkType, PrivateKey, Script } from '../src/index';
-
-const rpcClient = Rpc.getInstance();
+// import { Kaspa, Rpc, NetworkType, PrivateKey, Script, loadKaspaWasm } from '../dist/index';
+// await loadKaspaWasm();
 // Example 1: Transfer KAS using a single private key
 async function testSingleTransfer() {
-    await rpcClient.connect();
+    await Rpc.setInstance(NetworkType.Mainnet).connect()
     let toAddress = 'kaspatest:pr6mpn7hgfa99v0rf4pf0k3c83pkmrqtd8h46fn44g9vr8c6khw2u4mn2fgy3'
     let privateKey = new PrivateKey("3da233c786bfb4cc6e7319f757a094fc2f33b4217613abe3d29ed684ee464828")
 
@@ -15,7 +15,7 @@ async function testSingleTransfer() {
     }
 
     // Disconnect from the RPC server
-    rpcClient.disconnect()
+    Rpc.getInstance().disconnect()
 }
 
 // Example 2: Transfer KAS from a multi-signature address
@@ -42,7 +42,7 @@ async function testMultiSigTransfer() {
     }
 
     // Disconnect from the RPC server
-    rpcClient.disconnect()
+    Rpc.getInstance().disconnect()
 }
 
 // Run the examples

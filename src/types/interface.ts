@@ -1,5 +1,5 @@
 
-import { Encoding, Resolver } from "@/wasm/kaspa/kaspa";
+import { Encoding, Resolver } from "../../wasm/kaspa/kaspa";
 import { OP } from '../utils/enum'
 export interface RpcOptions {
     encoding: Encoding;

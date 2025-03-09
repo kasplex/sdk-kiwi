@@ -1,21 +1,19 @@
-import { ReturnStatement } from './../node_modules/@swc/types/index.d';
-import { describe, it, expect } from 'vitest';
-import {kaspaToSompi, NetworkType, PrivateKey, PublicKey} from "../src/wasm/kaspa";
+import { describe, expect, test } from 'bun:test';
+import { NetworkType, PrivateKey } from "../wasm/kaspa/kaspa";
 import { createKrc20Data } from '../src/utils/utils'
 import { OP } from '../src/utils/enum'
 import { Rpc } from '../src/rpc/client';
 import { KRC20 } from '../src/krc20';
 import { Kiwi } from '../src/kiwi'
+import { loadKaspaWasm } from "../src/init";
+await loadKaspaWasm();
 
 let toAddress = 'kaspatest:qpyrh5ev84kc50nrhnc3g59ujr3a3pv4jweg57rge9sydrwyz9drunfa9n4sf'
-let privateKey = new PrivateKey("3da233c786bfb4cc6e7319f757a094fc2f33b4217613abe3d29ed684ee464828")
 let _privateKey = "3da233c786bfb4cc6e7319f757a094fc2f33b4217613abe3d29ed684ee464828"
 Kiwi.setNetwork(NetworkType.Testnet)
-
 describe('Transaction', () => {
-    it('mint', async () => {
+    test('mint', async () => {
         await Rpc.setInstance(NetworkType.Testnet).connect()
-
         const krc20data = createKrc20Data({
             p: "krc-20",
             op: OP.Mint,
@@ -25,7 +23,7 @@ describe('Transaction', () => {
         console.log("Mint txid", txid)
     }, 50000)
 
-    it('transfer', async () => {
+    test('transfer', async () => {
         await Rpc.setInstance(NetworkType.Testnet).connect()
         const krc20data = createKrc20Data({
             p: "krc-20",
@@ -39,7 +37,7 @@ describe('Transaction', () => {
         await Rpc.getInstance().disconnect()
     }, 50000)
 
-    it('deploy', async () => {
+    test('deploy', async () => {
         await Rpc.setInstance(NetworkType.Testnet).connect()
         const deploydata = createKrc20Data({
             p: "krc-20",
@@ -57,7 +55,7 @@ describe('Transaction', () => {
         await Rpc.getInstance().disconnect()
     }, 50000)
 
-    it('list', async () => {
+    test('list', async () => {
         await Rpc.setInstance(NetworkType.Testnet).connect()
         const krc20data = createKrc20Data({
             p: "krc-20",
@@ -70,7 +68,7 @@ describe('Transaction', () => {
         await Rpc.getInstance().disconnect()
     }, 50000)
 
-    it('send', async () => {
+    test('send', async () => {
         await Rpc.setInstance(NetworkType.Testnet).connect()
         const krc20data = createKrc20Data({
             p: "krc-20",
@@ -84,7 +82,7 @@ describe('Transaction', () => {
         await Rpc.getInstance().disconnect()
     }, 50000)
 
-    it("transferMulti", async () => {
+    test("transferMulti", async () => {
         await Rpc.setInstance(NetworkType.Testnet).connect()
         const krc20data = createKrc20Data({
             p: "krc-20",
@@ -93,7 +91,7 @@ describe('Transaction', () => {
             to: "kaspatest:qr6uzet8l842fz33kjl4jk0t6t7m43n8rxvfj6jms9jjz0n08rneuej3f0m08",
             amt: "20000000",
         })
-        
+
         const requireSigNum = 2;
         const useEcdsa = false
         let privateKeys = [

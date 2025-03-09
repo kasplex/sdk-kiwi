@@ -1,10 +1,12 @@
-import {describe, expect, it} from 'vitest';
+import { describe, expect, test } from 'bun:test';
 import {Wallet} from '../src/address/wallet';
 import {Script} from '../src/script/script';
 import {Kaspa} from '../src/kaspa';
 import {Mnemonic} from '../src/address/mnemonic';
-import { NetworkType} from "../src/wasm/kaspa";
+import { NetworkType} from "../wasm/kaspa/kaspa";
 import {Rpc} from "../src/rpc/client";
+import { loadKaspaWasm } from "../src/init";
+await loadKaspaWasm()
 
 let privateKeys = [
     "8648d429bd1bd5ff5688fe217a743bf8deb0b1ea02032db647c0e1d482c1f83c",
@@ -19,14 +21,14 @@ let publicKeys = [
 
 describe('multi sign address function tests', () => {
 
-    it('muitiSign address', () => {
+    test('muitiSign address', () => {
         let address = Script.multiSignAddress(2, publicKeys, NetworkType.Testnet)
         expect(address.toString()).toBe("kaspatest:pr6mpn7hgfa99v0rf4pf0k3c83pkmrqtd8h46fn44g9vr8c6khw2u4mn2fgy3");
         console.log("muiti sign address:", address)
     });
 
 
-    it('muitiSign address transaction', async () => {
+    test('muitiSign address transaction', async () => {
         await Rpc.setInstance(NetworkType.Testnet).connect()
         let address = Script.multiSignAddress(2, publicKeys, NetworkType.Testnet)
         let redeemScript = Script.redeemScript(2, publicKeys)

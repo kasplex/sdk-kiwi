@@ -10,4 +10,5 @@ export * from "./krc20";
 export * from "./utils/enum";
 export * from "./utils/utils";
 export * from './kiwi'
-export { NetworkType, PrivateKey } from "@/wasm/kaspa";
+export * from './init'
+export { NetworkType, PrivateKey } from "../wasm/kaspa/kaspa";
