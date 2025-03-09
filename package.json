@@ -2,6 +2,9 @@
   "name": "@kasplex/sdk-kiwi",
   "version": "1.0.0",
   "sideEffects": false,
+  "publishConfig": {
+    "access": "restricted"
+  },
   "description": "Kaspa SDK for Kiwi Wallet",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -13,17 +16,14 @@
     "default": "./dist/kiwi.js"
   },
   "files": [
-    "dist",
-    "src",
-    "*.wasm"
+    "dist"
   ],
   "scripts": {
     "test": "bun test",
     "start": "bun run src/index.ts",
-    "build": "bun build ./src/index.ts --outdir ./dist --format esm --minify",
+    "build": "bun build ./src/index.ts --outdir ./dist --entry-naming [dir]/[name].[ext] --chunk-naming [name].[ext] --asset-naming [name].[ext]",
     "build:cjs": "bun build ./src/index.ts --outdir ./dist/cjs --format cjs",
-    "build:umd": "bun build./src/index.ts --outdir./dist/umd --format umd",
-    "build:all": "bun run build && bun run build:cjs && bun run build:umd && bun run build:types"
+    "build:all": "bun run build && bun run build:cjs"
   },
   "repository": {
     "type": "git",

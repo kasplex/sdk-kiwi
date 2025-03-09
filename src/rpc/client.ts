@@ -11,7 +11,7 @@ class Rpc {
      * @param network - The network type (default: Mainnet).
      * @param url - The optional RPC server URL.
      */
-    private constructor(network: NetworkType = NetworkType.Mainnet, url: string = "") {
+    private constructor(network: NetworkType, url: string = "") {
         this.client = new RpcClient(Rpc.getConfig(network, url));
     }
 
@@ -22,7 +22,7 @@ class Rpc {
      * @param url - The optional RPC server URL.
      * @returns The singleton instance of Rpc.
      */
-    public static setInstance(network: NetworkType = NetworkType.Mainnet, url: string = ""): Rpc {
+    public static setInstance(network: NetworkType, url: string = ""): Rpc {
         if (Rpc.instance) {
             console.log("Rpc instance already exists. Returning existing instance.");
             return Rpc.instance;
@@ -47,7 +47,7 @@ class Rpc {
      * Establishes a connection to the RPC server.
      */
     public async connect(): Promise<void> {
-        if(this.client.isConnected) {
+        if (this.client.isConnected) {
             console.log("Already connected to the RPC server.");
             return;
         }

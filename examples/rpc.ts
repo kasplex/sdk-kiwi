@@ -1,6 +1,7 @@
 
-import {  Rpc, NetworkType, PrivateKey, Script } from '../src/index';
+import {  Rpc, PrivateKey, Script, loadKaspaWasm, NetworkType } from '../dist/index';
 
+await loadKaspaWasm()
 async function testRpc() {
     try {
         await Rpc.setInstance(NetworkType.Testnet).connect();

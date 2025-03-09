@@ -85,7 +85,7 @@ async function testKrc20List() {
 }
 
 // Run the test
-// await testKrc20Mint();
+await testKrc20Mint();
 // testKrc20Deploy();
 // testKrc20List()
 // testKrc20Transfer()
