@@ -17,12 +17,12 @@ To integrate **Kasplex Wallet SDK - Kiwi** into your project, follow these steps
 
 1. **Install the SDK**:
    ```sh
-   npm install "@kasplex/kiwi"
+   npm install @kasplex/kiwi
    ```
 2. **Set up networkType and init rpc client for use**:
    ```typescript
    import { Kiwi, Rpc, NetworkType } from "@kasplex/kiwi";
-   Kiwi.setNetwork(NetworkType.Mainnet)      // NetworkType.Testnet for test net
+   await Kiwi.setNetwork(NetworkType.Mainnet)      // NetworkType.Testnet for test net
    await Rpc.setInstance(NetworkType.Testnet).connect();
    ```
 3. **Generate a new wallet**:

@@ -1,4 +1,6 @@
-import { Wallet, NetworkType } from '../src/index';
+import { Wallet, NetworkType, Kiwi } from '@kasplex/kiwi';
+
+await Kiwi.setNetwork(NetworkType.Testnet);
 
 // Example 1: Create a wallet from a mnemonic
 const mnemonic = "oil style genre huge push sword security deposit reveal where height orphan file brass umbrella wrap poverty elite slam child glad carbon verify organ";

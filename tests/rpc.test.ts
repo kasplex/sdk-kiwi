@@ -1,8 +1,8 @@
 import { beforeAll, describe, expect, test } from '@jest/globals';
 import { Rpc } from '../src/rpc/client';
 import { NetworkType } from "../wasm/kaspa/kaspa";
-import { loadKaspaWasm } from '../src/init'
-await loadKaspaWasm()
+import { Kiwi } from '../src/kiwi';
+await Kiwi.setNetwork(NetworkType.Testnet);
 
 describe('address generator function tests fo mainnet', async () => {
     // Test for getServerInfo

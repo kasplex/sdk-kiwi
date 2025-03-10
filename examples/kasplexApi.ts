@@ -1,5 +1,5 @@
 
-import { KasplexApi } from '../src/index';
+import { KasplexApi } from '@kasplex/kiwi';
 
 async function testKasplexApi() {
     try {

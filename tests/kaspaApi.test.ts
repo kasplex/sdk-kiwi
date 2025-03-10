@@ -8,7 +8,7 @@ const address = `kaspa:qrxh35ysr2hchag9gtam5vlkvpmn89ph78t6nqvg44yj3xf8rpeg22dwn
 const params: Params = {
     addresses: [address],
 };
-Kiwi.setNetwork(NetworkType.Mainnet)
+await Kiwi.setNetwork(NetworkType.Mainnet)
 
 describe('KaspaApi', () => {
 

@@ -1,16 +1,15 @@
-import { describe, expect, test } from '@jest/globals';
-import { NetworkType, PrivateKey } from "../wasm/kaspa/kaspa";
+import { describe, test } from '@jest/globals';
+import {  NetworkType } from "../wasm/kaspa/kaspa";
 import { createKrc20Data } from '../src/utils/utils'
 import { OP } from '../src/utils/enum'
 import { Rpc } from '../src/rpc/client';
 import { KRC20 } from '../src/krc20';
 import { Kiwi } from '../src/kiwi'
-import { loadKaspaWasm } from "../src/init";
-await loadKaspaWasm();
+
 
 let toAddress = 'kaspatest:qpyrh5ev84kc50nrhnc3g59ujr3a3pv4jweg57rge9sydrwyz9drunfa9n4sf'
-let _privateKey = "3da233c786bfb4cc6e7319f757a094fc2f33b4217613abe3d29ed684ee464828"
-Kiwi.setNetwork(NetworkType.Testnet)
+let _privateKey = "fd67dcd4f94b20ac5f7c5eea83bb886c388d7a7787fd315810ee6d002cf5eb9a"
+await Kiwi.setNetwork(NetworkType.Testnet)
 describe('Transaction', () => {
     test('mint', async () => {
         await Rpc.setInstance(NetworkType.Testnet).connect()
@@ -21,7 +20,21 @@ describe('Transaction', () => {
         })
         let txid = await KRC20.mint(_privateKey, krc20data, 100000n)
         console.log("Mint txid", txid)
+        await Rpc.getInstance().disconnect()
     }, 50000)
+
+    test('mutilMint', async () => {
+        await Rpc.setInstance(NetworkType.Testnet).connect()
+        const krc20data = createKrc20Data({
+            p: "krc-20",
+            op: OP.Mint,
+            tick: 'SNOWDN',
+        })
+        let txid = await KRC20.multiMint(_privateKey, krc20data, 230000000n, 10)
+        console.log("mutilMint txid", txid)
+        await Rpc.getInstance().disconnect()
+    }, 50000)
+
 
     test('transfer', async () => {
         await Rpc.setInstance(NetworkType.Testnet).connect()

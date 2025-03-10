@@ -1,5 +1,4 @@
-import { Mnemonic } from '../src/index';
-import { Rpc, OP, createKrc20Data, KRC20, NetworkType, loadKaspaWasm } from '../dist/index';
+import { Rpc, OP, createKrc20Data, KRC20, NetworkType, loadKaspaWasm, Mnemonic } from '@kasplex/kiwi';
 await loadKaspaWasm();
 
 // Example 1: Generate a 12-word mnemonic

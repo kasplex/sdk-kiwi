@@ -1,7 +1,7 @@
 
-import {  Rpc, PrivateKey, Script, NetworkType, loadKaspaWasm } from '../dist/index';
+import {  Rpc, PrivateKey, Script, NetworkType, Kiwi } from '@kasplex/kiwi';
 
-await loadKaspaWasm()
+await Kiwi.setNetwork(NetworkType.Testnet);
 async function testRpc() {
     try {
         await Rpc.setInstance(NetworkType.Testnet).connect();

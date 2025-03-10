@@ -43,22 +43,26 @@ class KRC20 {
     }
 
     /**
-     * Creates and submits a transaction with entries.
-     * @param privateKey - The private key.
-     * @param entries - The transaction entries.
-     * @param outputs - The transaction outputs.
-     * @param fee - The transaction fee.
-     * @param script - The script for signing.
-     * @returns The submitted transaction ID.
+     * Creates a transaction with the given UTXO entries, outputs, fee, script, and address.
+     * This method signs the transaction with the provided private key and submits it.
+     *
+     * @param privateKey - The private key used to sign the transaction.
+     * @param entries - The UTXO entries to be used as inputs for the transaction.
+     * @param outputs - The outputs of the transaction.
+     * @param fee - The transaction fee in the smallest unit (e.g., satoshis for Bitcoin).
+     * @param script - The script builder used to construct the transaction script.
+     * @param address - The recipient address for the transaction.
+     * @returns A promise that resolves to the transaction ID (or hash) after submission.
      */
     private static async createTransactionWithEntries(
         privateKey: PrivateKey,
         entries: any[],
         outputs: any[],
         fee: bigint,
-        script: ScriptBuilder
+        script: ScriptBuilder,
+        address: string,
     ) {
-        const address = privateKey.toPublicKey().toAddress(Kiwi.network).toString();
+
         return await Transaction.createTransactionsWithEntries(entries, outputs, address, fee)
             .sign([privateKey], script)
             .submit();
@@ -89,7 +93,7 @@ class KRC20 {
 
         const revealEntries = Entries.revealEntries(p2shAddress, commitTx!, script.createPayToScriptHashScript());
         const getFee = getFeeByOp(data.op);
-        return this.createTransactionWithEntries(privateKey, revealEntries, [], getFee, script);
+        return this.createTransactionWithEntries(privateKey, revealEntries, [], getFee, script, address);
     }
 
 
@@ -131,6 +135,48 @@ class KRC20 {
             throw new Error("Invalid input: 'op' must be 'mint'");
         }
         return await KRC20.executeKrc20Operation(privateKey, data, fee);
+    }
+
+    /**
+     * Multi-mints new KRC20 tokens.
+     * @param privateKeyStr - The private key string.
+     * @param data - The KRC20 data containing mint details.
+     * @param fee - The transaction fee.
+     * @param executionCount - The number of mint operations to execute.
+     * @returns The submitted reveal transaction IDs.
+     */
+    public static async multiMint(privateKeyStr: string, data: Krc20Data, fee: bigint = 0n, executionCount: number = 1) {
+        if (data.op !== OP.Mint) {
+            throw new Error("Invalid input: 'op' must be'mint'");
+        }
+        if(executionCount === 1) {
+            return this.mint(privateKeyStr, data, fee);
+        }
+        const privateKey = new PrivateKey(privateKeyStr);
+        const script = this.createScript(privateKey, data);
+        const p2shAddress = this.createP2SHAddress(script);
+        const address = privateKey.toPublicKey().toAddress(Kiwi.network).toString();
+        const outputs = Output.createOutputs(p2shAddress.toString(), BASE_KAS_TO_P2SH_ADDRESS);
+        const commitTx = await Transaction.createTransactions(address, outputs, fee).sign([privateKey]).submit();
+        
+        const revealEntries = Entries.revealEntries(p2shAddress, commitTx!, script.createPayToScriptHashScript());
+        const getFee = getFeeByOp(data.op);
+        await this.createTransactionWithEntries(privateKey, revealEntries, [], getFee, script, address);
+
+        let revealTxIds: string[] = [];
+        const revealFee = kaspaToSompi("0.0001")!;
+        if (executionCount > 1 && data.op === OP.Mint) {
+            for (let i = 0; i < executionCount; i++) {
+                const revealEntries = await Entries.entries(p2shAddress.toString());
+                try {
+                    const revealTxId = await this.createTransactionWithEntries(privateKey, revealEntries, [], revealFee, script, p2shAddress.toString()) as string;
+                    revealTxIds.push(revealTxId);
+                } catch (error) {
+                    console.error(`Error in reveal operation ${i}:`, error);
+                }
+            }
+            return revealTxIds;
+        }
     }
 
     /**
@@ -179,6 +225,9 @@ class KRC20 {
      * Sends KRC20 tokens to another address.
      * @param privateKeyStr - The private key for signing the transaction.
      * @param data - The KRC20 data containing send details.
+     * @param buyPrivateKey - The buyer's private key.
+     * @param hash - The transaction hash.
+     * @param amount - The amount to send.
      * @param fee - The transaction fee.
      * @returns The submitted reveal transaction.
      */

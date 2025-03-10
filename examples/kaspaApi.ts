@@ -1,5 +1,8 @@
-import { KaspaApi } from '../src/index';
+import { KaspaApi, Kiwi, NetworkType } from '@kasplex/kiwi';
 
+await Kiwi.setNetwork(NetworkType.Mainnet);
+
+// await Kiwi.setNetwork(NetworkType.Mainnet);
 async function testKaspaApi() {
     try {
         // Example 1: Get Kaspa network information
