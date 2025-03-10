@@ -1,4 +1,4 @@
-import { describe, expect, test } from 'bun:test';
+import { describe, expect, test } from '@jest/globals';
 import {addressFromScriptPublicKey, NetworkType, PrivateKey} from "../wasm/kaspa/kaspa";
 import { Script } from '../src/script/script';
 import { createKrc20Data, networkToString } from '../src/utils/utils'

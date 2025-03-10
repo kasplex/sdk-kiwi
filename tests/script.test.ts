@@ -1,4 +1,4 @@
-import { describe, expect, test } from 'bun:test';
+import { describe, expect, test } from '@jest/globals';
 import { Script } from '../src/script/script';
 import { createKrc20Data, networkToString } from '../src/utils/utils';
 import { OP } from '../src/utils/enum';

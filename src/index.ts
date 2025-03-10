@@ -1,3 +1,6 @@
+import { Buffer } from 'buffer';
+globalThis.Buffer = Buffer;
+
 export * from "./address/mnemonic";
 export * from "./address/wallet";
 export * from "./rpc/client";

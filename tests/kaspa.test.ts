@@ -1,4 +1,4 @@
-import { describe, expect, test } from 'bun:test';
+import { describe, expect, test } from '@jest/globals';
 import {NetworkType, PrivateKey} from "../wasm/kaspa/kaspa";
 import { Rpc } from '../src/rpc/client';
 import {Kaspa} from "../src/kaspa";

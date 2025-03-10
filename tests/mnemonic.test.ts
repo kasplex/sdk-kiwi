@@ -1,4 +1,4 @@
-import { describe, expect, test } from 'bun:test';
+import { describe, expect, test } from '@jest/globals';
 import {Mnemonic} from '../src/address/mnemonic';
 import { loadKaspaWasm } from "../src/init";
 await loadKaspaWasm()

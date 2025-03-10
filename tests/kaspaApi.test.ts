@@ -1,6 +1,6 @@
 import { KaspaApi } from '../src/api/kaspaApi'
 import { Params } from "../src/types/interface";
-import { describe, expect, test } from 'bun:test';
+import { describe, expect, test } from '@jest/globals';
 import { NetworkType } from '../wasm/kaspa/kaspa'
 import { Kiwi } from '../src/kiwi'
 

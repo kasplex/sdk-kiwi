@@ -1,5 +1,5 @@
 
-import {  Rpc, PrivateKey, Script, loadKaspaWasm, NetworkType } from '../dist/index';
+import {  Rpc, PrivateKey, Script, NetworkType, loadKaspaWasm } from '../dist/index';
 
 await loadKaspaWasm()
 async function testRpc() {

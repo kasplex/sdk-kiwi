@@ -1,4 +1,4 @@
-import { describe, expect, test } from 'bun:test';
+import { describe, expect, test } from '@jest/globals';
 import { NetworkType, PrivateKey } from "../wasm/kaspa/kaspa";
 import { createKrc20Data } from '../src/utils/utils'
 import { OP } from '../src/utils/enum'

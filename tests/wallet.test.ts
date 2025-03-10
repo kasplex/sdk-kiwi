@@ -1,4 +1,4 @@
-import { describe, expect, test } from 'bun:test';
+import { describe, expect, test } from '@jest/globals';
 import {Wallet} from '../src/address/wallet';
 import { NetworkType} from "../wasm/kaspa/kaspa";
 import { loadKaspaWasm } from "../src/init";
