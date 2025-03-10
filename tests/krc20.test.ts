@@ -30,7 +30,7 @@ describe('Transaction', () => {
             op: OP.Mint,
             tick: 'SNOWDN',
         })
-        let txid = await KRC20.multiMint(_privateKey, krc20data, 230000000n, 10)
+        let txid = await KRC20.multiMint(_privateKey, krc20data, 130000000n, 10)
         console.log("mutilMint txid", txid)
         await Rpc.getInstance().disconnect()
     }, 50000)

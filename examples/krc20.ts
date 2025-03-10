@@ -20,6 +20,22 @@ async function testKrc20Mint() {
     }
 }
 
+async function testKrc20MutilMint() {
+    try {
+        await Rpc.setInstance(NetworkType.Testnet).connect()
+        const krc20data = createKrc20Data({
+            p: "krc-20",
+            op: OP.Mint,
+            tick: 'SNOWDN',
+        })
+        let txids = await KRC20.multiMint(_privateKey, krc20data, 130000000n, 10)
+        console.log("mutilMint txids", txids)
+        await Rpc.getInstance().disconnect()
+    } catch (error) {
+        console.error("Error testing krc20 MutilMint:", error);
+    }
+}
+
 async function testKrc20Deploy() {
     try {
         await Rpc.setInstance(NetworkType.Mainnet).connect()
@@ -38,7 +54,7 @@ async function testKrc20Deploy() {
         console.log("Deploy txsh", txid);
 
         // Disconnect from the RPC server
-       await Rpc.getInstance().disconnect()
+        await Rpc.getInstance().disconnect()
     } catch (error) {
         console.error("Error testing krc20 Deploy:", error);
     }
@@ -77,14 +93,15 @@ async function testKrc20List() {
         console.log("Deploy txsh", txid);
 
         // Disconnect from the RPC server
-        await  Rpc.getInstance().disconnect()
+        await Rpc.getInstance().disconnect()
     } catch (error) {
         console.error("Error testing krc20 list:", error);
     }
 }
 
 // Run the test
-testKrc20Mint();
+// testKrc20Mint();
+testKrc20MutilMint();
 // testKrc20Deploy();
 // testKrc20List()
 // testKrc20Transfer()
