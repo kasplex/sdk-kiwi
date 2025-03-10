@@ -11,6 +11,9 @@
 - **Multi-Signature Wallet Support**: Implement enhanced security with multi-signature wallet functionality.
 - **Message Subscription**: Subscribe to blockchain events, transaction updates, and real-time notifications.
 
+## Installation
+Node.js Version Requirement: This SDK requires Node.js version 20.13.1 or higher. You can check your Node.js version by running:
+
 ## Getting Started
 
 To integrate **Kasplex Wallet SDK - Kiwi** into your project, follow these steps:
