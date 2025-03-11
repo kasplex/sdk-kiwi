@@ -88,15 +88,15 @@ class KRC20 {
                 throw new Error("Invalid 'to' address");
             }
         }
-        const getFee = getFeeByOp(data.op) + BASE_P2SH_TO_KASPA_ADDRESS;
-        const outputs = Output.createOutputs(p2shAddress.toString(), getFee);
+        const getFee = getFeeByOp(data.op) 
+        const p2shFee = (getFee === 0n ? 100000000n : getFee) + BASE_P2SH_TO_KASPA_ADDRESS;
+        const outputs = Output.createOutputs(p2shAddress.toString(), p2shFee);
         const commitTx = await Transaction.createTransactions(address, outputs, fee).sign([privateKey]).submit();
-        
         console.log('commitTx', commitTx)
+        console.log('p2shFee', p2shFee)
+        console.log('fee', getFee)
         const revealEntries = Entries.revealEntries(p2shAddress, commitTx!, script.createPayToScriptHashScript());
-        // const getFee = getFeeByOp(data.op);
-        console.log('fee', fee)
-        return this.createTransactionWithEntries(privateKey, revealEntries, [], fee, script, address);
+        return this.createTransactionWithEntries(privateKey, revealEntries, [], getFee, script, address);
     }
 
 
@@ -161,7 +161,6 @@ class KRC20 {
         const address = privateKey.toPublicKey().toAddress(Kiwi.network).toString();
         const outputs = Output.createOutputs(p2shAddress.toString(), BASE_KAS_TO_P2SH_ADDRESS);
         const commitTx = await Transaction.createTransactions(address, outputs, fee).sign([privateKey]).submit();
-        
         const revealEntries = Entries.revealEntries(p2shAddress, commitTx!, script.createPayToScriptHashScript());
         const getFee = getFeeByOp(data.op);
         await this.createTransactionWithEntries(privateKey, revealEntries, [], getFee, script, address);

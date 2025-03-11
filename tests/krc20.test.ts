@@ -23,17 +23,17 @@ describe('Transaction', () => {
     //     await Rpc.getInstance().disconnect()
     // }, 50000)
 
-    // test('mutilMint', async () => {
-    //     await Rpc.setInstance(NetworkType.Testnet).connect()
-    //     const krc20data = createKrc20Data({
-    //         p: "krc-20",
-    //         op: OP.Mint,
-    //         tick: 'SNOWDN',
-    //     })
-    //     let txid = await KRC20.multiMint(_privateKey, krc20data, 130000000n, 10)
-    //     console.log("mutilMint txid", txid)
-    //     await Rpc.getInstance().disconnect()
-    // }, 50000)
+    test('mutilMint', async () => {
+        await Rpc.setInstance(NetworkType.Testnet).connect()
+        const krc20data = createKrc20Data({
+            p: "krc-20",
+            op: OP.Mint,
+            tick: 'SNOWDN',
+        })
+        let txid = await KRC20.multiMint(_privateKey, krc20data, 130000000n, 10)
+        console.log("mutilMint txid", txid)
+        await Rpc.getInstance().disconnect()
+    }, 50000)
 
 
     // test('transfer', async () => {
@@ -42,29 +42,29 @@ describe('Transaction', () => {
     //         p: "krc-20",
     //         op: OP.Transfer,
     //         tick: "SNOWDN",
-    //         to: toAddress,
-    //         amt: "20",
+    //         to: _toAddress,
+    //         amt: "2",
     //     })  
-    //     let txid = await KRC20.transfer(_privateKey, krc20data, 130000n)
+    //     let txid = await KRC20.transfer(_privateKey, krc20data)
     //     console.log("Transfer txid", txid)
     //     await Rpc.getInstance().disconnect()
     // }, 50000)
 
-    test('deploy', async () => {
-        console.log('deploy start')
-        await Rpc.setInstance(NetworkType.Testnet).connect()
-        const deploydata = createKrc20Data({
-            p: "krc-20",
-            op: OP.Deploy,
-            tick: "OXXY",
-            to: _toAddress,
-            max: '100000000000000000',
-            dec: '8'
-        })  
-        let txid = await KRC20.deploy(_privateKey, deploydata, 100000n)
-        console.log("Deploy txsh", txid)
-        await Rpc.getInstance().disconnect()
-    }, 100000)
+    // test('deploy', async () => {
+    //     console.log('deploy start')
+    //     await Rpc.setInstance(NetworkType.Testnet).connect()
+    //     const deploydata = createKrc20Data({
+    //         p: "krc-20",
+    //         op: OP.Deploy,
+    //         tick: "OXXY",
+    //         to: _toAddress,
+    //         max: '100000000000000000',
+    //         dec: '8'
+    //     })  
+    //     let txid = await KRC20.deploy(_privateKey, deploydata, 100000n)
+    //     console.log("Deploy txsh", txid)
+    //     await Rpc.getInstance().disconnect()
+    // }, 100000)
 
     // test('list', async () => {
     //     await Rpc.setInstance(NetworkType.Testnet).connect()
