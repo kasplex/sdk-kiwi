@@ -88,15 +88,16 @@ class KRC20 {
                 throw new Error("Invalid 'to' address");
             }
         }
-        const getFee = getFeeByOp(data.op) 
-        const p2shFee = (getFee === 0n ? 100000000n : getFee) + BASE_P2SH_TO_KASPA_ADDRESS;
+        const { p2shFee, updatedFee} = this.getFeeInfo(data.op, fee)
+        console.log('updatedFee', updatedFee)
+        console.log('p2shFee', p2shFee)
+        console.log('fee', fee)
         const outputs = Output.createOutputs(p2shAddress.toString(), p2shFee);
+        
         const commitTx = await Transaction.createTransactions(address, outputs, fee).sign([privateKey]).submit();
         console.log('commitTx', commitTx)
-        console.log('p2shFee', p2shFee)
-        console.log('fee', getFee)
         const revealEntries = Entries.revealEntries(p2shAddress, commitTx!, script.createPayToScriptHashScript());
-        return this.createTransactionWithEntries(privateKey, revealEntries, [], getFee, script, address);
+        return this.createTransactionWithEntries(privateKey, revealEntries, [], updatedFee, script, address);
     }
 
 
@@ -140,6 +141,17 @@ class KRC20 {
         return await KRC20.executeKrc20Operation(privateKey, data, fee);
     }
 
+    private static getFeeInfo(op: OP, fee: bigint = 0n) {
+        const getFee = getFeeByOp(op);
+        const isFeeZero = getFee === 0n;
+        const p2shFee = (isFeeZero ? 100000000n : getFee) + BASE_P2SH_TO_KASPA_ADDRESS;
+        const updatedFee = isFeeZero ? (fee === 0n ? 100000000n : fee) : getFee;
+        return {
+            p2shFee,
+            updatedFee
+        }
+    }
+
     /**
      * Multi-mints new KRC20 tokens.
      * @param privateKeyStr - The private key string.
@@ -158,12 +170,12 @@ class KRC20 {
         const privateKey = new PrivateKey(privateKeyStr);
         const script = this.createScript(privateKey, data);
         const p2shAddress = this.createP2SHAddress(script);
+        const { p2shFee, updatedFee} = this.getFeeInfo(data.op, fee)
         const address = privateKey.toPublicKey().toAddress(Kiwi.network).toString();
-        const outputs = Output.createOutputs(p2shAddress.toString(), BASE_KAS_TO_P2SH_ADDRESS);
+        const outputs = Output.createOutputs(p2shAddress.toString(), p2shFee);
         const commitTx = await Transaction.createTransactions(address, outputs, fee).sign([privateKey]).submit();
         const revealEntries = Entries.revealEntries(p2shAddress, commitTx!, script.createPayToScriptHashScript());
-        const getFee = getFeeByOp(data.op);
-        await this.createTransactionWithEntries(privateKey, revealEntries, [], getFee, script, address);
+        await this.createTransactionWithEntries(privateKey, revealEntries, [], updatedFee, script, address);
 
         let revealTxIds: string[] = [];
         const revealFee = kaspaToSompi("0.0001")!;
