@@ -17,7 +17,7 @@ import { OP } from "./utils/enum";
 import { Transaction } from "./tx/transaction";
 import { Entries } from "./tx/entries";
 import { Script } from './script/script';
-import { BASE_KAS_TO_P2SH_ADDRESS } from "./utils/constants";
+import { BASE_KAS_TO_P2SH_ADDRESS, BASE_P2SH_TO_KASPA_ADDRESS } from "./utils/constants";
 import { Address as AddressUtil } from "./utils/address";
 import { getFeeByOp } from './utils/utils'
 import { Output } from "./tx/output";
@@ -88,12 +88,15 @@ class KRC20 {
                 throw new Error("Invalid 'to' address");
             }
         }
-        const outputs = Output.createOutputs(p2shAddress.toString(), BASE_KAS_TO_P2SH_ADDRESS);
+        const getFee = getFeeByOp(data.op) + BASE_P2SH_TO_KASPA_ADDRESS;
+        const outputs = Output.createOutputs(p2shAddress.toString(), getFee);
         const commitTx = await Transaction.createTransactions(address, outputs, fee).sign([privateKey]).submit();
-
+        
+        console.log('commitTx', commitTx)
         const revealEntries = Entries.revealEntries(p2shAddress, commitTx!, script.createPayToScriptHashScript());
-        const getFee = getFeeByOp(data.op);
-        return this.createTransactionWithEntries(privateKey, revealEntries, [], getFee, script, address);
+        // const getFee = getFeeByOp(data.op);
+        console.log('fee', fee)
+        return this.createTransactionWithEntries(privateKey, revealEntries, [], fee, script, address);
     }
 
 

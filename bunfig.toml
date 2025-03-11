@@ -1,0 +1,7 @@
+# bunfig.toml
+
+[entrypoints]
+main = "src/index.ts"
+
+[build]
+outdir = "dist"
