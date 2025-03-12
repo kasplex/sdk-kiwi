@@ -20,13 +20,13 @@ class Transaction {
      * @param sigOpCount - (Optional) Number of signature operations to include.
      * @returns A `PendingTransaction` instance representing the created transaction.
      */
-    public static createTransactions(
+    public static async createTransactions(
         address: string | Address,
         outputs: IPaymentOutput[],
         fee?: bigint,
         priorityEntries?: [],
         sigOpCount?: number
-    ): PendingTransaction {
+    ): Promise<PendingTransaction> {
         return PendingTransaction.createTransactions(address.toString(), outputs, fee, priorityEntries, sigOpCount);
     }
 
@@ -68,7 +68,7 @@ class Transaction {
         fee?: bigint,
         priorityEntries?: [],
         sigOpCount?: number
-    ): PendingTransaction {
+    ): Promise<PendingTransaction> {
         return PendingTransaction.createTransactionsWithEntries(entries, outputs, address, fee, priorityEntries, sigOpCount);
     }
 }

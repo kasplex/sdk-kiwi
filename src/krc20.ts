@@ -62,10 +62,8 @@ class KRC20 {
         script: ScriptBuilder,
         address: string,
     ) {
-
         return await Transaction.createTransactionsWithEntries(entries, outputs, address, fee)
-            .sign([privateKey], script)
-            .submit();
+            .then(r => r.sign([privateKey], script).submit());
     }
 
     /**
@@ -91,10 +89,8 @@ class KRC20 {
         const getFee = getFeeByOp(data.op) 
         const p2shFee = (getFee === 0n ? 100000000n : getFee) + BASE_P2SH_TO_KASPA_ADDRESS;
         const outputs = Output.createOutputs(p2shAddress.toString(), p2shFee);
-        const commitTx = await Transaction.createTransactions(address, outputs, fee).sign([privateKey]).submit();
-        console.log('commitTx', commitTx)
-        console.log('p2shFee', p2shFee)
-        console.log('fee', getFee)
+        const commitTx = await Transaction.createTransactions(address, outputs, fee)
+            .then(r =>  r.sign([privateKey]).submit());
         const revealEntries = Entries.revealEntries(p2shAddress, commitTx!, script.createPayToScriptHashScript());
         return this.createTransactionWithEntries(privateKey, revealEntries, [], getFee, script, address);
     }
@@ -160,7 +156,8 @@ class KRC20 {
         const p2shAddress = this.createP2SHAddress(script);
         const address = privateKey.toPublicKey().toAddress(Kiwi.network).toString();
         const outputs = Output.createOutputs(p2shAddress.toString(), BASE_KAS_TO_P2SH_ADDRESS);
-        const commitTx = await Transaction.createTransactions(address, outputs, fee).sign([privateKey]).submit();
+        const commitTx = await Transaction.createTransactions(address, outputs, fee)
+            .then(r => r.sign([privateKey]).submit());
         const revealEntries = Entries.revealEntries(p2shAddress, commitTx!, script.createPayToScriptHashScript());
         const getFee = getFeeByOp(data.op);
         await this.createTransactionWithEntries(privateKey, revealEntries, [], getFee, script, address);
@@ -288,7 +285,8 @@ class KRC20 {
         const outputScriptPublicKey = this.getScriptPublicKey(txOutput);
         const receiveAddress = addressFromScriptPublicKey(outputScriptPublicKey, Kiwi.network)!
         const outputs = Output.createOutputs(receiveAddress.toString(), tx.outputs[0].value);
-        return await Transaction.createTransactionsWithEntries(entries, outputs, address, fee, entries as []).sign([_buyPrivateKey], txInputs.signatureScript, true).submit()
+        return await Transaction.createTransactionsWithEntries(entries, outputs, address, fee, entries as []).then(r =>
+                r.sign([_buyPrivateKey], txInputs.signatureScript, true).submit())
     }
 
 
@@ -311,11 +309,12 @@ class KRC20 {
         const scriptOp = new ScriptBuilder().addData(scriptAddress.toString())
         const _privateKeys = privateKeys.map(pk => new PrivateKey(pk))
         const outputs = Output.createOutputs(P2SHAddress.toString(), kaspaToSompi("0.3")!);
-        const commitTx = await Transaction.createTransactions(address, outputs, 0n, undefined, 3).multiSign(_privateKeys, redeemScript).submit();
+        const commitTx = await Transaction.createTransactions(address, outputs, 0n, undefined, 3)
+            .then(r => r.multiSign(_privateKeys, redeemScript).submit());
         const revealEntries = Entries.revealEntries(P2SHAddress, commitTx!, scriptPublicKey);
-        return await Transaction.createTransactionsWithEntries(revealEntries, [], address, fee, revealEntries as []).sign(_privateKeys, scriptOp).submit();
+        return await Transaction.createTransactionsWithEntries(revealEntries, [], address, fee, revealEntries as [])
+            .then(r => r.sign(_privateKeys, scriptOp).submit());
     }
-
 }
 
 export { KRC20 };

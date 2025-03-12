@@ -20,7 +20,8 @@ class Kaspa {
     public static async transferKas(privateKey: PrivateKey, address: string | Address, amount: bigint, fee?: bigint | undefined) {
         const fromAddress = privateKey.toKeypair().toAddress(Kiwi.network).toString()
         const outputs = Output.createOutputs(address.toString(), amount)
-        return Transaction.createTransactions(fromAddress, outputs, fee).sign([privateKey]).submit()
+        let tx = await Transaction.createTransactions(fromAddress, outputs, fee)
+        return tx.sign([privateKey]).submit()
     }
 
     /**
@@ -41,8 +42,8 @@ class Kaspa {
         let privateKeys = privateKeyStr.map( r => {
             return new PrivateKey(r)
         })
-        return Transaction.createTransactions(fromAddress, outputs, fee, [], signTotal)
-            .multiSign(privateKeys, script).submit()
+        let tx = await Transaction.createTransactions(fromAddress, outputs, fee, [], signTotal)
+        return tx.multiSign(privateKeys, script).submit()
     }
 }
 

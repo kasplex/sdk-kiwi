@@ -34,12 +34,13 @@ describe('Transaction', () => {
 
         const outputs = Output.createOutputs(p2shAddress.toString(), BASE_KAS_TO_P2SH_ADDRESS);
 
-        const commitTx = await Transaction.createTransactions(address, outputs, 0n).sign([privateKey]).submit()
+        const commitTx = await Transaction.createTransactions(address, outputs, 0n)
+            .then(r => r.sign([privateKey]).submit())
 
         let revealEntries = Entries.revealEntries(p2shAddress, commitTx!, scriptPublicKey)
 
         const revealTx = await Transaction.createTransactionsWithEntries(revealEntries, [], address, 100000000n)
-            .sign([privateKey], script).submit()
+            .then(r => r.sign([privateKey], script).submit())
         console.log("reveal tx", revealTx)
 
         await Rpc.getInstance().disconnect()
