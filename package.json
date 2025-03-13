@@ -49,6 +49,8 @@
     "ts-jest": "^29.2.6",
     "typescript": "~5.7.2",
     "unplugin-auto-import": "^19.0.0",
+    "vite-plugin-dts": "^4.5.3",
+    "vite-plugin-static-copy": "^2.3.0",
     "vite-plugin-top-level-await": "^1.5.0",
     "vite-plugin-wasm": "^3.4.1",
     "vitest": "^3.0.8"

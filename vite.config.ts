@@ -1,27 +1,40 @@
-import { defineConfig } from "vite";
-import wasm from "vite-plugin-wasm";
-import topLevelAwait from "vite-plugin-top-level-await";
+import { defineConfig } from 'vite'
+import { resolve } from 'path'
+import { viteStaticCopy } from 'vite-plugin-static-copy'
+import dts from 'vite-plugin-dts'
 
 export default defineConfig({
-    plugins: [
-        wasm(), 
-        topLevelAwait()
-    ],
-    build: {
-        target: "esnext",
-        lib: {
-            entry: "src/index.ts",
-            name: "sdk-wiki",
-            formats: ["es", "cjs", "umd"],
-            fileName: (format) => `sdk-wiki.${format}.js`,
-        },
-        rollupOptions: {
-            external: ["@kasdk/web"],
-            output: {
-                globals: {
-                    "@kasdk/web": "KasdkWeb",
-                },
-            },
-        },
+  base: './',
+  plugins: [
+    dts(),
+    viteStaticCopy({
+      targets: [
+        {
+          src: 'wasm/**',
+          dest: 'wasm'
+        }
+      ]
+    }),
+  ],
+  resolve: {
+    alias: {
+      '@': resolve(__dirname, './src'),
     },
-});
+  },
+  build: {
+    outDir: 'dist',
+    emptyOutDir: false,
+    lib: {
+      entry: resolve(__dirname, './src/index.ts'),
+      name: 'KasplexWeb3',
+      fileName: 'index',
+    },
+    rollupOptions: {
+      output: {
+        globals: {
+          liteMove: 'KasplexWeb3'
+        }
+      }
+    },
+  }
+})

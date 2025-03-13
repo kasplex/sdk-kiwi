@@ -1,3 +1,4 @@
+import { expect } from 'vitest';
 export const BASE_URL_TEST = `https://tn10api.kasplex.org`;
 export const BASE_URL_MAIN = `https://api.kasplex.org`;
 
@@ -8,6 +9,8 @@ export const U64_MAX_VALUE = 18446744073709551615n;
 export const BASE_KAS_TO_P2SH_ADDRESS = 130000000n
 
 export const BASE_P2SH_TO_KASPA_ADDRESS = 30000000n
+
+export const DEFAULT_FEE = 100000000n
 
 export const MIN_PUSHDATA = {
     MIN_PUSHDATA1: 77,

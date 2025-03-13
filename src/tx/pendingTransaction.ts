@@ -15,7 +15,7 @@ import { Rpc } from "../rpc/client";
 import { Kiwi } from "../kiwi";
 
 class PendingTransaction {
-    private transaction: ICreateTransactions;
+    public transaction: ICreateTransactions;
 
     constructor(transaction: ICreateTransactions) {
         this.transaction = transaction;

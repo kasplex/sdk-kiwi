@@ -11,12 +11,12 @@ let privateKey = new PrivateKey("2596b6e6a76c75148fa41a5f72ea83c5b25f6fc4252d86a
 
 describe('Transaction', () => {
 
-    test('transferKas', async () => {
-        await Rpc.setInstance(NetworkType.Testnet).connect()
-        const txid = await Kaspa.transferKas(privateKey, toAddress, 1300000000n, 10000n)
-        console.log("txid", txid)
-        await Rpc.setInstance(NetworkType.Testnet).disconnect()
-    });
+    // test('transferKas', async () => {
+    //     await Rpc.setInstance(NetworkType.Testnet).connect()
+    //     const txid = await Kaspa.transferKas(privateKey, toAddress, 1300000000n, 10000n)
+    //     console.log("txid", txid)
+    //     await Rpc.setInstance(NetworkType.Testnet).disconnect()
+    // });
 
     test('transferKas', async () => {
         let eventMap: Map<string, boolean> = new Map();

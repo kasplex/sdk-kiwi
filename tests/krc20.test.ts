@@ -8,21 +8,21 @@ import { Kiwi } from '../src/kiwi'
 
 
 let _toAddress = 'kaspatest:qpyrh5ev84kc50nrhnc3g59ujr3a3pv4jweg57rge9sydrwyz9drunfa9n4sf'
-let _privateKey = "fd67dcd4f94b20ac5f7c5eea83bb886c388d7a7787fd315810ee6d002cf5eb9a"
+let _privateKey = "3da233c786bfb4cc6e7319f757a094fc2f33b4217613abe3d29ed684ee464828"
 await Kiwi.setNetwork(NetworkType.Testnet)
 describe('Transaction', () => {
-    // test('mint', async () => {
-    //     await Rpc.setInstance(NetworkType.Testnet).connect()
-    //     console.log('rpc connect...')
-    //     const krc20data = createKrc20Data({
-    //         p: "krc-20",
-    //         op: OP.Mint,
-    //         tick: 'SNOWDN',
-    //     })
-    //     let txid = await KRC20.mint(_privateKey, krc20data)
-    //     console.log("Mint txid", txid)
-    //     await Rpc.getInstance().disconnect()
-    // }, 50000)
+    test('mint', async () => {
+        await Rpc.setInstance(NetworkType.Testnet).connect()
+        console.log('rpc connect...')
+        const krc20data = createKrc20Data({
+            p: "krc-20",
+            op: OP.Mint,
+            tick: 'SNOWDN',
+        })
+        let txid = await KRC20.mint(_privateKey, krc20data)
+        console.log("Mint txid", txid)
+        await Rpc.getInstance().disconnect()
+    }, 50000)
 
     // test('mutilMint', async () => {
     //     await Rpc.setInstance(NetworkType.Testnet).connect()
@@ -38,19 +38,19 @@ describe('Transaction', () => {
     // }, 300000)
 
 
-    test('transfer', async () => {
-        await Rpc.setInstance(NetworkType.Testnet).connect()
-        const krc20data = createKrc20Data({
-            p: "krc-20",
-            op: OP.Transfer,
-            tick: "",
-            to: _toAddress,
-            amt: "22",
-        })  
-        let txid = await KRC20.transfer(_privateKey, krc20data, 100000n)
-        console.log("Transfer txid", txid)
-        await Rpc.getInstance().disconnect()
-    }, 50000)
+    // test('transfer', async () => {
+    //     await Rpc.setInstance(NetworkType.Testnet).connect()
+    //     const krc20data = createKrc20Data({
+    //         p: "krc-20",
+    //         op: OP.Transfer,
+    //         tick: "",
+    //         to: _toAddress,
+    //         amt: "22",
+    //     })  
+    //     let txid = await KRC20.transfer(_privateKey, krc20data, 100000n)
+    //     console.log("Transfer txid", txid)
+    //     await Rpc.getInstance().disconnect()
+    // }, 50000)
 
     // test('deploy', async () => {
     //     console.log('deploy start')
