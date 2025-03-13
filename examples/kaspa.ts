@@ -46,6 +46,38 @@ async function testMultiSigTransfer() {
     await Rpc.getInstance().disconnect()
 }
 
+// Example 1: Transfer KAS 5 times
+async function testTransfers() {
+    let eventMap: Map<string, boolean> = new Map();
+    await Rpc.setInstance(NetworkType.Testnet).connect()
+
+    let toAddress = 'kaspa:qrxh35ysr2hchag9gtam5vlkvpmn89ph78t6nqvg44yj3xf8rpeg22dwn3r90'
+    let privateKey = new PrivateKey("fd67dcd4f94b20ac5f7c5eea83bb886c388d7a7787fd315810ee6d002cf5eb9a")
+
+    let address = new PrivateKey(privateKey).toPublicKey().toXOnlyPublicKey().toAddress(NetworkType.Testnet)
+    await Rpc.getInstance().client.subscribeUtxosChanged([address.toString()]);
+    Rpc.getInstance().client.addEventListener('utxos-changed', async (event: any) => {
+        const addedEntry = event.data.added.find((entry: any) =>
+            entry.address.payload === address.toString().split(':')[1]
+        );
+        if (addedEntry) {
+            let txid = addedEntry.outpoint.transactionId.toString()
+            eventMap.set(txid, true)
+        }
+    });
+
+    for (let i = 0; i < 5; i++) {
+        const txid = await Kaspa.transferKas(privateKey, toAddress, 1300000000n, 10000n)
+        while (eventMap.get(txid!) == undefined) {
+            await new Promise(resolve => setTimeout(resolve, 500)); // wait and check every 500ms
+        }
+        eventMap.delete(txid!);
+    }
+
+    await Rpc.setInstance(NetworkType.Testnet).disconnect()
+}
+
 // Run the examples
 testSingleTransfer();
 // testMultiSigTransfer();
+// testTransfers();

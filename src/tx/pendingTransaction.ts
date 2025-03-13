@@ -92,7 +92,6 @@ class PendingTransaction {
         sigOpCount?: number
     ): Promise<PendingTransaction> {
         const { entries } = await Rpc.getInstance().client.getUtxosByAddresses({ addresses: [address] });
-        console.log("entries:", entries)
         const tx = await PendingTransaction.createRawTransactions(entries, outputs, address, fee, priorityEntries, sigOpCount);
         return new PendingTransaction(tx);
     }

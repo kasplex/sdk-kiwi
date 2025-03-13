@@ -24,6 +24,7 @@ class Kaspa {
         return tx.sign([privateKey]).submit()
     }
 
+
     /**
      * Transfers KASPA from a multi-signature address to another address.
      * 
@@ -36,7 +37,6 @@ class Kaspa {
      * @param {bigint | undefined} fee - The transaction fee (optional).
      * @returns {Promise<any>} - A promise that resolves when the transaction is submitted.
      */
-
     public static async transferKasFromMultiSignAddress(fromAddress: string | Address, signTotal: number, script: ScriptBuilder, privateKeyStr: string[], address: string, amount: bigint, fee?: bigint | undefined) {
         const outputs = Output.createOutputs(address, amount)
         let privateKeys = privateKeyStr.map( r => {
