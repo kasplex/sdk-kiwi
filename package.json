@@ -51,6 +51,7 @@
     "unplugin-auto-import": "^19.0.0"
   },
   "dependencies": {
+    "@jest/globals": "^29.7.0",
     "buffer": "^6.0.3",
     "js-sha3": "^0.8.0",
     "node-fetch": "^3.3.2"
