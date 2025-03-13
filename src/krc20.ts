@@ -17,11 +17,28 @@ import { OP } from "./utils/enum";
 import { Transaction } from "./tx/transaction";
 import { Entries } from "./tx/entries";
 import { Script } from './script/script';
-import { BASE_KAS_TO_P2SH_ADDRESS, BASE_P2SH_TO_KASPA_ADDRESS } from "./utils/constants";
+import { BASE_P2SH_TO_KASPA_ADDRESS, BASE_KAS_TO_P2SH_ADDRESS } from "./utils/constants";
 import { Address as AddressUtil } from "./utils/address";
 import { getFeeByOp } from './utils/utils'
 import { Output } from "./tx/output";
-class KRC20 {
+import { Rpc } from "./rpc/client";
+import { EventEmitter } from 'events'
+class KRC20 extends EventEmitter {
+    private static instance: KRC20;
+    private static mintQueue: Array<{ data: Krc20Data; privateKey: PrivateKey; fee?: bigint }> = [];
+    private isMinting = false;
+
+    private constructor() {
+        super();
+    }
+
+    public static getInstance(): KRC20 {
+        if (!KRC20.instance) {
+            KRC20.instance = new KRC20();
+        }
+        return KRC20.instance;
+    }
+
     /**
     * Creates a KRC20 script.
     * @param privateKey - The private key.
@@ -86,14 +103,18 @@ class KRC20 {
                 throw new Error("Invalid 'to' address");
             }
         }
-        const { p2shFee, updatedFee} = this.getFeeInfo(data.op, fee)
-        console.log('updatedFee', updatedFee)
+        const { p2shFee, updatedFee } = this.getFeeInfo(data.op, fee)
         console.log('p2shFee', p2shFee)
+        console.log('updatedFee', updatedFee)
         console.log('fee', fee)
         const outputs = Output.createOutputs(p2shAddress.toString(), p2shFee);
         const commitTx = await Transaction.createTransactions(address, outputs, fee)
-            .then(r =>  r.sign([privateKey]).submit());
+            .then(r => r.sign([privateKey]).submit());
+        console.log("Commit txid", commitTx);
+        // const commitTx = '5d9469933ee20335a1a074c8bc0f48b1f5f4a66b497887e17fecd425700366c5'
+        console.log('p2shAddress', p2shAddress.toString())
         const revealEntries = Entries.revealEntries(p2shAddress, commitTx!, script.createPayToScriptHashScript());
+        console.log('revealEntries', revealEntries)
         return this.createTransactionWithEntries(privateKey, revealEntries, [], updatedFee, script, address);
     }
 
@@ -142,7 +163,8 @@ class KRC20 {
         const getFee = getFeeByOp(op);
         const isFeeZero = getFee === 0n;
         const p2shFee = (isFeeZero ? 100000000n : getFee) + BASE_P2SH_TO_KASPA_ADDRESS;
-        const updatedFee = isFeeZero ? (fee === 0n ? 100000000n : fee) : getFee;
+        const updatedFee = fee === 0n ? 100000000n : fee;
+        // const updatedFee = isFeeZero ? (fee === 0n ? 0n : fee) : getFee;
         return {
             p2shFee,
             updatedFee
@@ -161,14 +183,16 @@ class KRC20 {
         if (data.op !== OP.Mint) {
             throw new Error("Invalid input: 'op' must be'mint'");
         }
-        if(executionCount === 1) {
+        if (executionCount === 1) {
             return this.mint(privateKeyStr, data, fee);
         }
         const privateKey = new PrivateKey(privateKeyStr);
         const script = this.createScript(privateKey, data);
         const p2shAddress = this.createP2SHAddress(script);
-        const { p2shFee, updatedFee} = this.getFeeInfo(data.op, fee)
+        const { p2shFee } = this.getFeeInfo(data.op, fee)
         const address = privateKey.toPublicKey().toAddress(Kiwi.network).toString();
+        const client = Rpc.getInstance().client
+        
         const outputs = Output.createOutputs(p2shAddress.toString(), p2shFee);
         await Transaction.createTransactions(address, outputs, fee)
             .then(r => r.sign([privateKey]).submit());
@@ -176,18 +200,46 @@ class KRC20 {
         let revealTxIds: string[] = [];
         const revealFee = kaspaToSompi("0.0001")!;
         if (executionCount > 1 && data.op === OP.Mint) {
+            const maxValue = 30;
+            console.log('for start...')
+            await client.subscribeUtxosChanged([p2shAddress.toString()]);
             for (let i = 0; i < executionCount; i++) {
                 const revealEntries = await Entries.entries(p2shAddress.toString());
-                try {
-                    const revealTxId = await this.createTransactionWithEntries(privateKey, revealEntries, [], revealFee, script, p2shAddress.toString());
-                    revealTxIds.push(revealTxId as string);
-                } catch (error) {
-                    console.error(`Error in reveal operation ${i}:`, error);
+                const revealTxId = await this.createTransactionWithEntries(privateKey, revealEntries, [], revealFee, script, p2shAddress.toString());
+                console.log('revealTxId', revealTxId)
+                let eventReceived = false
+                let attempts = 1
+                while(!eventReceived && attempts <= maxValue){
+                    client.addEventListener('utxos-changed', async (event: any) => {
+                        attempts++
+                        console.log('执行监听', attempts)
+                        const { removed, added } = event.data
+                        const removedEntry = removed.find((entry: any) =>
+                            entry.address.payload === address.toString().split(':')[1]
+                        );
+                        const addedEntry = added.find((entry: any) =>
+                            entry.address.payload === address.toString().split(':')[1]
+                        );
+                        if (removedEntry) {
+                            const addedEventTrxId = addedEntry.outpoint.transactionId;
+                            console.log('addedEventTrxId', addedEventTrxId)
+                            if (addedEventTrxId == revealTxId) {
+                                console.log('addedEventTrxId', addedEventTrxId)
+                                console.log('revealTxId while', revealTxId)
+                                eventReceived = true
+                                revealTxIds.push(revealTxId as string);
+                            }
+                        }
+                    })
+                    await new Promise(resolve => setTimeout(resolve, 800));
                 }
             }
+            console.log('执行完成 end...')
+            client.removeEventListener('utxos-changed')
             return revealTxIds;
         }
     }
+
 
     /**
      * Deploys a new KRC20 token contract.
@@ -297,7 +349,7 @@ class KRC20 {
         const receiveAddress = addressFromScriptPublicKey(outputScriptPublicKey, Kiwi.network)!
         const outputs = Output.createOutputs(receiveAddress.toString(), tx.outputs[0].value);
         return await Transaction.createTransactionsWithEntries(entries, outputs, address, fee, entries as []).then(r =>
-                r.sign([_buyPrivateKey], txInputs.signatureScript, true).submit())
+            r.sign([_buyPrivateKey], txInputs.signatureScript, true).submit())
     }
 
 
