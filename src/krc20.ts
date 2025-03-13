@@ -1,26 +1,28 @@
 import {
-    PrivateKey,
-    addressFromScriptPublicKey,
-    Transaction as KaspaTransaction,
-    SighashType,
-    ScriptBuilder,
-    ITransactionOutput,
-    ScriptPublicKey,
-    kaspaToSompi,
-    type UtxoEntryReference,
     type Address,
-} from "../wasm/kaspa/kaspa";
+    addressFromScriptPublicKey,
+    ITransactionOutput,
+    kaspaToSompi,
+    PrivateKey,
+    ScriptBuilder,
+    ScriptPublicKey,
+    SighashType,
+    Transaction as KaspaTransaction,
+    type UtxoEntryReference
+} from '../wasm/kaspa/kaspa';
 
-import { Krc20Data } from "./types/interface";
-import { Kiwi } from "./kiwi";
-import { OP } from "./utils/enum";
-import { Transaction } from "./tx/transaction";
-import { Entries } from "./tx/entries";
+import { Krc20Data } from './types/interface';
+import { Kiwi } from './kiwi';
+import { OP } from './utils/enum';
+import { Transaction } from './tx/transaction';
+import { Entries } from './tx/entries';
 import { Script } from './script/script';
-import { BASE_KAS_TO_P2SH_ADDRESS, BASE_P2SH_TO_KASPA_ADDRESS } from "./utils/constants";
-import { Address as AddressUtil } from "./utils/address";
-import { getFeeByOp } from './utils/utils'
-import { Output } from "./tx/output";
+import { BASE_P2SH_TO_KASPA_ADDRESS } from './utils/constants';
+import { Address as AddressUtil } from './utils/address';
+import { getFeeByOp } from './utils/utils';
+import { Output } from './tx/output';
+import { Rpc } from './rpc/client';
+
 class KRC20 {
     /**
     * Creates a KRC20 script.
@@ -42,29 +44,29 @@ class KRC20 {
         return addressFromScriptPublicKey(scriptPublicKey, Kiwi.network)!;
     }
 
-    /**
-     * Creates a transaction with the given UTXO entries, outputs, fee, script, and address.
-     * This method signs the transaction with the provided private key and submits it.
-     *
-     * @param privateKey - The private key used to sign the transaction.
-     * @param entries - The UTXO entries to be used as inputs for the transaction.
-     * @param outputs - The outputs of the transaction.
-     * @param fee - The transaction fee in the smallest unit (e.g., satoshis for Bitcoin).
-     * @param script - The script builder used to construct the transaction script.
-     * @param address - The recipient address for the transaction.
-     * @returns A promise that resolves to the transaction ID (or hash) after submission.
-     */
-    private static async createTransactionWithEntries(
-        privateKey: PrivateKey,
-        entries: any[],
-        outputs: any[],
-        fee: bigint,
-        script: ScriptBuilder,
-        address: string,
-    ) {
-        return await Transaction.createTransactionsWithEntries(entries, outputs, address, fee)
-            .then(r => r.sign([privateKey], script).submit());
-    }
+    // /**
+    //  * Creates a transaction with the given UTXO entries, outputs, fee, script, and address.
+    //  * This method signs the transaction with the provided private key and submits it.
+    //  *
+    //  * @param privateKey - The private key used to sign the transaction.
+    //  * @param entries - The UTXO entries to be used as inputs for the transaction.
+    //  * @param outputs - The outputs of the transaction.
+    //  * @param fee - The transaction fee in the smallest unit (e.g., satoshis for Bitcoin).
+    //  * @param script - The script builder used to construct the transaction script.
+    //  * @param address - The recipient address for the transaction.
+    //  * @returns A promise that resolves to the transaction ID (or hash) after submission.
+    //  */
+    // private static async createTransactionWithEntries(
+    //     privateKey: PrivateKey,
+    //     entries: any[],
+    //     outputs: any[],
+    //     fee: bigint,
+    //     script: ScriptBuilder,
+    //     address: string,
+    // ) {
+    //     return await Transaction.createTransactionsWithEntries(entries, outputs, address, fee)
+    //         .then(r => r.sign([privateKey], script).submit());
+    // }
 
     /**
      * Executes a KRC20 operation.
@@ -94,7 +96,8 @@ class KRC20 {
         const commitTx = await Transaction.createTransactions(address, outputs, fee)
             .then(r =>  r.sign([privateKey]).submit());
         const revealEntries = Entries.revealEntries(p2shAddress, commitTx!, script.createPayToScriptHashScript());
-        return this.createTransactionWithEntries(privateKey, revealEntries, [], updatedFee, script, address);
+        return Transaction.createTransactionsWithEntries(revealEntries, outputs, address, updatedFee)
+            .then(r => r.sign([privateKey], script).submit())
     }
 
 
@@ -157,36 +160,45 @@ class KRC20 {
      * @param executionCount - The number of mint operations to execute.
      * @returns The submitted reveal transaction IDs.
      */
-    public static async multiMint(privateKeyStr: string, data: Krc20Data, fee: bigint = 0n, executionCount: number = 1) {
+    public static async multiMint(privateKeyStr: string, data: Krc20Data, executionCount: bigint = 1n) {
         if (data.op !== OP.Mint) {
             throw new Error("Invalid input: 'op' must be'mint'");
         }
-        if(executionCount === 1) {
-            return this.mint(privateKeyStr, data, fee);
+        if (executionCount < 1) {
+            throw new Error("Invalid executionCount");
+        }
+        if(executionCount === 1n) {
+            return this.mint(privateKeyStr, data, 0n);
         }
         const privateKey = new PrivateKey(privateKeyStr);
+        const address = privateKey.toPublicKey().toAddress(Kiwi.network).toString();
+
         const script = this.createScript(privateKey, data);
         const p2shAddress = this.createP2SHAddress(script);
-        const { p2shFee, updatedFee} = this.getFeeInfo(data.op, fee)
-        const address = privateKey.toPublicKey().toAddress(Kiwi.network).toString();
-        const outputs = Output.createOutputs(p2shAddress.toString(), p2shFee);
-        await Transaction.createTransactions(address, outputs, fee)
+
+        const mintFee = getFeeByOp(OP.Mint)
+        let payToP2SHAmount = mintFee * executionCount + BASE_P2SH_TO_KASPA_ADDRESS
+        const outputs = Output.createOutputs(p2shAddress.toString(), payToP2SHAmount);
+
+        let commitTxid = await Transaction.createTransactions(address, outputs, 0n)
             .then(r => r.sign([privateKey]).submit());
 
-        let revealTxIds: string[] = [];
-        const revealFee = kaspaToSompi("0.0001")!;
-        if (executionCount > 1 && data.op === OP.Mint) {
-            for (let i = 0; i < executionCount; i++) {
-                const revealEntries = await Entries.entries(p2shAddress.toString());
-                try {
-                    const revealTxId = await this.createTransactionWithEntries(privateKey, revealEntries, [], revealFee, script, p2shAddress.toString());
-                    revealTxIds.push(revealTxId as string);
-                } catch (error) {
-                    console.error(`Error in reveal operation ${i}:`, error);
+        for (let i = 0n; i < executionCount; i++) {
+            if (commitTxid) {
+                const revealEntries = Entries.revealEntries(p2shAddress, commitTxid, script.createPayToScriptHashScript(), payToP2SHAmount);
+                let revealTx = undefined
+                if (i == executionCount - 1n) {
+                    revealTx = await Transaction.createTransactionsWithEntries(revealEntries, [], address.toString(), mintFee)
+                } else {
+                    revealTx = await Transaction.createTransactionsWithEntries(revealEntries, [], p2shAddress.toString(), mintFee)
                 }
+                payToP2SHAmount -= revealTx.transaction.summary.fees
+                commitTxid = await revealTx.sign([privateKey], script).submit()!
+            } else {
+                throw Error(`error ${commitTxid} undefined`)
             }
-            return revealTxIds;
         }
+        return;
     }
 
     /**

@@ -1,11 +1,11 @@
 import {KasplexApi} from '../src/api/kasplexApi'
-import { describe, expect, it } from 'vitest';
+import { describe, expect, test } from '@jest/globals';
 
 let address = `kaspatest:qpyrh5ev84kc50nrhnc3g59ujr3a3pv4jweg57rge9sydrwyz9drunfa9n4sf`
 describe('api', () => {
 
     //Test for getBalance
-    it('getBalance', async () => {
+    test('getBalance', async () => {
         console.log('getBalance test')
         const res = await KasplexApi.getBalance(address, 'SNOWDN')
         console.log(`getBalance response: \x1B[32m%s\x1B[0m `, JSON.stringify(res))
