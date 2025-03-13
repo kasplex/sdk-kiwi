@@ -20,7 +20,7 @@
     "wasm"
   ],
   "scripts": {
-    "test": "bun test",
+    "test": "vitest",
     "start": "bun run src/index.ts",
     "build:types": "tsc --emitDeclarationOnly --outDir dist",
     "build": "bun build ./src/index.ts --outdir ./dist --entry-naming [dir]/[name].[ext] --asset-naming [name].[ext] --target=node",
@@ -48,7 +48,10 @@
     "terser": "^5.24.4",
     "ts-jest": "^29.2.6",
     "typescript": "~5.7.2",
-    "unplugin-auto-import": "^19.0.0"
+    "unplugin-auto-import": "^19.0.0",
+    "vite-plugin-top-level-await": "^1.5.0",
+    "vite-plugin-wasm": "^3.4.1",
+    "vitest": "^3.0.8"
   },
   "dependencies": {
     "@jest/globals": "^29.7.0",

@@ -98,24 +98,17 @@ class KRC20 extends EventEmitter {
         const script = this.createScript(privateKey, data);
         const p2shAddress = this.createP2SHAddress(script);
         const address = privateKey.toPublicKey().toAddress(Kiwi.network).toString();
-        if (data.to) {
-            if (!AddressUtil.validate(data.to)) {
-                throw new Error("Invalid 'to' address");
-            }
+        if (data.to && typeof data.to === 'string' && !AddressUtil.validate(data.to)) {
+            throw new Error(`Invalid 'to' address: ${data.to}`);
         }
-        const { p2shFee, updatedFee } = this.getFeeInfo(data.op, fee)
-        console.log('p2shFee', p2shFee)
-        console.log('updatedFee', updatedFee)
-        console.log('fee', fee)
-        const outputs = Output.createOutputs(p2shAddress.toString(), p2shFee);
-        const commitTx = await Transaction.createTransactions(address, outputs, fee)
-            .then(r => r.sign([privateKey]).submit());
-        console.log("Commit txid", commitTx);
-        // const commitTx = '5d9469933ee20335a1a074c8bc0f48b1f5f4a66b497887e17fecd425700366c5'
-        console.log('p2shAddress', p2shAddress.toString())
-        const revealEntries = Entries.revealEntries(p2shAddress, commitTx!, script.createPayToScriptHashScript());
-        console.log('revealEntries', revealEntries)
-        return this.createTransactionWithEntries(privateKey, revealEntries, [], updatedFee, script, address);
+        const { p2shFee, priorityFee } = this.getFeeInfo(data.op, fee)
+        // const outputs = Output.createOutputs(p2shAddress.toString(), p2shFee);
+        // const commitTx = await Transaction.createTransactions(address, outputs, fee)
+        //     .then(r => r.sign([privateKey]).submit());
+        const commitTx = '48fe3a8177aec05bc1cfc81b5fbedbf91c78d0733312a2616b5a32836d967ff9'
+        const revealAmount = data.op === OP.Deploy ? p2shFee : BASE_KAS_TO_P2SH_ADDRESS
+        const revealEntries = Entries.revealEntries(p2shAddress, commitTx!, script.createPayToScriptHashScript(), revealAmount);
+        return this.createTransactionWithEntries(privateKey, revealEntries, [], priorityFee, script, address);
     }
 
 
@@ -160,15 +153,11 @@ class KRC20 extends EventEmitter {
     }
 
     private static getFeeInfo(op: OP, fee: bigint = 0n) {
+        const DEFAULT_FEE = 100000000n;
         const getFee = getFeeByOp(op);
-        const isFeeZero = getFee === 0n;
-        const p2shFee = (isFeeZero ? 100000000n : getFee) + BASE_P2SH_TO_KASPA_ADDRESS;
-        const updatedFee = fee === 0n ? 100000000n : fee;
-        // const updatedFee = isFeeZero ? (fee === 0n ? 0n : fee) : getFee;
-        return {
-            p2shFee,
-            updatedFee
-        }
+        const p2shFee = (getFee === 0n ? DEFAULT_FEE : getFee) + BASE_P2SH_TO_KASPA_ADDRESS;
+        const priorityFee = op === OP.Transfer ? 0n : (fee === 0n ? DEFAULT_FEE : fee);
+        return { p2shFee, priorityFee };
     }
 
     /**
@@ -193,7 +182,7 @@ class KRC20 extends EventEmitter {
         const address = privateKey.toPublicKey().toAddress(Kiwi.network).toString();
         const client = Rpc.getInstance().client
         
-        const outputs = Output.createOutputs(p2shAddress.toString(), p2shFee);
+        const outputs = Output.createOutputs(p2shAddress.toString(), BASE_KAS_TO_P2SH_ADDRESS);
         await Transaction.createTransactions(address, outputs, fee)
             .then(r => r.sign([privateKey]).submit());
 
