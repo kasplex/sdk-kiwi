@@ -10,7 +10,7 @@ class KaspaApi {
      * @returns {string} - The base API URL.
      */
     private static getBaseUrl(): string {
-        const url = Kiwi.network === NetworkType.Mainnet ? BASE_URL_KASPA : '';
+        const url = Kiwi.network === NetworkType.Mainnet ? BASE_URL_KASPA.MAIN : BASE_URL_KASPA.TEST;
         if (!url) {
             throw new Error("The current testing environment cannot call related interfaces.");
         }
