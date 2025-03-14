@@ -5,6 +5,7 @@ import { NetworkType } from "../../wasm/kaspa/kaspa";
 import { Kiwi } from "@/kiwi";
 
 class KaspaApi {
+
     /**
      * Determines the appropriate API base URL based on the network type.
      * @returns {string} - The base API URL.
@@ -16,6 +17,7 @@ class KaspaApi {
         }
         return url;
     }
+
     /**
      * Get balance for a specific Kaspa address.
      * @param kaspaAddress The Kaspa wallet address
