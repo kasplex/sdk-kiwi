@@ -86,17 +86,17 @@ function getSizeByPrivateKeys(multiplier: number, addend: number, ecdsa?: boolea
 function getFeeByOp(op: OP): bigint {
     switch (op) {
         case OP.Deploy:
-            return kaspaToSompi("20")!;
+            return 100000000000n;
         case OP.Mint:
-            return kaspaToSompi("1")!;
+            return 100000000n;
         case OP.Transfer:
-            return kaspaToSompi("0")!;
+            return 0n;
         case OP.Send:
-            return kaspaToSompi("0")!;
+            return 0n;
         case OP.List:
-            return kaspaToSompi("0")!;
+            return 0n;
         default:
-            return kaspaToSompi("0")!;
+            return 0n;
     }
 }
 

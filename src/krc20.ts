@@ -45,28 +45,24 @@ class KRC20 {
 
     /**
      * Executes a KRC20 operation.
-     * @param privateKey - The private key.
+     * @param privateKeyStr - The private key.
      * @param data - The KRC20 data.
      * @param fee - The transaction fee.
      * @returns The submitted transaction ID.
      */
-    private static async executeKrc20Operation(privateKeyStr: string, data: Krc20Data, fee: bigint) {
-        if (!data.op) {
-            throw new Error("Invalid input: 'op' must be provided");
-        }
+    private static async executeKrc20Operation(privateKeyStr: string, data: Krc20Data, fee: bigint = 0n) {
         const privateKey = new PrivateKey(privateKeyStr);
         const script = this.createScript(privateKey, data);
         const p2shAddress = this.createP2SHAddress(script);
         const address = privateKey.toPublicKey().toAddress(Kiwi.network).toString();
-        if (data.to && typeof data.to === 'string' && !AddressUtil.validate(data.to)) {
-            throw new Error(`Invalid 'to' address: ${data.to}`);
-        }
-        const { p2shFee, priorityFee} = this.getFeeInfo(data.op, fee)
+
+        const { p2shFee, priorityFee} = this.getFeeInfo(data.op)
         const outputs = Output.createOutputs(p2shAddress.toString(), p2shFee);
-        const commitTx = await Transaction.createTransactions(address, outputs, fee)
+        const commitTx = await Transaction.createTransactions(address, outputs, 0n)
             .then(r =>  r.sign([privateKey]).submit());
-        const revealEntries = Entries.revealEntries(p2shAddress, commitTx!, script.createPayToScriptHashScript());
-        return Transaction.createTransactionsWithEntries(revealEntries, outputs, address, priorityFee)
+
+        const revealEntries = Entries.revealEntries(p2shAddress, commitTx!, script.createPayToScriptHashScript(), p2shFee);
+        return Transaction.createTransactionsWithEntries(revealEntries, [], address, priorityFee)
             .then(r => r.sign([privateKey], script).submit())
     }
 
@@ -111,10 +107,9 @@ class KRC20 {
         return await KRC20.executeKrc20Operation(privateKey, data, fee);
     }
 
-    private static getFeeInfo(op: OP, fee: bigint = 0n) {
-        const getFee = getFeeByOp(op);
-        const p2shFee = (getFee === 0n ? DEFAULT_FEE : getFee) + BASE_P2SH_TO_KASPA_ADDRESS;
-        const priorityFee = op === OP.Transfer ? 0n : (fee === 0n ? DEFAULT_FEE : fee);
+    private static getFeeInfo(op: OP) {
+        const priorityFee = getFeeByOp(op);
+        const p2shFee = (priorityFee === 0n ? DEFAULT_FEE : priorityFee) + BASE_P2SH_TO_KASPA_ADDRESS;
         return { p2shFee, priorityFee };
     }
 
