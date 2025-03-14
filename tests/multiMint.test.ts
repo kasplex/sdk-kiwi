@@ -14,14 +14,14 @@ let _privateKey = "fd67dcd4f94b20ac5f7c5eea83bb886c388d7a7787fd315810ee6d002cf5e
 async function multiMintTest() {
     Kiwi.setNetwork(NetworkType.Testnet)
     await Rpc.setInstance(NetworkType.Testnet).connect()
-
+    console.log('rpc connect...')
     const krc20data = createKrc20Data({
         p: "krc-20",
         op: OP.Mint,
-        tick: 'OXXY',
+        tick: 'KFWFS',
     })
-    let pk = new PrivateKey(_privateKey)
     let txid = await KRC20.multiMint(_privateKey, krc20data,5)
+    console.log('multiMint txid', txid)
     await Rpc.getInstance().disconnect()
 }
 
