@@ -1,4 +1,3 @@
-import { expect } from 'vitest';
 export const BASE_URL_TEST = `https://tn10api.kasplex.org`;
 export const BASE_URL_MAIN = `https://api.kasplex.org`;
 

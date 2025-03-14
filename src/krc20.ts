@@ -18,8 +18,8 @@ import { Transaction } from './tx/transaction';
 import { Entries } from './tx/entries';
 import { Script } from './script/script';
 import { BASE_P2SH_TO_KASPA_ADDRESS, DEFAULT_FEE } from './utils/constants';
-import { Address as AddressUtil } from './utils/address';
 import { getFeeByOp } from './utils/utils';
+import { ValidateKrc20Data } from './check';
 import { Output } from './tx/output';
 
 class KRC20 {
@@ -44,6 +44,18 @@ class KRC20 {
     }
 
     /**
+     * Get the fee information based on the operation type.
+     *
+     * @param op - The operation type (e.g., 'mint', 'deploy', 'transfer').
+     * @returns An object containing the P2SH fee and priority fee.
+     */
+    private static getFeeInfo(op: OP) {
+        const priorityFee = getFeeByOp(op);
+        const p2shFee = (priorityFee === 0n ? DEFAULT_FEE : priorityFee) + BASE_P2SH_TO_KASPA_ADDRESS;
+        return { p2shFee, priorityFee };
+    }
+
+    /**
      * Executes a KRC20 operation.
      * @param privateKeyStr - The private key.
      * @param data - The KRC20 data.
@@ -51,17 +63,18 @@ class KRC20 {
      * @returns The submitted transaction ID.
      */
     private static async executeKrc20Operation(privateKeyStr: string, data: Krc20Data, fee: bigint = 0n) {
+        ValidateKrc20Data.validate(data);
         const privateKey = new PrivateKey(privateKeyStr);
         const script = this.createScript(privateKey, data);
         const p2shAddress = this.createP2SHAddress(script);
         const address = privateKey.toPublicKey().toAddress(Kiwi.network).toString();
 
-        const { p2shFee, priorityFee} = this.getFeeInfo(data.op)
+        let { p2shFee, priorityFee } = this.getFeeInfo(data.op)
         const outputs = Output.createOutputs(p2shAddress.toString(), p2shFee);
         const commitTx = await Transaction.createTransactions(address, outputs, fee)
-            .then(r =>  r.sign([privateKey]).submit());
-
+            .then(r => r.sign([privateKey]).submit());
         const revealEntries = Entries.revealEntries(p2shAddress, commitTx!, script.createPayToScriptHashScript(), p2shFee);
+        priorityFee = priorityFee === 0n ? 100000n : priorityFee;
         return Transaction.createTransactionsWithEntries(revealEntries, [], address, priorityFee)
             .then(r => r.sign([privateKey], script).submit())
     }
@@ -107,12 +120,6 @@ class KRC20 {
         return await KRC20.executeKrc20Operation(privateKey, data, fee);
     }
 
-    private static getFeeInfo(op: OP) {
-        const priorityFee = getFeeByOp(op);
-        const p2shFee = (priorityFee === 0n ? DEFAULT_FEE : priorityFee) + BASE_P2SH_TO_KASPA_ADDRESS;
-        return { p2shFee, priorityFee };
-    }
-
     /**
      * Multi-mints new KRC20 tokens.
      * @param privateKeyStr - The private key string.
@@ -128,7 +135,7 @@ class KRC20 {
         if (executionCount < 1) {
             throw new Error("Invalid executionCount");
         }
-        if(executionCount === 1) {
+        if (executionCount === 1) {
             return this.mint(privateKeyStr, data, 0n);
         }
         const privateKey = new PrivateKey(privateKeyStr);
@@ -136,7 +143,7 @@ class KRC20 {
         const script = this.createScript(privateKey, data);
         const p2shAddress = this.createP2SHAddress(script);
         const mintFee = getFeeByOp(OP.Mint);
-        
+
         let payToP2SHAmount = mintFee * BigInt(executionCount) + BASE_P2SH_TO_KASPA_ADDRESS
         const outputs = Output.createOutputs(p2shAddress.toString(), payToP2SHAmount);
         let commitTxid = await Transaction.createTransactions(address, outputs, 0n)
@@ -154,8 +161,6 @@ class KRC20 {
         }
         return;
     }
-
-
     /**
      * Deploys a new KRC20 token contract.
      * @param privateKey - The private key for signing the transaction.
@@ -240,8 +245,6 @@ class KRC20 {
         return Transaction.createTransaction(revealEntries, output, 0n, "", 1)
             .sign(_privateKey, script, SighashType.SingleAnyOneCanPay).toJson()
     }
-
-
     /**
      * Reveals a partially signed transaction.
      * @param buyPrivateKey - The private key.
@@ -266,8 +269,6 @@ class KRC20 {
         return await Transaction.createTransactionsWithEntries(entries, outputs, address, fee, entries as []).then(r =>
             r.sign([_buyPrivateKey], txInputs.signatureScript, true).submit())
     }
-
-
     /**
      * Transfers KRC20 tokens to multiple addresses using multi-signature.
      * @param require - The number of required signatures.
