@@ -58,7 +58,7 @@ class KRC20 {
 
         const { p2shFee, priorityFee} = this.getFeeInfo(data.op)
         const outputs = Output.createOutputs(p2shAddress.toString(), p2shFee);
-        const commitTx = await Transaction.createTransactions(address, outputs, 0n)
+        const commitTx = await Transaction.createTransactions(address, outputs, fee)
             .then(r =>  r.sign([privateKey]).submit());
 
         const revealEntries = Entries.revealEntries(p2shAddress, commitTx!, script.createPayToScriptHashScript(), p2shFee);
