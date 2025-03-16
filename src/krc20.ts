@@ -38,7 +38,7 @@ class KRC20 {
      * @param script - The script.
      * @returns The P2SH address.
      */
-    private static createP2SHAddress(script: ScriptBuilder): Address {
+    public static createP2SHAddress(script: ScriptBuilder): Address {
         const scriptPublicKey = script.createPayToScriptHashScript();
         return addressFromScriptPublicKey(scriptPublicKey, Kiwi.network)!;
     }

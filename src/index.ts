@@ -17,4 +17,12 @@ export * from "./utils/enum";
 export * from "./utils/utils";
 export * from './kiwi'
 export * from './init'
-export { NetworkType, PrivateKey } from "../wasm/kaspa/kaspa";
+export { 
+    NetworkType, 
+    PrivateKey, 
+    Address, 
+    ScriptBuilder, 
+    ScriptPublicKey, 
+    UtxoEntryReference, 
+    addressFromScriptPublicKey 
+} from "../wasm/kaspa/kaspa";
