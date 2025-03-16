@@ -1,7 +1,10 @@
 export const BASE_URL_TEST = `https://tn10api.kasplex.org`;
 export const BASE_URL_MAIN = `https://api.kasplex.org`;
 
-export const BASE_URL_KASPA = `https://api.kaspa.org`;
+export const BASE_URL_KASPA  = {
+    MAIN: `https://api.kaspa.org`,
+    TEST: `https://api-tn10.kaspa.org`,
+}
 
 export const U64_MAX_VALUE = 18446744073709551615n;
 

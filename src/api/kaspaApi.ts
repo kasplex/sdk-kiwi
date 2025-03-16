@@ -5,17 +5,19 @@ import { NetworkType } from "../../wasm/kaspa/kaspa";
 import { Kiwi } from "@/kiwi";
 
 class KaspaApi {
+
     /**
      * Determines the appropriate API base URL based on the network type.
      * @returns {string} - The base API URL.
      */
     private static getBaseUrl(): string {
-        const url = Kiwi.network === NetworkType.Mainnet ? BASE_URL_KASPA : '';
+        const url = Kiwi.network === NetworkType.Mainnet ? BASE_URL_KASPA.MAIN : BASE_URL_KASPA.TEST;
         if (!url) {
             throw new Error("The current testing environment cannot call related interfaces.");
         }
         return url;
     }
+
     /**
      * Get balance for a specific Kaspa address.
      * @param kaspaAddress The Kaspa wallet address
