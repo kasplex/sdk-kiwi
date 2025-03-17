@@ -17,6 +17,7 @@ export * from "./utils/enum";
 export * from "./utils/utils";
 export * from './kiwi'
 export * from './init'
+export * from "./types/interface"
 export { 
     NetworkType, 
     PrivateKey, 
@@ -24,5 +25,6 @@ export {
     ScriptBuilder, 
     ScriptPublicKey, 
     UtxoEntryReference, 
+    type ITransactionOutput,
     addressFromScriptPublicKey 
 } from "../wasm/kaspa/kaspa";
