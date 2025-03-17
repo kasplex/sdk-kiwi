@@ -128,7 +128,14 @@ class KRC20 {
      * @param executionCount - The number of mint operations to execute.
      * @returns The submitted reveal transaction IDs.
      */
-    public static async multiMint(privateKeyStr: string, data: Krc20Data, executionCount: number = 1) {
+    public static async multiMint(
+        privateKeyStr: string, 
+        data: Krc20Data, 
+        executionCount: number = 1, 
+        onProgress: (current: number, total: number, txid: string) => void = (current, total, txid) => {
+            console.log(`Progress: ${current}/${total} (${Math.round((current / total) * 100)}%) txId: ${txid}`);
+        }
+    ) {
         if (data.op !== OP.Mint) {
             throw new Error("Invalid input: 'op' must be'mint'");
         }
@@ -158,6 +165,7 @@ class KRC20 {
             const revealTx = await Transaction.createTransactionsWithEntries(revealEntries, [], recipientAddress, mintFee);
             payToP2SHAmount -= revealTx.transaction.summary.fees;
             commitTxid = await revealTx.sign([privateKey], script).submit();
+            onProgress(i+1, executionCount, commitTxid!)
         }
         return;
     }

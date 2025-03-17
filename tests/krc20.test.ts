@@ -24,18 +24,18 @@ describe('Transaction', () => {
     //     await Rpc.getInstance().disconnect()
     // }, 50000)
 
-    // test('mutilMint', async () => {
-    //     await Rpc.setInstance(NetworkType.Testnet).connect()
-    //     const krc20data = createKrc20Data({
-    //         p: "krc-20",
-    //         op: OP.Mint,
-    //         tick: 'KFWFS',
-    //     })
-    //     console.log('rpc connect...')
-    //     let txid = await KRC20.multiMint(_privateKey, krc20data, 5)
-    //     console.log("mutilMint txid", txid)
-    //     await Rpc.getInstance().disconnect()
-    // }, 300000)
+    test('mutilMint', async () => {
+        await Rpc.setInstance(NetworkType.Testnet).connect()
+        const krc20data = createKrc20Data({
+            p: "krc-20",
+            op: OP.Mint,
+            tick: 'KFWFS',
+        })
+        console.log('rpc connect...')
+        let txid = await KRC20.multiMint(_privateKey, krc20data, 5)
+        console.log("mutilMint txid", txid)
+        await Rpc.getInstance().disconnect()
+    }, 300000)
 
 
     // test('transfer', async () => {
