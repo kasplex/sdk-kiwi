@@ -147,25 +147,28 @@ class PendingTransaction {
         return this;
     }
 
-    /**
-     * Signs the transaction with multiple private keys and a script.
-     *
-     * @param privateKeys - List of private keys.
-     * @param script - Custom script to use in the signature.
-     * @returns The updated `PendingTransaction` instance.
-     */
-    public multiSign(privateKeys: PrivateKey[], script: ScriptBuilder): this {
-        // this.transaction = this.transaction.then(async transactions => {
-        //     for (const transaction of transactions.transactions) {
-        //         transaction.transaction.inputs.forEach((_, i) => {
-        //             const signatures = privateKeys.map(pk => transaction.createInputSignature(i, pk)).join('');
-        //             transaction.fillInput(i, signatures + script.toString());
-        //         });
-        //     }
-        //     return transactions;
-        // });
-        return this;
-    }
+    // /**
+    //  * Signs the transaction with multiple private keys and a script.
+    //  *
+    //  * @param privateKeys - List of private keys.
+    //  * @param script - Custom script to use in the signature.
+    //  * @returns The updated `PendingTransaction` instance.
+    //  */
+    // public multiSign(privateKeys: PrivateKey[], script: ScriptBuilder): this {
+    //     // // this.transaction = this.transaction.then(async transactions => {
+    //     // //     for (const transaction of transactions.transactions) {
+    //     // //         transaction.transaction.inputs.forEach((_, i) => {
+    //     // //             const signatures = privateKeys.map(pk => transaction.createInputSignature(i, pk)).join('');
+    //     // //             transaction.fillInput(i, signatures + script.toString());
+    //     // //         });
+    //     // //     }
+    //     // //     return transactions;
+    //     // // });
+    //     // this.transaction.transactions.forEach(r => {
+    //     //     r.to
+    //     // })
+    //     // return this;
+    // }
 
     /**
      * Submits the signed transaction to the network.

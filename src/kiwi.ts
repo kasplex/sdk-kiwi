@@ -1,5 +1,4 @@
 import { NetworkType } from "../wasm/kaspa/kaspa";
-import { loadKaspaWasm } from "./init";
 
 class Kiwi {
 
@@ -11,9 +10,8 @@ class Kiwi {
      * 
      * @param {NetworkType} network - The network type to set (e.g., Mainnet, Testnet).
      */
-    public static async setNetwork(network: NetworkType) {
+    public static setNetwork(network: NetworkType) {
         if(!Kiwi.isWasmLoaded) {
-            await loadKaspaWasm()
             Kiwi.isWasmLoaded = true
         }
         Kiwi.network = network

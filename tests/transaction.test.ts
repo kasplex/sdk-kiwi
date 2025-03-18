@@ -1,4 +1,4 @@
-import { describe, expect, test } from '@jest/globals';
+import { describe, expect, it } from 'vitest';
 import {addressFromScriptPublicKey, NetworkType, PrivateKey} from "../wasm/kaspa/kaspa";
 import { Script } from '../src/script/script';
 import { createKrc20Data, networkToString } from '../src/utils/utils'
@@ -9,15 +9,15 @@ import { Entries } from '../src/tx/entries';
 import { Kiwi } from '../src/kiwi';
 import { Output } from '../src/tx/output';
 import { BASE_KAS_TO_P2SH_ADDRESS } from "../src/utils/constants";
-import { loadKaspaWasm } from "../src/init";
-await loadKaspaWasm()
 
 let toAddress = 'kaspatest:qpyrh5ev84kc50nrhnc3g59ujr3a3pv4jweg57rge9sydrwyz9drunfa9n4sf'
 let privateKey = new PrivateKey("3da233c786bfb4cc6e7319f757a094fc2f33b4217613abe3d29ed684ee464828")
 
 describe('Transaction', () => {
 
-    test('mint', async () => {
+    Kiwi.setNetwork(NetworkType.Testnet);
+
+    it('mint', async () => {
         await Rpc.setInstance(NetworkType.Testnet).connect()
 
         const krc20data = createKrc20Data({

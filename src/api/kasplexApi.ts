@@ -1,4 +1,4 @@
-import { NetworkType } from "../../wasm/kaspa/kaspa";
+import { NetworkType } from "../../wasm/kaspa";
 import { httpClient } from '@/utils/http';
 import { BASE_URL_TEST, BASE_URL_MAIN } from '@/utils/constants';
 import { Kiwi } from "@/kiwi";
