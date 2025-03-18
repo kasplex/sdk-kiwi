@@ -62,7 +62,7 @@ class Kaspa {
             return new PrivateKey(r)
         })
         let tx = await Transaction.createTransactions(fromAddress, outputs, fee, [], signTotal)
-        return tx.multiSign(privateKeys, script).submit()
+        return tx.sign(privateKeys, script).submit()
     }
 }
 

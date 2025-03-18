@@ -12,6 +12,16 @@ export * from "./tx/index";
 export * from "./krc20";
 export * from "./utils/index"
 export * from './kiwi'
-export * from './init'
+// export * from './init'
 export * from "./types/interface"
 export * as WasmKaspa from '../wasm/kaspa/kaspa'
+export { 
+    NetworkType, 
+    PrivateKey, 
+    Address, 
+    ScriptBuilder, 
+    ScriptPublicKey, 
+    UtxoEntryReference, 
+    type ITransactionOutput,
+    addressFromScriptPublicKey 
+} from "../wasm/kaspa/kaspa";
