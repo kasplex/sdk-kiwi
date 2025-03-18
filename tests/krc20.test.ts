@@ -1,41 +1,40 @@
 import { describe, test } from 'vitest';
 import {  NetworkType } from "../wasm/kaspa/kaspa";
+import { Kiwi } from '../src/kiwi'
 import { createKrc20Data } from '../src/utils/utils'
 import { OP } from '../src/utils/enum'
 import { Rpc } from '../src/rpc/client';
 import { KRC20 } from '../src/krc20';
-import { Kiwi } from '../src/kiwi'
-
 
 let _toAddress = 'kaspatest:qp5aflmtqc9zk9s8cnlkne7sxh895eqqjscpad0wgjpjxtrgqszy55v22vejn'
 let _privateKey = "3da233c786bfb4cc6e7319f757a094fc2f33b4217613abe3d29ed684ee464828"
 await Kiwi.setNetwork(NetworkType.Testnet)
 describe('Transaction', () => {
-    // test('mint', async () => {
-    //     await Rpc.setInstance(NetworkType.Testnet).connect()
-    //     console.log('rpc connect...')
-    //     const krc20data = createKrc20Data({
-    //         p: "krc-20",
-    //         op: OP.Mint,
-    //         tick: 'TCKFE',
-    //     })
-    //     let txid = await KRC20.mint(_privateKey, krc20data)
-    //     console.log("Mint txid", txid)
-    //     await Rpc.getInstance().disconnect()
-    // }, 50000)
-
-    test('mutilMint', async () => {
+    test('mint', async () => {
         await Rpc.setInstance(NetworkType.Testnet).connect()
+        console.log('rpc connect...')
         const krc20data = createKrc20Data({
             p: "krc-20",
             op: OP.Mint,
-            tick: 'KFWFS',
+            tick: 'TCKFE',
         })
-        console.log('rpc connect...')
-        let txid = await KRC20.multiMint(_privateKey, krc20data, 5)
-        console.log("mutilMint txid", txid)
+        let txid = await KRC20.mint(_privateKey, krc20data)
+        console.log("Mint txid", txid)
         await Rpc.getInstance().disconnect()
-    }, 300000)
+    }, 50000)
+
+    // test('mutilMint', async () => {
+    //     await Rpc.setInstance(NetworkType.Testnet).connect()
+    //     const krc20data = createKrc20Data({
+    //         p: "krc-20",
+    //         op: OP.Mint,
+    //         tick: 'KFWFS',
+    //     })
+    //     console.log('rpc connect...')
+    //     let txid = await KRC20.multiMint(_privateKey, krc20data, 5)
+    //     console.log("mutilMint txid", txid)
+    //     await Rpc.getInstance().disconnect()
+    // }, 300000)
 
 
     // test('transfer', async () => {
@@ -91,9 +90,9 @@ describe('Transaction', () => {
     //         op: OP.Send,
     //         tick: "SNOWDN",
     //     })
-    //     const hash = "e2c89a8350049ca89a3ac4aa7cd60575c309a6997eb5bc1797d09c3a6a74db57"
-    //     const _buyPrivateKey = "fd67dcd4f94b20ac5f7c5eea83bb886c388d7a7787fd315810ee6d002cf5eb9a"
-    //     let txid = await KRC20.send(_privateKey, krc20data, _buyPrivateKey,hash,100000000n, 100000n)
+    //     const hash = "70135803b9b1b35ead15205d84b3f7de81f537b54f9fbcfe107b0cd2432ecc5b"
+    //     const _buyPrivateKey = "9c5584ec9a03c7b988fc83e92a88d05ca7587b207ab2f467b1b60b10e74418e0"
+    //     let txid = await KRC20.send(_privateKey, krc20data, _buyPrivateKey,hash,100000000n, 10000000n)
     //     console.log("Send txid", txid)
     //     await Rpc.getInstance().disconnect()
     // }, 50000)

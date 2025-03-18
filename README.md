@@ -24,9 +24,9 @@ To integrate **Kasplex Wallet SDK - Kiwi** into your project, follow these steps
    ```
 2. **Set up networkType and init rpc client for use**:
    ```typescript
-   import { Kiwi, Rpc, NetworkType } from "@kasplex/kiwi";
-   await Kiwi.setNetwork(NetworkType.Mainnet)      // NetworkType.Testnet for test net
-   await Rpc.setInstance(NetworkType.Mainnet).connect();
+   import { Kiwi, Rpc,  WasmKaspa } from "@kasplex/kiwi";
+   await Kiwi.setNetwork(WasmKaspa.NetworkType.Mainnet)      // NetworkType.Testnet for test net
+   await Rpc.setInstance(WasmKaspa.NetworkType.Mainnet).connect();
    ```
 3. **Generate a new wallet**:
    ```typescript

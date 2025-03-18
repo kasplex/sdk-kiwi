@@ -22,3 +22,8 @@ export interface Krc20Data {
     dec?: "8",
     pre?: string,
 }
+
+export interface addressList {
+    address: string,
+    amount: bigint
+}
