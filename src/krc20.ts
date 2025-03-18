@@ -130,21 +130,18 @@ class KRC20 {
      */
     public static async multiMint(
         privateKeyStr: string, 
-        data: Krc20Data, 
-        executionCount: number = 1, 
-        onProgress: (current: number, total: number, txid: string) => void = (current, total, txid) => {
-            console.log(`Progress: ${current}/${total} (${Math.round((current / total) * 100)}%) txId: ${txid}`);
-        }
-    ) {
-        if (data.op !== OP.Mint) {
-            throw new Error("Invalid input: 'op' must be'mint'");
-        }
-        if (executionCount < 1) {
-            throw new Error("Invalid executionCount");
-        }
+        data: Krc20Data,
+        fee: bigint = 0n,
+        executionCount: number = 1,
+        callback?: (current: number, txid: string) => void
+    ) : Promise<string | undefined> {
+        if (data.op !== OP.Mint) throw new Error("Invalid input: 'op' must be 'mint'");
+        if (executionCount < 1) throw new Error("Invalid executionCount");
+
         if (executionCount === 1) {
             return this.mint(privateKeyStr, data, 0n);
         }
+
         const privateKey = new PrivateKey(privateKeyStr);
         const address = privateKey.toPublicKey().toAddress(Kiwi.network).toString();
         const script = this.createScript(privateKey, data);
@@ -153,19 +150,24 @@ class KRC20 {
 
         let payToP2SHAmount = mintFee * BigInt(executionCount) + BASE_P2SH_TO_KASPA_ADDRESS
         const outputs = Output.createOutputs(p2shAddress.toString(), payToP2SHAmount);
-        let commitTxid = await Transaction.createTransactions(address, outputs, 0n)
+        let commitTxid = await Transaction.createTransactions(address, outputs, fee)
             .then(r => r.sign([privateKey]).submit());
 
-        if (!commitTxid) {
-            throw new Error(`Error: commitTxid is undefined`);
-        }
+        if (!commitTxid) throw new Error(`Error: commitTxid is undefined`);
+
         for (let i = 0; i < executionCount; i++) {
             const revealEntries = Entries.revealEntries(p2shAddress, commitTxid!, script.createPayToScriptHashScript(), payToP2SHAmount);
             const recipientAddress = i === executionCount - 1 ? address : p2shAddress.toString();
             const revealTx = await Transaction.createTransactionsWithEntries(revealEntries, [], recipientAddress, mintFee);
             payToP2SHAmount -= revealTx.transaction.summary.fees;
             commitTxid = await revealTx.sign([privateKey], script).submit();
-            onProgress(i+1, executionCount, commitTxid!)
+            if (callback && typeof callback === 'function') {
+                try {
+                    callback(i + 1, commitTxid!);
+                } catch (error) {
+                    console.warn(`Callback error at step ${i + 1}:`, error);
+                }
+            }
         }
         return;
     }
@@ -250,7 +252,7 @@ class KRC20 {
         const enterAmount = this.getEnterAmount(entries, hash)
         const output = Output.createOutputs(address, amount);
         const revealEntries = Entries.revealEntries(p2shAddress, hash, scriptPublicKey, enterAmount);
-        return Transaction.createTransaction(revealEntries, output, 0n, "", 1)
+        return Transaction.createTransactionWithEntries(revealEntries, output, 0n, "", 1)
             .sign(_privateKey, script, SighashType.SingleAnyOneCanPay).toJson()
     }
     /**
@@ -288,19 +290,19 @@ class KRC20 {
      * @returns The submitted transaction ID.
      */
     public static async transferMulti(require: number, publicKeysStr: string[], data: Krc20Data, privateKeys: string[], ecdsa?: boolean, fee?: bigint) {
-        const redeemScript = Script.redeemMultiSignAddress(require, publicKeysStr, ecdsa || false);
-        const address = Script.multiSignAddress(require, publicKeysStr, Kiwi.network, ecdsa || false);
-        const scriptAddress = Script.multiSignTxKrc20Script(publicKeysStr, data, require, ecdsa || false)
-        const scriptPublicKey = scriptAddress.createPayToScriptHashScript()
-        const P2SHAddress = addressFromScriptPublicKey(scriptPublicKey, Kiwi.network)!;
-        const scriptOp = new ScriptBuilder().addData(scriptAddress.toString())
-        const _privateKeys = privateKeys.map(pk => new PrivateKey(pk))
-        const outputs = Output.createOutputs(P2SHAddress.toString(), kaspaToSompi("0.3")!);
-        const commitTx = await Transaction.createTransactions(address, outputs, 0n, undefined, 3)
-            .then(r => r.multiSign(_privateKeys, redeemScript).submit());
-        const revealEntries = Entries.revealEntries(P2SHAddress, commitTx!, scriptPublicKey);
-        return await Transaction.createTransactionsWithEntries(revealEntries, [], address, fee, revealEntries as [])
-            .then(r => r.sign(_privateKeys, scriptOp).submit());
+        // const redeemScript = Script.redeemMultiSignAddress(require, publicKeysStr, ecdsa || false);
+        // const address = Script.multiSignAddress(require, publicKeysStr, Kiwi.network, ecdsa || false);
+        // const scriptAddress = Script.multiSignTxKrc20Script(publicKeysStr, data, require, ecdsa || false)
+        // const scriptPublicKey = scriptAddress.createPayToScriptHashScript()
+        // const P2SHAddress = addressFromScriptPublicKey(scriptPublicKey, Kiwi.network)!;
+        // const scriptOp = new ScriptBuilder().addData(scriptAddress.toString())
+        // const _privateKeys = privateKeys.map(pk => new PrivateKey(pk))
+        // const outputs = Output.createOutputs(P2SHAddress.toString(), kaspaToSompi("0.3")!);
+        // const commitTx = await Transaction.createTransactions(address, outputs, 0n, undefined, 3)
+        //     .then(r => r.multiSign(_privateKeys, redeemScript).submit());
+        // const revealEntries = Entries.revealEntries(P2SHAddress, commitTx!, scriptPublicKey);
+        // return await Transaction.createTransactionsWithEntries(revealEntries, [], address, fee, revealEntries as [])
+        //     .then(r => r.sign(_privateKeys, scriptOp).submit());
     }
 }
 

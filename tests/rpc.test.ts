@@ -1,12 +1,14 @@
-import { beforeAll, describe, expect, test } from '@jest/globals';
+import { beforeAll, describe, expect, it } from 'vitest';
 import { Rpc } from '../src/rpc/client';
 import { NetworkType } from "../wasm/kaspa/kaspa";
 import { Kiwi } from '../src/kiwi';
-await Kiwi.setNetwork(NetworkType.Testnet);
 
 describe('address generator function tests fo mainnet', async () => {
+
+    Kiwi.setNetwork(NetworkType.Testnet);
+
     // Test for getServerInfo
-    test('should return server info with correct rpcApiVersion testnet', async () => {
+    it('should return server info with correct rpcApiVersion testnet', async () => {
         await Rpc.setInstance(NetworkType.Testnet).connect()
         let rpc = Rpc.getInstance();
         await rpc.client.connect();
@@ -16,7 +18,7 @@ describe('address generator function tests fo mainnet', async () => {
         rpc.client.disconnect();
     }, 50000);
 
-    test('should return server info with correct rpcApiVersion mainnet', async () => {
+    it('should return server info with correct rpcApiVersion mainnet', async () => {
         await Rpc.setInstance(NetworkType.Testnet).connect()
         let rpc = Rpc.getInstance();
         const res = await rpc.client.getServerInfo();
@@ -25,7 +27,7 @@ describe('address generator function tests fo mainnet', async () => {
         rpc.client.disconnect();
     }, 20000);
 
-    test('should return addEventListener info', async () => {
+    it('should return addEventListener info', async () => {
         await Rpc.setInstance(NetworkType.Testnet).connect()
         let rpc = Rpc.getInstance();
         await rpc.client.connect();
