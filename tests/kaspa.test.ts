@@ -28,7 +28,7 @@ describe('Transaction', () => {
                 amount: 2000000000n
             }
         ]
-        const txid = await Kaspa.transferKasToMultiSignAddress(privateKey, addressList, 13000000n)
+        const txid = await Kaspa.transferToMultipleAccounts(privateKey, addressList, 13000000n)
         console.log("txid", txid)
         await Rpc.setInstance(NetworkType.Testnet).disconnect()
     }, 50000);

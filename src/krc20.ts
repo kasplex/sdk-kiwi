@@ -2,7 +2,6 @@ import {
     type Address,
     addressFromScriptPublicKey,
     ITransactionOutput,
-    kaspaToSompi,
     PrivateKey,
     ScriptBuilder,
     ScriptPublicKey,

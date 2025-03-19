@@ -5,7 +5,14 @@
         "moduleResolution": "Node",
         "strict": true,
         "esModuleInterop": true,
+        "baseUrl": ".",
         "paths": {
+            "kaspa": ["wasm/kaspa"],
+            "kaspa-web": ["wasm/kaspa-web"],
+            "@env/kaspa": [
+                "wasm/kaspa-node",
+                "wasm/kaspa-web"
+            ],
             "@/*": ["./src/*"]
         },
         "skipLibCheck": true,

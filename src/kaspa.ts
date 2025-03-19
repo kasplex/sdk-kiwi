@@ -25,13 +25,14 @@ class Kaspa {
     }
     
     /**
-     * Transfers KASPA from a single-signature address to multiple recipient addresses.
+     * Transfers KASPA from a single-signature address to multiple recipient addresses in a single transaction.
      *
      * @param {PrivateKey} privateKey - The private key of the sender.
      * @param {addressList[]} addressList - An array of objects containing recipient addresses and amounts.
      * @param {bigint | undefined} fee - The transaction fee (optional).
+     * @throws {Error} - Throws an error if the addressList is empty.
      */
-    public static async transferKasToMultiSignAddress(privateKey: PrivateKey, addressList: addressList[], fee?: bigint | undefined) {
+    public static async transferToMultipleAccounts(privateKey: PrivateKey, addressList: addressList[], fee?: bigint | undefined) {
         if (addressList.length === 0) {
             throw new Error("addressList is empty");
         }
