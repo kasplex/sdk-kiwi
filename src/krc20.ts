@@ -18,77 +18,89 @@ import { Transaction } from './tx/transaction';
 import { Entries } from './tx/entries';
 import { Script } from './script/script';
 import { BASE_P2SH_TO_KASPA_ADDRESS, DEFAULT_FEE } from './utils/constants';
-import { getFeeByOp } from './utils/utils';
+import { createKrc20Data, getFeeByOp } from './utils/utils';
 import { ValidateKrc20Data } from './check';
 import { Output } from './tx/output';
+import { Rpc } from '@/rpc/client';
 
 class KRC20 {
-    /**
-    * Creates a KRC20 script.
-    * @param privateKey - The private key.
-    * @param data - The KRC20 data.
-    * @returns The generated script.
-    */
-    private static createScript(privateKey: PrivateKey, data: Krc20Data): ScriptBuilder {
-        return Script.krc20Script(privateKey.toPublicKey().toXOnlyPublicKey().toString(), data);
+
+    public static async executeCommit(privateKey: PrivateKey, data: Krc20Data, fee: bigint = 0n) {
+        ValidateKrc20Data.validate(data);
+        const fromAddress = privateKey.toPublicKey().toAddress(Kiwi.network).toString();
+
+        const script = this.createScript(privateKey, data);
+        const p2shAddress = this.createP2SHAddress(script);
+        let { p2shFee, priorityFee } = this.getFeeInfo(data.op)
+        const outputs = Output.createOutputs(p2shAddress.toString(), p2shFee);
+
+        const { entries } = await Rpc.getInstance().client.getUtxosByAddresses([fromAddress])
+        return Transaction.createTransactions({
+            changeAddress: fromAddress,
+            outputs: outputs,
+            priorityFee: fee,
+            entries: entries,
+            networkId: Kiwi.getNetworkID(),
+        }).then(r => r.sign([privateKey]).submit())
     }
 
-    /**
-     * Creates a P2SH address from a script.
-     * @param script - The script.
-     * @returns The P2SH address.
-     */
-    public static createP2SHAddress(script: ScriptBuilder): Address {
-        const scriptPublicKey = script.createPayToScriptHashScript();
-        return addressFromScriptPublicKey(scriptPublicKey, Kiwi.network)!;
-    }
+    public static async executeReveal(privateKey: PrivateKey, data: Krc20Data, commitTxid: string) {
+        ValidateKrc20Data.validate(data);
+        const script = this.createScript(privateKey, data);
+        const p2shAddress = this.createP2SHAddress(script);
+        const fromAddress = privateKey.toPublicKey().toAddress(Kiwi.network).toString();
 
-    /**
-     * Get the fee information based on the operation type.
-     *
-     * @param op - The operation type (e.g., 'mint', 'deploy', 'transfer').
-     * @returns An object containing the P2SH fee and priority fee.
-     */
-    private static getFeeInfo(op: OP) {
-        const priorityFee = getFeeByOp(op);
-        const p2shFee = (priorityFee === 0n ? DEFAULT_FEE : priorityFee) + BASE_P2SH_TO_KASPA_ADDRESS;
-        return { p2shFee, priorityFee };
+        let { p2shFee, priorityFee } = this.getFeeInfo(data.op)
+        const { entries } = await Rpc.getInstance().client.getUtxosByAddresses([p2shAddress])
+        const entry = entries.find(entry => {
+            return entry.entry.outpoint.transactionId === commitTxid
+        })
+        if (entry == undefined) throw Error("commit txid not find")
+        priorityFee = priorityFee === 0n ? 100000n : priorityFee;
+        return Transaction.createTransactions({
+            changeAddress: fromAddress,
+            outputs: [],
+            priorityFee: priorityFee,
+            entries: [entry!],
+            networkId: Kiwi.getNetworkID(),
+        }).then(r => r.sign([privateKey], script).submit())
     }
 
     /**
      * Executes a KRC20 operation.
-     * @param privateKeyStr - The private key.
+     * @param privateKey - The private key.
      * @param data - The KRC20 data.
      * @param fee - The transaction fee.
      * @returns The submitted transaction ID.
      */
-    private static async executeKrc20Operation(privateKeyStr: string, data: Krc20Data, fee: bigint = 0n) {
+    public static async executeOperation(privateKey: PrivateKey, data: Krc20Data, fee: bigint = 0n) {
         ValidateKrc20Data.validate(data);
-        const privateKey = new PrivateKey(privateKeyStr);
         const script = this.createScript(privateKey, data);
         const p2shAddress = this.createP2SHAddress(script);
-        const address = privateKey.toPublicKey().toAddress(Kiwi.network).toString();
+        const fromAddress = privateKey.toPublicKey().toAddress(Kiwi.network).toString();
 
         let { p2shFee, priorityFee } = this.getFeeInfo(data.op)
         const outputs = Output.createOutputs(p2shAddress.toString(), p2shFee);
-        const commitTx = await Transaction.createTransactions(address, outputs, fee)
-            .then(r => r.sign([privateKey]).submit());
-        const revealEntries = Entries.revealEntries(p2shAddress, commitTx!, script.createPayToScriptHashScript(), p2shFee);
+
+        const { entries } = await Rpc.getInstance().client.getUtxosByAddresses([fromAddress])
+        const commitTxid = await Transaction.createTransactions({
+            changeAddress: fromAddress,
+            outputs: outputs,
+            priorityFee: fee,
+            entries: entries,
+            networkId: Kiwi.getNetworkID(),
+        }).then(r => r.sign([privateKey]).submit())
+
+        const revealEntries = Entries.revealEntries(p2shAddress, commitTxid!, script.createPayToScriptHashScript(), p2shFee);
         priorityFee = priorityFee === 0n ? 100000n : priorityFee;
-        return Transaction.createTransactionsWithEntries(revealEntries, [], address, priorityFee)
-            .then(r => r.sign([privateKey], script).submit())
-    }
 
-
-    /**
-     * Gets the amount from UTXO entries for a specific transaction hash.
-     * @param entries - The UTXO entries.
-     * @param hash - The transaction hash.
-     * @returns The amount.
-     */
-    private static getEnterAmount(entries: UtxoEntryReference[], hash: string): bigint {
-        const entry = entries.find(entry => entry.outpoint.transactionId === hash);
-        return entry ? entry.amount : 0n;
+        return Transaction.createTransactions({
+            changeAddress: fromAddress,
+            outputs: [],
+            priorityFee: priorityFee,
+            entries: revealEntries,
+            networkId: Kiwi.getNetworkID(),
+        }).then(r => r.sign([privateKey], script).submit())
     }
 
     /**
@@ -113,54 +125,197 @@ class KRC20 {
      * @param fee - The transaction fee.
      * @returns The submitted reveal transaction.
      */
-    public static async mint(privateKey: string, data: Krc20Data, fee: bigint = 0n) {
-        if (data.op !== OP.Mint) {
-            throw new Error("Invalid input: 'op' must be 'mint'");
+    public static async mint(privateKey: PrivateKey, data: Krc20Data, fee: bigint = 0n) {
+        if (data.op !== OP.Mint) throw new Error("Invalid input: 'op' must be 'mint'")
+        return await KRC20.executeOperation(privateKey, data, fee)
+    }
+
+    /**
+     * Deploys a new KRC20 token contract.
+     * @param privateKey - The private key for signing the transaction.
+     * @param data - The KRC20 data containing deployment details.
+     * @param fee - The transaction fee.
+     * @returns The submitted reveal transaction.
+     */
+    public static async deploy(privateKey: PrivateKey, data: Krc20Data, fee: bigint = 0n) {
+        if (data.op !== OP.Deploy) throw new Error("Invalid input: 'op' must be 'deploy'")
+        return await KRC20.executeOperation(privateKey, data, fee)
+    }
+
+    /** 
+     * Transfers KRC20 tokens to another address.
+     * @param privateKey - The private key for signing the transaction.
+     * @param data - The KRC20 data containing transfer details.
+     * @param fee - The transaction fee.
+     * @returns The submitted reveal transaction.
+     */
+    public static async transfer(privateKey: PrivateKey, data: Krc20Data, fee: bigint = 0n) {
+        if (!data.to || !data.amt) throw new Error("Invalid input: 'to' and 'amt' must be provided")
+        return await KRC20.executeOperation(privateKey, data, fee)
+    }
+
+    /**
+     * Lists KRC20 token details.
+     * @param privateKey - The private key for signing the transaction.
+     * @param data - The KRC20 data containing listing details.
+     * @param fee - The transaction fee.
+     * @returns The submitted reveal transaction.
+     */
+    public static async list(privateKey: PrivateKey, data: Krc20Data, fee: bigint = 0n) {
+        if (data.op !== OP.List) throw new Error("Invalid input: 'op' must be 'list'")
+        ValidateKrc20Data.validate(data)
+
+        const script = this.createScript(privateKey, data);
+        const p2shAddress = this.createP2SHAddress(script);
+        const fromAddress = privateKey.toPublicKey().toAddress(Kiwi.network).toString();
+
+        let { p2shFee, priorityFee } = this.getFeeInfo(data.op)
+        const outputs = Output.createOutputs(p2shAddress.toString(), p2shFee);
+
+        const { entries } = await Rpc.getInstance().client.getUtxosByAddresses([fromAddress])
+        const commitTxid = await Transaction.createTransactions({
+            changeAddress: fromAddress,
+            outputs: outputs,
+            priorityFee: fee,
+            entries: entries,
+            networkId: Kiwi.getNetworkID(),
+        }).then(r => r.sign([privateKey]).submit())
+
+        const revealEntries = Entries.revealEntries(p2shAddress, commitTxid!, script.createPayToScriptHashScript(), p2shFee);
+        priorityFee = priorityFee === 0n ? 100000n : priorityFee;
+
+        let sendKrc20Data = createKrc20Data({
+            p: "krc-20",
+            op: OP.Send,
+            tick: data.tick,
+        })
+        let sendScript = KRC20.createScript(privateKey, sendKrc20Data)
+        const SendP2SHAddress = addressFromScriptPublicKey(sendScript.createPayToScriptHashScript(), Kiwi.network)!;
+        let sendOutputs = Output.createOutputs(SendP2SHAddress.toString(), DEFAULT_FEE)
+
+        return Transaction.createTransactions({
+            changeAddress: fromAddress,
+            outputs: sendOutputs,
+            priorityFee: priorityFee,
+            entries: revealEntries,
+            networkId: Kiwi.getNetworkID(),
+        }).then(r => r.sign([privateKey], script).submit())
+    }
+
+    /**
+     * Signs a transaction.
+     * @param privateKey - The private key.
+     * @param data - The KRC20 data.
+     * @param hash - The transaction hash.
+     * @param amount - The amount.
+     * @param fee - The fee.
+     * @returns The serialized transaction.
+     */
+    public static async sendTransaction(privateKey: PrivateKey, data: Krc20Data, hash: string, amount: bigint, payload: string = "") {
+        if (data.op !== OP.Send) {
+            throw new Error("Invalid input: 'op' must be 'send'");
         }
-        return await KRC20.executeKrc20Operation(privateKey, data, fee);
+        const script = KRC20.createScript(privateKey, data);
+        const scriptPublicKey = script.createPayToScriptHashScript();
+        const p2shAddress = addressFromScriptPublicKey(scriptPublicKey, Kiwi.network)!;
+
+        const fromAddress = privateKey.toPublicKey().toAddress(Kiwi.network).toString();
+        const { entries } = await Rpc.getInstance().client.getUtxosByAddresses({ addresses: [p2shAddress.toString()] });
+        const entry = entries.find(entry => entry.entry.outpoint.transactionId === hash);
+        if (entry == undefined) throw Error("commit txid not find")
+
+        const output = Output.createOutputs(fromAddress, amount);
+        const revealEntries = Entries.revealEntries(p2shAddress, hash, scriptPublicKey, entry.amount);
+        return Transaction.createTransactionWithEntries(revealEntries, output, 0n, payload, 1)
+            .sign(privateKey, script, SighashType.SingleAnyOneCanPay).toJson()
+    }
+
+    /**
+     * Sends KRC20 tokens to another address.
+     * @param privateKey - The private key for signing the transaction.
+     * @param sendTx - The KRC20 data containing send details.
+     * @param priorityFee - The transaction fee.
+     * @returns The submitted reveal transaction.
+     */
+    public static async send(privateKey: PrivateKey, sendTx: string, priorityFee: bigint = 0n) {
+        let send = KaspaTransaction.deserializeFromSafeJSON(sendTx);
+        const fromAddress = privateKey.toPublicKey().toAddress(Kiwi.network);
+
+        let { entries } = await Rpc.getInstance().client.getUtxosByAddresses({addresses: [fromAddress.toString()]});
+        // @ts-ignore
+        send.inputs.forEach(input => entries.unshift(input.utxo))
+
+        const outputs = send.outputs.map(output => ({
+            address: addressFromScriptPublicKey(output.scriptPublicKey, Kiwi.network)!.toString(),
+            amount: output.value
+        }));
+
+        let sendPending = await Transaction.createTransactions({
+            priorityEntries: [],
+            changeAddress: fromAddress,
+            outputs: outputs,
+            priorityFee: priorityFee,
+            entries: entries,
+            networkId: Kiwi.getNetworkID(),
+        })
+        let sendTransaction = sendPending.transaction
+        sendTransaction.transactions[0].fillInput(0, send.inputs[0].signatureScript!);
+
+        for (const transaction of sendPending.transaction.transactions) {
+            transaction.sign([privateKey], false);
+        }
+        return sendPending.submit()
     }
 
     /**
      * Multi-mints new KRC20 tokens.
-     * @param privateKeyStr - The private key string.
+     * @param privateKey - The private key string.
      * @param data - The KRC20 data containing mint details.
      * @param fee - The transaction fee.
      * @param executionCount - The number of mint operations to execute.
+     * @param callback - callback function.
      * @returns The submitted reveal transaction IDs.
      */
     public static async multiMint(
-        privateKeyStr: string, 
+        privateKey: PrivateKey,
         data: Krc20Data,
         fee: bigint = 0n,
         executionCount: number = 1,
         callback?: (current: number, txid: string) => void
-    ) : Promise<string | undefined> {
+    ) : Promise<undefined> {
         if (data.op !== OP.Mint) throw new Error("Invalid input: 'op' must be 'mint'");
         if (executionCount < 1) throw new Error("Invalid executionCount");
 
-        if (executionCount === 1) {
-            return this.mint(privateKeyStr, data, 0n);
-        }
-
-        const privateKey = new PrivateKey(privateKeyStr);
-        const address = privateKey.toPublicKey().toAddress(Kiwi.network).toString();
+        const fromAddress = privateKey.toPublicKey().toAddress(Kiwi.network).toString();
         const script = this.createScript(privateKey, data);
         const p2shAddress = this.createP2SHAddress(script);
         const mintFee = getFeeByOp(OP.Mint);
 
         let payToP2SHAmount = mintFee * BigInt(executionCount) + BASE_P2SH_TO_KASPA_ADDRESS
         const outputs = Output.createOutputs(p2shAddress.toString(), payToP2SHAmount);
-        let commitTxid = await Transaction.createTransactions(address, outputs, fee)
-            .then(r => r.sign([privateKey]).submit());
 
-        if (!commitTxid) throw new Error(`Error: commitTxid is undefined`);
+        const { entries } = await Rpc.getInstance().client.getUtxosByAddresses([fromAddress])
+        let commitTxid = await Transaction.createTransactions({
+            changeAddress: fromAddress,
+            outputs: outputs,
+            priorityFee: fee,
+            entries: entries,
+            networkId: Kiwi.getNetworkID(),
+        }).then(r => r.sign([privateKey]).submit())
 
+        let publicKey = script.createPayToScriptHashScript()
         for (let i = 0; i < executionCount; i++) {
-            const revealEntries = Entries.revealEntries(p2shAddress, commitTxid!, script.createPayToScriptHashScript(), payToP2SHAmount);
-            const recipientAddress = i === executionCount - 1 ? address : p2shAddress.toString();
-            const revealTx = await Transaction.createTransactionsWithEntries(revealEntries, [], recipientAddress, mintFee);
-            payToP2SHAmount -= revealTx.transaction.summary.fees;
+            const revealEntries = Entries.revealEntries(p2shAddress, commitTxid!, publicKey, payToP2SHAmount);
+            const recipientAddress = i === executionCount - 1 ? fromAddress : p2shAddress.toString();
+            const revealTx = await Transaction.createTransactions({
+                changeAddress: recipientAddress,
+                outputs: [],
+                priorityFee: mintFee,
+                entries: revealEntries,
+                networkId: Kiwi.getNetworkID(),
+            })
             commitTxid = await revealTx.sign([privateKey], script).submit();
+            payToP2SHAmount -= revealTx.transaction.summary.fees;
             if (callback && typeof callback === 'function') {
                 try {
                     callback(i + 1, commitTxid!);
@@ -171,138 +326,36 @@ class KRC20 {
         }
         return;
     }
-    /**
-     * Deploys a new KRC20 token contract.
-     * @param privateKey - The private key for signing the transaction.
-     * @param data - The KRC20 data containing deployment details.
-     * @param fee - The transaction fee.
-     * @returns The submitted reveal transaction.
-     */
-    public static async deploy(privateKey: string, data: Krc20Data, fee: bigint = 0n) {
-        if (data.op !== OP.Deploy) {
-            throw new Error("Invalid input: 'op' must be 'deploy'");
-        }
-        return await KRC20.executeKrc20Operation(privateKey, data, fee);
-    }
 
-    /** 
-     * Transfers KRC20 tokens to another address.
-     * @param privateKey - The private key for signing the transaction.
-     * @param data - The KRC20 data containing transfer details.
-     * @param fee - The transaction fee.
-     * @returns The submitted reveal transaction.
+    /**
+     * Get the fee information based on the operation type.
+     *
+     * @param op - The operation type (e.g., 'mint', 'deploy', 'transfer').
+     * @returns An object containing the P2SH fee and priority fee.
      */
-    public static async transfer(privateKey: string, data: Krc20Data, fee: bigint = 0n) {
-        if (!data.to || !data.amt) {
-            throw new Error("Invalid input: 'to' and 'amt' must be provided");
-        }
-        return await KRC20.executeKrc20Operation(privateKey, data, fee);
+    private static getFeeInfo(op: OP) {
+        const priorityFee = getFeeByOp(op);
+        const p2shFee = (priorityFee === 0n ? DEFAULT_FEE : priorityFee) + BASE_P2SH_TO_KASPA_ADDRESS;
+        return { p2shFee, priorityFee };
     }
 
     /**
-     * Lists KRC20 token details.
-     * @param privateKey - The private key for signing the transaction.
-     * @param data - The KRC20 data containing listing details.
-     * @param fee - The transaction fee.
-     * @returns The submitted reveal transaction.
-     */
-    public static async list(privateKey: string, data: Krc20Data, fee: bigint = 0n) {
-        if (data.op !== OP.List) {
-            throw new Error("Invalid input: 'op' must be 'list'");
-        }
-        return await KRC20.executeKrc20Operation(privateKey, data, fee);
-    }
-
-    /**
-     * Sends KRC20 tokens to another address.
-     * @param privateKeyStr - The private key for signing the transaction.
-     * @param data - The KRC20 data containing send details.
-     * @param buyPrivateKey - The buyer's private key.
-     * @param hash - The transaction hash.
-     * @param amount - The amount to send.
-     * @param fee - The transaction fee.
-     * @returns The submitted reveal transaction.
-     */
-    public static async send(privateKeyStr: string, data: Krc20Data, buyPrivateKey: string, hash: string, amount: bigint, fee: bigint = 0n) {
-        if (data.op !== OP.Send) {
-            throw new Error("Invalid input: 'op' must be 'send'");
-        }
-        const signData = await this.signPartiaHalf(privateKeyStr, data, hash, amount!);
-        if (!signData) {
-            throw new Error("Invalid input: 'signData' must be provided");
-        }
-        return await this.revealPskt(buyPrivateKey, signData, hash, fee);
-    }
-
-    /**
-     * Signs a transaction partially.
+     * Creates a KRC20 script.
      * @param privateKey - The private key.
      * @param data - The KRC20 data.
-     * @param hash - The transaction hash.
-     * @param amount - The amount.
-     * @returns The serialized transaction.
+     * @returns The generated script.
      */
-    public static async signPartiaHalf(privateKey: string, data: Krc20Data, hash: string, amount: bigint): Promise<string> {
-        const _privateKey = new PrivateKey(privateKey);
-        const script = Script.krc20Script(_privateKey.toPublicKey().toXOnlyPublicKey().toString(), data);
-        const scriptPublicKey = script.createPayToScriptHashScript();
-        const p2shAddress = addressFromScriptPublicKey(scriptPublicKey, Kiwi.network)!;
-        const address = _privateKey.toPublicKey().toAddress(Kiwi.network).toString();
-        const entries = await Entries.entries(p2shAddress.toString());
-        const enterAmount = this.getEnterAmount(entries, hash)
-        const output = Output.createOutputs(address, amount);
-        const revealEntries = Entries.revealEntries(p2shAddress, hash, scriptPublicKey, enterAmount);
-        return Transaction.createTransactionWithEntries(revealEntries, output, 0n, "", 1)
-            .sign(_privateKey, script, SighashType.SingleAnyOneCanPay).toJson()
+    private static createScript(privateKey: PrivateKey, data: Krc20Data): ScriptBuilder {
+        return Script.krc20Script(privateKey.toPublicKey().toXOnlyPublicKey().toString(), data);
     }
+
     /**
-     * Reveals a partially signed transaction.
-     * @param buyPrivateKey - The private key.
-     * @param signData - The serialized transaction data.
-     * @param hash - The transaction hash.
-     * @param fee - The transaction fee.
-     * @returns The submitted transaction ID.
+     * Creates a P2SH address from a script.
+     * @param script - The script.
+     * @returns The P2SH address.
      */
-    public static async revealPskt(buyPrivateKey: string, signData: string, hash: string, fee: bigint = 0n) {
-        const _buyPrivateKey = new PrivateKey(buyPrivateKey);
-        const address = _buyPrivateKey.toPublicKey().toAddress(Kiwi.network).toString();
-        const tx = KaspaTransaction.deserializeFromSafeJSON(signData);
-        const txInputs = tx.inputs[0];
-        const txOutput = tx.outputs[0];
-        const { address: utxoAddress, amount, scriptPublicKey } = txInputs.utxo!;
-        const entries = await Entries.entries(address);
-        const buyEntries = await Entries.revealEntries(utxoAddress!, hash, scriptPublicKey, amount, entries[0].blockDaaScore)
-        entries.unshift(buyEntries[0] as UtxoEntryReference);
-        const outputScriptPublicKey = this.getScriptPublicKey(txOutput);
-        const receiveAddress = addressFromScriptPublicKey(outputScriptPublicKey, Kiwi.network)!
-        const outputs = Output.createOutputs(receiveAddress.toString(), tx.outputs[0].value);
-        return await Transaction.createTransactionsWithEntries(entries, outputs, address, fee, entries as []).then(r =>
-            r.sign([_buyPrivateKey], txInputs.signatureScript, true).submit())
-    }
-    /**
-     * Transfers KRC20 tokens to multiple addresses using multi-signature.
-     * @param require - The number of required signatures.
-     * @param publicKeysStr - The array of public keys.
-     * @param data - The KRC20 data containing transfer details.
-     * @param privateKeys - The array of private keys for signing.
-     * @param ecdsa - Whether to use ECDSA.
-     * @param fee - The transaction fee.
-     * @returns The submitted transaction ID.
-     */
-    public static async transferMulti(require: number, publicKeysStr: string[], data: Krc20Data, privateKeys: string[], ecdsa?: boolean, fee?: bigint) {
-        // const redeemScript = Script.redeemMultiSignAddress(require, publicKeysStr, ecdsa || false);
-        // const address = Script.multiSignAddress(require, publicKeysStr, Kiwi.network, ecdsa || false);
-        // const scriptAddress = Script.multiSignTxKrc20Script(publicKeysStr, data, require, ecdsa || false)
-        // const scriptPublicKey = scriptAddress.createPayToScriptHashScript()
-        // const P2SHAddress = addressFromScriptPublicKey(scriptPublicKey, Kiwi.network)!;
-        // const scriptOp = new ScriptBuilder().addData(scriptAddress.toString())
-        // const _privateKeys = privateKeys.map(pk => new PrivateKey(pk))
-        // const outputs = Output.createOutputs(P2SHAddress.toString(), kaspaToSompi("0.3")!);
-        // const commitTx = await Transaction.createTransactions(address, outputs, 0n, undefined, 3)
-        //     .then(r => r.multiSign(_privateKeys, redeemScript).submit());
-        // const revealEntries = Entries.revealEntries(P2SHAddress, commitTx!, scriptPublicKey);
-        // return await Transaction.createTransactionsWithEntries(revealEntries, [], address, fee, revealEntries as [])
-        //     .then(r => r.sign(_privateKeys, scriptOp).submit());
+    private static createP2SHAddress(script: ScriptBuilder): Address {
+        return addressFromScriptPublicKey(script.createPayToScriptHashScript(), Kiwi.network)!;
     }
 }
 

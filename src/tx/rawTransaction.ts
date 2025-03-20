@@ -7,15 +7,16 @@ import {
     HexString,
     Transaction,
     createInputSignature,
-    SighashType
-} from "../../wasm/kaspa/kaspa";
+    SighashType, signTransaction
+} from '../../wasm/kaspa/kaspa';
+
 import { Rpc } from '@/rpc/client';
 
 /**
  * Represents a raw Kaspa transaction, providing methods for creation and signing.
  */
 class RawTransaction {
-    private transaction: Transaction;
+    public transaction: Transaction;
 
     /**
      * Initializes a new instance of `RawTransaction` with a given transaction object.
@@ -77,9 +78,16 @@ class RawTransaction {
      * @param sigHashType - The signature hash type (optional).
      * @returns The updated instance of `RawTransaction`.
      */
-    public sign(privateKey: PrivateKey, script: ScriptBuilder, sigHashType?: SighashType): this {
-        const signature = createInputSignature(this.transaction, 0, privateKey, sigHashType);
-        this.transaction.inputs[0].signatureScript = script.encodePayToScriptHashSignatureScript(signature);
+    public sign(privateKey: PrivateKey, script?: ScriptBuilder, sigHashType?: SighashType): this {
+        if (script) {
+            const length = this.transaction.inputs.length
+            for (let i = 0; i < length; i++) {
+                const signature = createInputSignature(this.transaction, i, privateKey, sigHashType);
+                this.transaction.inputs[i].signatureScript = script.encodePayToScriptHashSignatureScript(signature);
+            }
+        } else {
+            this.transaction = signTransaction(this.transaction, [privateKey], false)
+        }
         return this;
     }
 
@@ -91,6 +99,18 @@ class RawTransaction {
     public toJson(): string {
         return this.transaction.serializeToSafeJSON();
     }
+
+
+    // /**
+    //  * Serializes the transaction into a JSON string format.
+    //  *
+    //  * @returns A JSON representation of the transaction.
+    //  */
+    // public async submit(): Promise<string> {
+    //     console.log("tx", this.transaction)
+    //     let resp = await Rpc.getInstance().client.submitTransaction({ transaction: this.transaction })
+    //     return resp.transactionId
+    // }
 }
 
 export { RawTransaction };

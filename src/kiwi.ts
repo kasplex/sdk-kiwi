@@ -1,4 +1,5 @@
-import { NetworkType } from "../wasm/kaspa/kaspa";
+import { NetworkId, NetworkType } from '../wasm/kaspa/kaspa';
+import { networkToString } from '../src/utils/utils';
 
 class Kiwi {
 
@@ -15,6 +16,10 @@ class Kiwi {
             Kiwi.isWasmLoaded = true
         }
         Kiwi.network = network
+    }
+
+    public static getNetworkID() {
+        return networkToString(Kiwi.network)
     }
 }
 export { Kiwi };

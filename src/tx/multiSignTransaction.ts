@@ -138,7 +138,6 @@ class MultiSignTransaction {
      * @returns The updated instance of `RawTransaction`.
      */
     public signScript(script: ScriptBuilder, sigHashType?: SighashType): this {
-        console.log(3333)
         let length = this.transaction.inputs.length;
         for (var i = 0; i < length; i++) {
             this.transaction.inputs[i].signatureScript += script.toString();
