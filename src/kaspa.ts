@@ -16,7 +16,7 @@ class Kaspa {
 
     public static async transfer(privateKey: PrivateKey, outputs: IPaymentOutput[], fee?: bigint | undefined) {
         if (outputs.length === 0) {
-            throw new Error("outputs is empty");
+            throw new Error("outputs is empty")
         }
         const fromAddress = privateKey.toKeypair().toAddress(Kiwi.network).toString();
         const { entries } = await Rpc.getInstance().client.getUtxosByAddresses([fromAddress])
