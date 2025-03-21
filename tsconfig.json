@@ -7,7 +7,7 @@
         "esModuleInterop": true,
         "baseUrl": ".",
         "paths": {
-            "kasp-platform": ["wasm/kaspa"],
+            "kasp-platform": ["./wasm/kaspa"],
             "@/*": ["./src/*"]
         },
         "skipLibCheck": true,

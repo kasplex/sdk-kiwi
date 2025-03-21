@@ -12,4 +12,5 @@ export * from "./tx/index";
 export * from "./krc20";
 export * from "./utils/index"
 export * from './kiwi'
+export * from './wasmKaspa'
 export * as WasmKaspa from '../wasm/kaspa';

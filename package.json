@@ -1,19 +1,19 @@
 {
   "name": "@kasplex/kiwi",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "sideEffects": false,
   "publishConfig": {
     "access": "public"
   },
   "description": "A powered solution for effortless Kaspa wallet integration, delivering secure and streamlined blockchain operations.",
-  "main": "dist/index.js",
-  "module": "dist/index.js",
+  "main": "dist/node/index.js",
+  "module": "dist/node/index.js",
   "browser": "dist/index.umd.js",
   "types": "dist/index.d.ts",
   "exports": {
-    "import": "./dist/index.js",
-    "require": "./dist/index.cjs",
-    "default": "./dist/kiwi.js"
+    "import": "./dist/node/index.js",
+    "require": "./dist/node/index.js",
+    "default": "./dist/node/index.js"
   },
   "files": [
     "dist",
@@ -23,7 +23,7 @@
     "test": "vitest",
     "start": "bun run src/index.ts",
     "build:types": "tsc --emitDeclarationOnly --outDir dist",
-    "build:node": "tsc --project tsconfig.json && bun build ./src/index.ts --sourcemap=none --outdir=dist/node --target node",
+    "build:node": "tsc --project tsconfig.json && bun build ./src/index.ts --outdir=dist/node --target node",
     "build": "bun build ./src/index.ts --outdir ./dist --entry-naming [dir]/[name].[ext] --asset-naming [name].[ext] --target=node",
     "prepublishOnly": "bun run build:node && bun run build:types"
   },
