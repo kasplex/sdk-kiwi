@@ -1,4 +1,4 @@
-import { NetworkId, NetworkType } from '../wasm/kaspa/kaspa';
+import { NetworkId, NetworkType } from 'kasp-platform';
 import { networkToString } from '../src/utils/utils';
 
 class Kiwi {

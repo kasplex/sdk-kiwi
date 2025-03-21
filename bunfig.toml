@@ -5,3 +5,5 @@ main = "src/index.ts"
 
 [build]
 outdir = "dist"
+minify = true
+sourcemap = "none" 

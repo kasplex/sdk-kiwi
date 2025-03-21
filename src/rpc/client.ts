@@ -1,4 +1,4 @@
-import { Encoding, Resolver, RpcClient, NetworkType } from "../../wasm/kaspa/kaspa";
+import { Encoding, Resolver, RpcClient, NetworkType } from 'kasp-platform';
 import { networkToString } from "../utils/utils";
 
 class Rpc {

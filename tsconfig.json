@@ -7,12 +7,7 @@
         "esModuleInterop": true,
         "baseUrl": ".",
         "paths": {
-            "kaspa": ["wasm/kaspa"],
-            "kaspa-web": ["wasm/kaspa-web"],
-            "@env/kaspa": [
-                "wasm/kaspa-node",
-                "wasm/kaspa-web"
-            ],
+            "kasp-platform": ["wasm/kaspa"],
             "@/*": ["./src/*"]
         },
         "skipLibCheck": true,

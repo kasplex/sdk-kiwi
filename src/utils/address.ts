@@ -1,5 +1,5 @@
 import {AddressVersion, AddressPrefix} from './enum';
-import { NetworkType } from "../../wasm/kaspa/kaspa";
+import { NetworkType } from 'kasp-platform';
 import {networkToAddressPrefix, addressPrefixToNetwork, stringToAddressPrefix} from './utils';
 
 export class Address {

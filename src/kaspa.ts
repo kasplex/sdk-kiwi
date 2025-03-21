@@ -1,7 +1,7 @@
 import {
     Address, type IPaymentOutput,
     PrivateKey
-} from '../wasm/kaspa/kaspa';
+} from 'kasp-platform';;
 import { Kiwi } from "@/kiwi";
 import { Transaction } from "./tx/transaction";
 import { Output } from "./tx/output";

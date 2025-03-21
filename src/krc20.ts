@@ -7,8 +7,7 @@ import {
     ScriptPublicKey,
     SighashType,
     Transaction as KaspaTransaction,
-    type UtxoEntryReference
-} from '../wasm/kaspa/kaspa';
+} from 'kasp-platform';
 
 import { Krc20Data } from './types/interface';
 import { Kiwi } from './kiwi';

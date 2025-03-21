@@ -2,18 +2,13 @@ import {
     PrivateKey,
     IPaymentOutput,
     createTransaction,
-    IUtxoEntry,
     ScriptBuilder,
     HexString,
     Transaction,
     createInputSignature,
-    createTransactions,
-    PendingTransaction,
     SighashType
-} from "../../wasm/kaspa/kaspa";
+} from 'kasp-platform';
 import { Rpc } from '@/rpc/client';
-import { transaction_set_payload_from_js_value } from '../../wasm/kaspa/kaspa_bg.wasm';
-
 /**
  * Represents a raw Kaspa transaction, providing methods for creation and signing.
  */
@@ -72,13 +67,13 @@ class MultiSignTransaction {
     public sign(privateKey: PrivateKey, script: ScriptBuilder, sigHashType?: SighashType): this {
         let length = this.transaction.inputs.length;
         for (var i = 0; i < length; i++) {
-           const signature = createInputSignature(this.transaction, i, privateKey, sigHashType);
-           if (this.transaction.inputs[i].signatureScript) {
-               this.transaction.inputs[i].signatureScript += signature
-           } else {
-            this.transaction.inputs[i].signatureScript = signature;
-           }
-           this.transaction.payload
+            const signature = createInputSignature(this.transaction, i, privateKey, sigHashType);
+            if (this.transaction.inputs[i].signatureScript) {
+                this.transaction.inputs[i].signatureScript += signature
+            } else {
+                this.transaction.inputs[i].signatureScript = signature;
+            }
+            this.transaction.payload
         }
         return this;
     }

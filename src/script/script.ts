@@ -4,7 +4,7 @@ import {
     ScriptBuilder,
     createMultisigAddress,
     NetworkType,
-} from "../../wasm/kaspa/kaspa";
+} from 'kasp-platform';
 import { Krc20Data } from '../types/interface';
 import { KASPLEX } from '../utils/constants';
 
