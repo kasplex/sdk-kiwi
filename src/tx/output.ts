@@ -1,4 +1,4 @@
-import { type IPaymentOutput } from 'kasp-platform';
+import { type IPaymentOutput } from "wasm/kaspa";
 
 class Output {
     /**

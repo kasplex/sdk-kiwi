@@ -7,7 +7,7 @@ import {
     Transaction,
     createInputSignature,
     SighashType
-} from 'kasp-platform';
+} from "wasm/kaspa";
 import { Rpc } from '@/rpc/client';
 /**
  * Represents a raw Kaspa transaction, providing methods for creation and signing.

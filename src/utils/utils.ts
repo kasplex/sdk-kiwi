@@ -1,4 +1,4 @@
-import { NetworkType, Opcodes } from 'kasp-platform';
+import { NetworkType, Opcodes } from "wasm/kaspa";
 import { MIN_PUSHDATA } from './constants'
 import { Krc20Data } from '../types/interface'
 import { OP } from "./enum";
@@ -143,5 +143,5 @@ export {
     getFeeByOp,
     addressPrefixToNetwork,
     stringToAddressPrefix,
-    networkToAddressPrefix
+    networkToAddressPrefix,
 };

@@ -10,7 +10,8 @@ export * from "./kaspa";
 export * from "./script/script";
 export * from "./tx/index";
 export * from "./krc20";
-export * from "./utils/index"
+export * from "./utils/index";
+export * from "./utils/enum";
 export * from './kiwi'
-export * from './wasmKaspa'
-export * as WasmKaspa from '../wasm/kaspa';
+export * from './init'
+export * as Wasm from "../wasm/kaspa";

@@ -7,7 +7,7 @@ import {
     ScriptPublicKey,
     SighashType,
     Transaction as KaspaTransaction,
-} from 'kasp-platform';
+} from "wasm/kaspa";
 
 import { Krc20Data } from './types/interface';
 import { Kiwi } from './kiwi';
@@ -244,7 +244,7 @@ class KRC20 {
         send.inputs.forEach(input => entries.unshift(input.utxo))
 
         const outputs = send.outputs.map(output => ({
-            address: addressFromScriptPublicKey(output.scriptPublicKey, Kiwi.network)!.toString(),
+            address: addressFromScriptPublicKey(output.scriptPublicKey as ScriptPublicKey, Kiwi.network)!.toString(),
             amount: output.value
         }));
 

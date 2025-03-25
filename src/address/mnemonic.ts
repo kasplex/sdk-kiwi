@@ -1,4 +1,4 @@
-import { Mnemonic as KaspaMnemonic } from 'kasp-platform';
+import { Mnemonic as KaspaMnemonic } from "wasm/kaspa";
 
 class Mnemonic {
     /**

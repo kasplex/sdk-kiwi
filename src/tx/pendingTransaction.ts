@@ -3,7 +3,7 @@ import {
     createTransactions,
     ICreateTransactions,
     ScriptBuilder, IGeneratorSettingsObject
-} from 'kasp-platform';
+} from "wasm/kaspa";
 import { Rpc } from "../rpc/client";
 
 class PendingTransaction {

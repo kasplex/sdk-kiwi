@@ -7,7 +7,7 @@ import {
     XOnlyPublicKey,
     signMessage,
     verifyMessage, HexString
-} from 'kasp-platform';
+} from "wasm/kaspa";
 import { Mnemonic } from "./mnemonic";
 import { WalletType } from "@/utils/enum";
 import {Address as AddressUtil} from "@/utils/address";

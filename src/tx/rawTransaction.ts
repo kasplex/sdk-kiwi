@@ -8,7 +8,7 @@ import {
     Transaction,
     createInputSignature,
     SighashType, signTransaction
-} from 'kasp-platform';
+} from "wasm/kaspa";
 
 import { Rpc } from '@/rpc/client';
 

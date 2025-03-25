@@ -1,9 +1,21 @@
 # bunfig.toml
 
+[install]
+preserve-symlinks = true
+
 [entrypoints]
 main = "src/index.ts"
 
 [build]
-outdir = "dist"
+entrypoints = ["./src/index.ts"]
+outdir = "./dist"
+target = "node"
+format = "esm"
 minify = true
-sourcemap = "none" 
+sourcemap = "external"
+publicPath = "./"
+copyFiles = true
+assetNaming = "[name].[ext]"
+entryNaming = "[dir]/[name].[ext]"
+external = ["wasm/*"]
+define = { "__dirname": "require('path').resolve(__dirname, '../wasm')" } 

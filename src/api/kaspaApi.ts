@@ -1,7 +1,7 @@
 import { httpClient } from '@/utils/http';
 import { BASE_URL_KASPA } from '@/utils/constants';
 import { Params } from '@/types/interface';
-import { NetworkType } from 'kasp-platform';
+import { NetworkType } from "wasm/kaspa";
 import { Kiwi } from "@/kiwi";
 
 class KaspaApi {

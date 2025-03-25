@@ -1,17 +1,17 @@
 import {
     Address, type IPaymentOutput,
     PrivateKey
-} from 'kasp-platform';;
+} from "wasm/kaspa";;
 import { Kiwi } from "@/kiwi";
 import { Transaction } from "./tx/transaction";
 import { Output } from "./tx/output";
 import { Rpc } from '@/rpc/client';
 
-class Kaspa {
+class KaspaTransaction {
 
     public static async transferKas(privateKey: PrivateKey, toAddress: string | Address, amount: bigint, fee?: bigint | undefined) {
         const outputs = Output.createOutputs(toAddress.toString(), amount)
-        return Kaspa.transfer(privateKey, outputs, fee)
+        return KaspaTransaction.transfer(privateKey, outputs, fee)
     }
 
     public static async transfer(privateKey: PrivateKey, outputs: IPaymentOutput[], fee?: bigint | undefined) {
@@ -30,4 +30,4 @@ class Kaspa {
     }
 }
 
-export { Kaspa };
+export { KaspaTransaction };
