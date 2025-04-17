@@ -6,12 +6,11 @@ export * from "./address/wallet";
 export * from "./rpc/client";
 export * from "./api/kasplexApi";
 export * from "./api/kaspaApi";
-export * from "./kaspa";
+export * from "./KaspaTransaction";
 export * from "./script/script";
-export * from "./tx/index";
 export * from "./krc20";
+export * from './kiwi';
+export * from './init';
 export * from "./utils/index";
-export * from "./utils/enum";
-export * from './kiwi'
-export * from './init'
-export * as Wasm from "../wasm/kaspa";
+export * as Tx from "./tx";
+export * as Wasm from '../wasm/kaspa-node';

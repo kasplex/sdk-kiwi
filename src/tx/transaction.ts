@@ -4,7 +4,7 @@ import {
     IUtxoEntry,
     HexString,
     IGeneratorSettingsObject
-} from "wasm/kaspa";
+} from "../../wasm/kaspa-node";
 import { PendingTransaction } from "./pendingTransaction";
 import { RawTransaction } from "./rawTransaction";
 import { MultiSignTransaction } from "./multiSignTransaction";

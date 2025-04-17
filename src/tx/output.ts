@@ -1,4 +1,4 @@
-import { type IPaymentOutput } from "wasm/kaspa";
+import { type IPaymentOutput } from "../../wasm/kaspa-node";
 
 class Output {
     /**

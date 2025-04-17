@@ -1,7 +1,7 @@
 import {describe, it} from 'vitest';
-import {NetworkType, PrivateKey} from "../wasm/kaspa/kaspa";
+import {NetworkType, PrivateKey} from "../wasm/kaspa-node";
 import {Rpc} from '../src/rpc/client';
-import {Kaspa} from "../src/kaspa";
+import { KaspaTransaction } from "../src/KaspaTransaction";
 import { Output } from '../src/tx/output';
 
 let toAddress = 'kaspatest:pr6mpn7hgfa99v0rf4pf0k3c83pkmrqtd8h46fn44g9vr8c6khw2u4mn2fgy3'
@@ -11,7 +11,7 @@ describe('Transaction', () => {
 
     it('transferKas', async () => {
         await Rpc.setInstance(NetworkType.Testnet).connect()
-        const txid = await Kaspa.transferKas(privateKey, toAddress, 130000000n, 1000000n)
+        const txid = await KaspaTransaction.transferKas(privateKey, toAddress, 130000000n, 1000000n)
         console.log("txid", txid)
         await Rpc.setInstance(NetworkType.Testnet).disconnect()
     });
@@ -28,7 +28,7 @@ describe('Transaction', () => {
                 amount: 200000000n
             }
         ]
-        const txid = await Kaspa.transfer(privateKey, outputs, 100000n)
+        const txid = await KaspaTransaction.transfer(privateKey, outputs, 100000n)
         console.log("txid", txid)
         await Rpc.setInstance(NetworkType.Testnet).disconnect()
     }, 50000);

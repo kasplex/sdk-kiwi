@@ -1,7 +1,7 @@
 import { httpClient } from '@/utils/http';
 import { BASE_URL_KASPA } from '@/utils/constants';
 import { Params } from '@/types/interface';
-import { NetworkType } from "wasm/kaspa";
+import { NetworkType } from "../../wasm/kaspa-node";
 import { Kiwi } from "@/kiwi";
 
 class KaspaApi {
@@ -48,6 +48,16 @@ class KaspaApi {
      */
     public static postUtxos(params: Params) {
         return httpClient.post(`${this.getBaseUrl()}/addresses/utxos`, params);
+    }
+
+    /**
+    * Retrieves full transaction details for a specific Kaspa address.
+    * @param address The Kaspa wallet address to query.
+    * @param param Optional query parameters (e.g., limit, offset, fields, resolve_previous_outpoints).
+    * @returns A Promise resolving to the full transaction details.
+    */
+    public static getFullTransactions(address: string, param: Record<string, string> = {}) {
+        return httpClient.get(`${this.getBaseUrl()}/addresses/${address}/full-transactions`, param);
     }
 
     /**

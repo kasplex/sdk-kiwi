@@ -7,7 +7,8 @@ import {
     ScriptPublicKey,
     SighashType,
     Transaction as KaspaTransaction,
-} from "wasm/kaspa";
+    HexString,
+} from "../wasm/kaspa-node";
 
 import { Krc20Data } from './types/interface';
 import { Kiwi } from './kiwi';
@@ -48,7 +49,7 @@ class KRC20 {
         const p2shAddress = this.createP2SHAddress(script);
         const fromAddress = privateKey.toPublicKey().toAddress(Kiwi.network).toString();
 
-        let { p2shFee, priorityFee } = this.getFeeInfo(data.op)
+        let { priorityFee } = this.getFeeInfo(data.op)
         const { entries } = await Rpc.getInstance().client.getUtxosByAddresses([p2shAddress])
         const entry = entries.find(entry => {
             return entry.entry.outpoint.transactionId === commitTxid
@@ -69,9 +70,10 @@ class KRC20 {
      * @param privateKey - The private key.
      * @param data - The KRC20 data.
      * @param fee - The transaction fee.
+     * @param payload - The transaction payload.
      * @returns The submitted transaction ID.
      */
-    public static async executeOperation(privateKey: PrivateKey, data: Krc20Data, fee: bigint = 0n) {
+    public static async executeOperation(privateKey: PrivateKey, data: Krc20Data, fee: bigint = 0n, payload?: HexString | Uint8Array,) {
         ValidateKrc20Data.validate(data);
         const script = this.createScript(privateKey, data);
         const p2shAddress = this.createP2SHAddress(script);
@@ -97,6 +99,7 @@ class KRC20 {
             outputs: [],
             priorityFee: priorityFee,
             entries: revealEntries,
+            payload: payload,
             networkId: Kiwi.getNetworkID(),
         }).then(r => r.sign([privateKey], script).submit())
     }
@@ -121,11 +124,12 @@ class KRC20 {
      * @param privateKey - The private key for signing the transaction.
      * @param data - The KRC20 data containing mint details.
      * @param fee - The transaction fee.
+     * @param payload - (Optional) payload in the transaction.
      * @returns The submitted reveal transaction.
      */
-    public static async mint(privateKey: PrivateKey, data: Krc20Data, fee: bigint = 0n) {
+    public static async mint(privateKey: PrivateKey, data: Krc20Data, fee: bigint = 0n, payload?: HexString | Uint8Array) {
         if (data.op !== OP.Mint) throw new Error("Invalid input: 'op' must be 'mint'")
-        return await KRC20.executeOperation(privateKey, data, fee)
+        return await KRC20.executeOperation(privateKey, data, fee, payload)
     }
 
     /**
@@ -147,9 +151,9 @@ class KRC20 {
      * @param fee - The transaction fee.
      * @returns The submitted reveal transaction.
      */
-    public static async transfer(privateKey: PrivateKey, data: Krc20Data, fee: bigint = 0n) {
+    public static async transfer(privateKey: PrivateKey, data: Krc20Data, fee: bigint = 0n, payload?: HexString | Uint8Array) {
         if (!data.to || !data.amt) throw new Error("Invalid input: 'to' and 'amt' must be provided")
-        return await KRC20.executeOperation(privateKey, data, fee)
+        return await KRC20.executeOperation(privateKey, data, fee, payload)
     }
 
     /**
@@ -207,6 +211,7 @@ class KRC20 {
      * @param hash - The transaction hash.
      * @param amount - The amount.
      * @param fee - The fee.
+     * @param payload - The payload.
      * @returns The serialized transaction.
      */
     public static async sendTransaction(privateKey: PrivateKey, data: Krc20Data, hash: string, amount: bigint, payload: string = "") {

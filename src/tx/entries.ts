@@ -1,5 +1,5 @@
 import { Rpc } from "../rpc/client"
-import { Address, ScriptPublicKey, IUtxoEntry, UtxoEntryReference } from "wasm/kaspa";
+import { Address, ScriptPublicKey, IUtxoEntry, UtxoEntryReference } from "../../wasm/kaspa-node";
 import { U64_MAX_VALUE, BASE_KAS_TO_P2SH_ADDRESS } from "../utils/constants";
 
 class Entries {

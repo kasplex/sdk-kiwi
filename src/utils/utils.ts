@@ -1,4 +1,4 @@
-import { NetworkType, Opcodes } from "wasm/kaspa";
+import { NetworkType, Opcodes } from "../../wasm/kaspa-node";
 import { MIN_PUSHDATA } from './constants'
 import { Krc20Data } from '../types/interface'
 import { OP } from "./enum";

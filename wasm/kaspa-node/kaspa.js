@@ -14410,6 +14410,7 @@ module.exports.__wbindgen_try_into_number = function(arg0) {
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const path = require('path').join(__dirname, 'kaspa_bg.wasm');
+console.log('path', path)
 const bytes = require('fs').readFileSync(path);
 
 const wasmModule = new WebAssembly.Module(bytes);

@@ -1,4 +1,4 @@
-import { Encoding, Resolver, RpcClient, NetworkType } from "wasm/kaspa";
+import { Encoding, Resolver, RpcClient, NetworkType } from "../../wasm/kaspa-node";
 import { networkToString } from "../utils/utils";
 
 class Rpc {
@@ -23,10 +23,10 @@ class Rpc {
      * @returns The singleton instance of Rpc.
      */
     public static setInstance(network: NetworkType, url: string = ""): Rpc {
-        if (Rpc.instance) {
-            console.log("Rpc instance already exists. Returning existing instance.");
-            return Rpc.instance;
-        }
+        // if (Rpc.instance) {
+        //     console.log("Rpc instance already exists. Returning existing instance.");
+        //     return Rpc.instance;
+        // }
         Rpc.instance = new Rpc(network, url);
         return Rpc.instance;
     }
