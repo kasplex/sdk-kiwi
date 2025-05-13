@@ -1,0 +1,8 @@
+node_modules/
+src/
+tsconfig.json
+tests
+wasm/
+scripts/
+scripts
+*.tgz
