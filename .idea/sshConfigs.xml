@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SshConfigs">
+    <configs>
+      <sshConfig host="46.51.197.117" id="6ecab27a-2dc2-4972-ad38-7015cb068844" keyPath="$USER_HOME$/Documents/ssh-key/kaspa-test.pem" port="22" nameFormat="DESCRIPTIVE" username="ubuntu" useOpenSSHConfig="true" />
+    </configs>
+  </component>
+</project>

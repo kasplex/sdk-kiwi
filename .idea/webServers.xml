@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="3fed08b5-a191-44ce-a112-00228f02dadb" name="46.51.197.117">
+        <fileTransfer rootFolder="/home/ubuntu/sdk-kiwi" accessType="SFTP" host="46.51.197.117" port="22" sshConfigId="6ecab27a-2dc2-4972-ad38-7015cb068844" sshConfig="ubuntu@46.51.197.117:22 key" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

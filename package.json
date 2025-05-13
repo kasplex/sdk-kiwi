@@ -1,0 +1,52 @@
+{
+    "name": "@kasplex/kiwi-web",
+    "version": "1.0.9",
+    "type": "module",
+    "sideEffects": false,
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "browser": "dist/index.js",
+    "exports": {
+        "import": "./dist/index.js",
+        "require": "./dist/index.js",
+        "default": "./dist/index.js"
+    },
+    "description": "A powered solution for effortless Kaspa wallet integration, delivering secure and streamlined blockchain operations.",
+    "scripts": {
+        "build:types": "tsc --emitDeclarationOnly --outDir dist",
+        "build": "bun build ./src/index.ts --outdir=dist/ --entry-naming [dir]/[name].[ext] --asset-naming [name].[ext] --target browser",
+        "publish": "npm run build && npm run build:types"
+    },
+    "files": [
+        "dist"
+    ],
+    "keywords": [
+        "kasplex sdk",
+        "kaspa wasm",
+        "krc20 sdk",
+        "kaspa wallet",
+        "kiwi",
+        "kasplex"
+    ],
+    "author": "kasplex",
+    "license": "ISC",
+    "devDependencies": {
+        "@types/node": "^22.14.1",
+        "bun-types": "^1.2.4",
+        "path-browserify": "^1.0.1",
+        "terser": "^5.24.4",
+        "typescript": "~5.7.2",
+        "unplugin-auto-import": "^19.0.0",
+        "url": "^0.11.4",
+        "vite-plugin-dts": "^4.5.3",
+        "vite-plugin-static-copy": "^2.3.0",
+        "vite-plugin-top-level-await": "^1.5.0",
+        "vite-plugin-wasm": "^3.4.1",
+        "vitest": "^3.0.8"
+    },
+    "dependencies": {
+        "buffer": "^6.0.3",
+        "js-sha3": "^0.8.0",
+        "node-fetch": "^3.3.2"
+    }
+}
