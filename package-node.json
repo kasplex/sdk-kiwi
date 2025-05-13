@@ -1,14 +1,19 @@
 {
     "name": "@kasplex/kiwi",
-    "version": "1.0.19",
+    "version": "1.0.20",
     "type": "module",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "browser": "dist/index.js",
+    "readme": "README.md",
     "exports": {
         "import": "./dist/index.js",
         "require": "./dist/index.js",
-        "default": "./dist/index.js"
+        "default": "./dist/index.js",
+        "readme": {
+            "node": "./README.md",
+            "browser":"./README-WEB.md"    
+        }
     },
     "description": "A powered solution for effortless Kaspa wallet integration, delivering secure and streamlined blockchain operations.",
     "scripts": {

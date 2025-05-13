@@ -68,27 +68,3 @@ We welcome contributions from the community! Feel free to submit issues, feature
 This project is licensed under the **MIT License**.
 
 🚀 **Start building with Kasplex Wallet SDK - Kiwi today and unlock the full potential of the Kaspa ecosystem!**
-
-
-
-## 📜 Version History
-### [1.0.19] - 2025-05-01
-#### 🛠️ Bug Fixes
-- Fixed issue with transaction processing (#123)
-
-#### API Request Interface Modifications
-- Added the getBlackList interface for querying the blacklist.
-- Enhanced interface return types for better data type visibility.
-
-### [1.0.11] - 2025-04-17
-
-#### 🛠️ Bug Fixes
-- Fixed known issues in transaction processing (#123)
-
-#### ✨ Features
-- Upgraded WASM dependency to v0.17.1 (#125)
-- Added payload support for asset transfers (#128)
-
-#### 📚 Documentation
-- Updated API reference documentation (#130)
-

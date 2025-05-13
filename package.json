@@ -1,15 +1,20 @@
 {
     "name": "@kasplex/kiwi-web",
-    "version": "1.0.9",
+    "version": "1.0.10",
     "type": "module",
     "sideEffects": false,
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "browser": "dist/index.js",
+    "readme": "README-WEB.md",
     "exports": {
         "import": "./dist/index.js",
         "require": "./dist/index.js",
-        "default": "./dist/index.js"
+        "default": "./dist/index.js",
+        "readme": {
+            "node": "./README.md",
+            "browser":"./README-WEB.md"    
+        }
     },
     "description": "A powered solution for effortless Kaspa wallet integration, delivering secure and streamlined blockchain operations.",
     "scripts": {
@@ -18,14 +23,15 @@
         "publish": "npm run build && npm run build:types"
     },
     "files": [
-        "dist"
+        "dist",
+        "README-WEB.md"
     ],
     "keywords": [
         "kasplex sdk",
         "kaspa wasm",
         "krc20 sdk",
         "kaspa wallet",
-        "kiwi",
+        "kiwi-web",
         "kasplex"
     ],
     "author": "kasplex",
