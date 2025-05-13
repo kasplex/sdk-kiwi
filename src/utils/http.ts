@@ -11,7 +11,7 @@ class HttpRequest {
      * @param timeout Request timeout in milliseconds (default: 10s).
      * @param headers Optional default headers for all requests.
      */
-    constructor(timeout = 5000, headers: HeadersInit = {}) {
+    constructor(timeout = 10000, headers: HeadersInit = {}) {
         this.timeout = timeout;
         this.defaultHeaders = {
             'Content-Type': 'application/json',
