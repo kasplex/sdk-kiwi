@@ -24,7 +24,8 @@
     },
     "files": [
         "dist",
-        "README-WEB.md"
+        "README-WEB.md",
+        "README-WalletExt.md"
     ],
     "keywords": [
         "kasplex sdk",

@@ -24,6 +24,7 @@ export * from "./krc20";
 export * from './kiwi';
 export * from './init';
 export * from "./utils/index";
+export * from "./browerExtend/index";
 export * as Modules from "./types/index";
 export * as Tx from "./tx";
 

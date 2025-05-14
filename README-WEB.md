@@ -57,7 +57,27 @@ To integrate **Kasplex Wallet SDK - Kiwi** into your project, follow these steps
    let txid = await KRC20.mint(_privateKey, krc20data, 100000n)
    console.log("Mint txid", txid)
    ```
+6. **Browser Extension Integration**:
+   ```typescript
+   import { BrowerWallet, WalletApi } from "@kasplex/kiwi-web";
+
+   const walletList = await BrowerWallet.getBrowerWalletList();
+   console.log("walletList", walletList);
    
+   // Create and initialize wallet instance
+   const wallet = await WalletApi.create('kasware');
+   
+   // Request account access
+   const accounts = await wallet.requestAccounts();
+   console.log('Connected accounts:', accounts);
+   
+   // Get wallet balance
+   const balance = await wallet.getBalance();
+   console.log('Wallet balance:', balance);
+   ```
+
+   For detailed browser extension integration guide, please refer to our [Browser Extension Documentation](./README-WalletExt.md)
+
 ## More Examples
 - For more detailed usage examples, check out our [Examples Directory](./example/)
 - For usage of node, check out our [Kiwi for NODE](./README.md)

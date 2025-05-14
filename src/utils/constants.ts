@@ -24,3 +24,12 @@ export const MIN_PUSHDATA = {
 }
 
 export const KASPLEX = 'kasplex'
+
+export const WALLET_ID_LIST = {
+    Kaskeeper: 'bicbpicnddlclhekbmgafcbkemdikdem',
+    Kaspian: 'cidcgacclonccobcbihholdncmehnlpl',
+    kasware: 'hklhheigdmpoolooomdihmhlpjjdbklf',
+    kastle: 'oambclflhjfppdmkghokjmpppmaebego',
+    kasperia: 'iefpncmddjlfolamigjfdhnfpmfincch',
+    unisat: 'ppbibelpcjmhbdihakflkdcoccbgbkpo',
+}
