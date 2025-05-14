@@ -1,18 +1,18 @@
 # Kasplex Wallet SDK - Kiwi
 
-**Kasplex Wallet SDK - Kasplex in Wallet Integration (Kiwi) is a powerful and easy-to-use SDK designed to simplify the management of Kaspa wallet assets. It provides seamless integration with Kaspa nodes, KRC20 tokens, and essential wallet functionalities, enabling developers to build robust Kaspa-based applications effortlessly..
+**Kasplex Wallet SDK - Kasplex in Wallet Integration (Kiwi) is a powerful and easy-to-use SDK designed to simplify the management of Kaspa wallet assets. It provides seamless integration with Kaspa nodes, KRC20 tokens, and essential wallet functionalities, enabling developers to build robust Kaspa-based applications effortlessly.
 
 ## Features
 
 - **Mnemonic Support**: Generate and restore wallets securely using industry-standard mnemonics.
 - **Wallet Generation & Derivation**: Create hierarchical deterministic (HD) wallets and derive multiple addresses.
 - **KRC20 Protocol Implementation & API Integration**: Easily interact with **KRC20 tokens** using built-in API functions.
-- **Kaspa API & Node Connectivity**: Connect to Kaspa nodes for real-time blockchain data and transaction processing.
+- **Kaspa API & Node Connectivity**: Connect to Kaspa nodes for real-time blockchain data and transaction process.
 - **Multi-Signature Wallet Support**: Implement enhanced security with multi-signature wallet functionality.
 - **Message Subscription**: Subscribe to blockchain events, transaction updates, and real-time notifications.
 
 ## Installation
-Node.js Version Requirement: This SDK requires Node.js version 20.13.1 or higher. You can check your Node.js version by running:
+Node.js Version Requirement: This SDK requires Node.js version 20.13.1 or higher. You can check the version of Node.js while it is running.
 
 ## Getting Started
 
@@ -36,7 +36,7 @@ To integrate **Kasplex Wallet SDK - Kiwi** into your project, follow these steps
    let wallet = Wallet.fromMnemonic(mnemonic)
    ```
    
-4. **send kas**:
+4. **send $KAS**:
    ```typescript
    import { Kaspa } from "@kasplex/kiwi";
    const resp = await Kaspa.transferKas(privateKey, toAddress, 130000000n, 10000n)
@@ -56,7 +56,7 @@ To integrate **Kasplex Wallet SDK - Kiwi** into your project, follow these steps
    
 ## More Examples
 - For more detailed usage examples, check out our [Examples Directory](./example/)
-- For usage of web, check out our [Kiwi for WEB](./README-WEB.md)
+- For web usage, check out our [Kiwi for WEB](./README-WEB.md)
 
 
 ## Contribution
