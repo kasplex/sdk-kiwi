@@ -104,7 +104,6 @@ const account = await wallet.getAccounts();
 ## Reference Connection
 
 - **[Kasware Documentation](https://docs.kasware.xyz/wallet/dev-base/dev-integration#requestaccounts)**: Official documentation for integrating with the Kasware wallet.
-- **[Unisat Developer Center](https://docs.unisat.io/dev/unisat-developer-center/unisat-wallet)**: Official developer resources for integrating with the Unisat wallet.
 
 ## Best Practices
 
