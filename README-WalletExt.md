@@ -8,19 +8,25 @@ A unified wallet API interface for interacting with various cryptocurrency walle
 import { WalletApi } from '@kasplex/kiwi-web';
 
 // Create and initialize wallet instance
-const wallet = await WalletApi.create('unisat');
+const wallet = await WalletApi.create('kasware');
 
 // Request account access
 const accounts = await wallet.authorize();
 console.log('Connected accounts:', accounts);
+
+// Send KAS
+const txId = await wallet.sendKaspa(
+    'kaspatest:qrxh35ysr2hchag9gtam5vlkvpmn89ph78t6nqvg44yj3xf8rpeg2ttgg7a5t',
+    100000000,
+)
+console.log('Transaction ID Info:', txId);
 ```
 
 ## Supported Wallets
 
 - Kasware
-- Kastle
 - Kaskeeper
-- Unisat
+- Kastle
 
 ## Core Features
 
@@ -32,8 +38,6 @@ console.log('Connected accounts:', accounts);
 - Message Signing
 - PSBT Operations
 
-## API Reference
-
 ### Account Management
 
 #### `authorize()`
@@ -43,58 +47,58 @@ const accounts = await wallet.authorize();
 ```
 
 #### `getAccounts()`
-Gets currently connected accounts.
+Get currently connected accounts.
 ```typescript
 const account = await wallet.getAccounts();
 ```
 
-# Wallet Method Support Comparison
+## Wallet Method Support Comparison
 
-| Method Name            | KasKeeper | Kastle | KasWare | UniSat |
-|------------------------|-----------|--------|---------|--------|
-| **Authorization & Connection** |           |        |         |        |
-| authorize              | Yes       | Yes    | Yes     | Yes    |
-| connect                | Yes       | Yes    | No      | No     |
-| requestAccounts        | Yes       |        | Yes     | Yes    |
-| getAccounts            | Yes       |        | Yes     | Yes    |
-| getAccount             | No        | Yes    | No      | No     |
-| **Network & Version**  |           |        |         |        |
-| getVersion             | Yes       |        | Yes     | No     |
-| getNetwork             | Yes       |        | Yes     | Yes    |
-| switchNetwork          | Yes       |        | Yes     | Yes    |
-| disconnect             | Yes       |        | Yes     | Yes    |
-| **Account Info**       |           |        |         |        |
-| getPublicKey           | Yes       |        | Yes     | Yes    |
-| getBalance             | Yes       |        | Yes     | Yes    |
-| getKRC20Balance        | Yes       |        | Yes     | Yes    |
-| getUtxoEntries         | No        |        | Yes     | Yes    |
-| **Transaction Operations** |           |        |         |        |
-| sendKaspa              | Yes       |        | Yes     | Yes    |
-| signPskt               | No        |        | Yes     | Yes    |
-| buildScript            | No        |        | Yes     | Yes    |
-| submitCommitReveal     | No        |        | Yes     | Yes    |
-| createKRC20Order       | No        |        | Yes     | Yes    |
-| buyKRC20Token          | No        |        | Yes     | Yes    |
-| cancelKRC20Order       | No        |        | Yes     | Yes    |
-| signMessage            | Yes       |        | Yes     | Yes    |
-| signKRC20Transaction   | No        |        | Yes     | Yes    |
-| **Chain & Inscriptions** |           |        |         |        |
-| getChain               | No        |        | No      | Yes    |
-| switchChain            | No        |        | No      | Yes    |
-| getInscriptions        | No        |        | No      | Yes    |
-| sendBitcoin            | No        |        | No      | Yes    |
-| sendRunes              | No        |        | No      | Yes    |
-| inscribeTransfer       | No        |        | No      | Yes    |
-| **PSBT Operations**    |           |        |         |        |
-| pushTx                 | Yes       |        | Yes     | Yes    |
-| signPsbt               | Yes       |        | No      | Yes    |
-| signPsbts              | Yes       |        | No      | Yes    |
-| pushPsbt               | Yes       |        | No      | Yes    |
-| **Other Features**     |           |        |         |        |
-| initialize             | Yes       |        | Yes     | No     |
-| openDeployKrc20View    | Yes       |        | No      | No     |
-| openMintKrc20View      | Yes       |        | No      | No     |
-| verifyMessage          | Yes       |        | No      | No     |
+| Method Name            | KasKeeper | Kastle | KasWare |
+|------------------------|-----------|--------|---------|
+| **Authorization & Connection** |           |        |         |
+| authorize              | Yes       | Yes    | Yes     |
+| connect                | Yes       | Yes    | No      |
+| requestAccounts        | Yes       |        | Yes     |
+| getAccounts            | Yes       |        | Yes     |
+| getAccount             | No        | Yes    | No      |
+| **Network & Version**  |           |        |         |
+| getVersion             | Yes       |        | Yes     |
+| getNetwork             | Yes       |        | Yes     |
+| switchNetwork          | Yes       |        | Yes     |
+| disconnect             | Yes       |        | Yes     |
+| **Account Info**       |           |        |         |
+| getPublicKey           | Yes       |        | Yes     |
+| getBalance             | Yes       |        | Yes     |
+| getKRC20Balance        | Yes       |        | Yes     |
+| getUtxoEntries         | No        |        | Yes     |
+| **Transaction Operations** |           |        |         |
+| sendKaspa              | Yes       |        | Yes     |
+| signPskt               | No        |        | Yes     |
+| buildScript            | No        |        | Yes     |
+| submitCommitReveal     | No        |        | Yes     |
+| createKRC20Order       | No        |        | Yes     |
+| buyKRC20Token          | No        |        | Yes     |
+| cancelKRC20Order       | No        |        | Yes     |
+| signMessage            | Yes       |        | Yes     |
+| signKRC20Transaction   | No        |        | Yes     |
+| **Chain & Inscriptions** |           |        |         |
+| getChain               | No        |        | No      |
+| switchChain            | No        |        | No      |
+| getInscriptions        | No        |        | No      |
+| sendBitcoin            | No        |        | No      |
+| sendRunes              | No        |        | No      |
+| inscribeTransfer       | No        |        | No      |
+| **PSBT Operations**    |           |        |         |
+| pushTx                 | Yes       |        | Yes     |
+| signPsbt               | Yes       |        | No      |
+| signPsbts              | Yes       |        | No      |
+| pushPsbt               | Yes       |        | No      |
+| **Other Features**     |           |        |         |
+| initialize             | Yes       |        | Yes     |
+| openDeployKrc20View    | Yes       |        | No      |
+| openMintKrc20View      | Yes       |        | No      |
+| verifyMessage          | Yes       |        | No      |
 
 
 ## Reference Connection

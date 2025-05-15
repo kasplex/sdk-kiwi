@@ -49,7 +49,7 @@ class BrowerWallet {
      * @param {number} delay - The delay (in milliseconds) between retries (default: 300).
      * @returns {Promise<boolean>} A promise that resolves to `true` if the extension is installed, otherwise `false`.
      */
-    public static async isExtInstalled(extensionName: string, retries: number = 2, delay: number = 300): Promise<boolean> {
+    public static async isExtInstalled(extensionName: string, retries: number = 3, delay: number = 350): Promise<boolean> {
         try {
             if (!extensionName) return false;
             for (let i = 0; i < retries; i++) {
@@ -76,7 +76,8 @@ class BrowerWallet {
     public static async getWallet(walletName: string): Promise<Window[keyof Window] | null> {
         if (!walletName) return null;
         const extensionName = Object.keys(WALLET_ID_LIST).find(key => key.toLowerCase() === walletName.toLowerCase()) || walletName;
-        const isInstalled = await this.isExtInstalled(extensionName);
+        const retries = extensionName === 'kastle' ? 4 : 2
+        const isInstalled = await this.isExtInstalled(extensionName, retries);
         return isInstalled ? window[extensionName as keyof Window] : null;
     }
 }

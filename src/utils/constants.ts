@@ -31,5 +31,4 @@ export const WALLET_ID_LIST = {
     kasware: 'hklhheigdmpoolooomdihmhlpjjdbklf',
     kastle: 'oambclflhjfppdmkghokjmpppmaebego',
     kasperia: 'iefpncmddjlfolamigjfdhnfpmfincch',
-    unisat: 'ppbibelpcjmhbdihakflkdcoccbgbkpo',
 }

@@ -58,6 +58,8 @@ To integrate **Kasplex Wallet SDK - Kiwi** into your project, follow these steps
 - For more detailed usage examples, check out our [Examples Directory](./example/)
 - For web usage, check out our [Kiwi for WEB](./README-WEB.md)
 
+## Integrated wallet method
+- Please refer to the details for the method of providing a wallet in the [WalletExt](./README-WalletExt.md)
 
 ## Contribution
 

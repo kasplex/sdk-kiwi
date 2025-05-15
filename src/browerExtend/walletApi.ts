@@ -164,6 +164,15 @@ class WalletApi {
         const fn = await this.checkFun('getAccounts');
         return await fn();
     }
+
+    /**
+     * Gets currently connected accounts
+     * @returns Promise<string> - Primary account address
+     */
+    public async getAccount(): Promise<string> {
+        const fn = await this.checkFun('getAccount');
+        return await fn();
+    }
     /**
      * Gets current network version
      * @returns Promise<string> - Network version identifier
@@ -245,9 +254,9 @@ class WalletApi {
      * @param options - Additional transaction options
      * @returns Promise<string> - Transaction hash
      */
-    public async sendKaspa(toAddress: string, sompi: number, options: object): Promise<string> {
+    public async sendKaspa(toAddress: string, sompi: number, options?: object): Promise<string> {
         const fn = await this.checkFun('sendKaspa');
-        return await fn(toAddress, sompi, options);
+        return await fn(toAddress, sompi, options || {});
     }
 
     /**
