@@ -1,5 +1,6 @@
 import { BrowerWallet } from "./walletDetector";
 import { errorMsg } from './errorMsg'
+import { WALLET_AUTH_METHODS } from '../utils/constants'
 
 /**
  * A unified wallet API interface for interacting with various cryptocurrency wallets.
@@ -77,18 +78,8 @@ class WalletApi {
      */
     public async authorize() {
         if (!this.walletName) return '';
-        const walletName = this.walletName.toLowerCase();
-        switch (walletName) {
-            case 'kastle':
-                return await this.connect();
-            case 'kasware':
-            case 'unisat':
-                return await this.requestAccounts();
-            case 'kaskeeper':
-                return await this.disconnect();
-            default:
-                return '';
-        }
+        const method = WALLET_AUTH_METHODS[this.walletName.toLowerCase() as keyof typeof WALLET_AUTH_METHODS];
+        return method ? await this[method]() : '';
     }
 
     /**

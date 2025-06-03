@@ -25,10 +25,18 @@ export const MIN_PUSHDATA = {
 
 export const KASPLEX = 'kasplex'
 
+export const WALLET_AUTH_METHODS = {
+    kastle: 'connect',
+    kasware: 'requestAccounts',
+    unisat: 'requestAccounts',
+    kaskeeper: 'disconnect',
+    kasperia: 'requestAccounts'
+}  as const;
+
 export const WALLET_ID_LIST = {
     Kaskeeper: 'bicbpicnddlclhekbmgafcbkemdikdem',
     Kaspian: 'cidcgacclonccobcbihholdncmehnlpl',
     kasware: 'hklhheigdmpoolooomdihmhlpjjdbklf',
     kastle: 'oambclflhjfppdmkghokjmpppmaebego',
-    kasperia: 'iefpncmddjlfolamigjfdhnfpmfincch',
+    kasperia: 'ffalcabgggegkejjlknofllbaledgcob',
 }

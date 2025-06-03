@@ -61,6 +61,18 @@ class KaspaApi {
     }
 
     /**
+     * Retrieves paginated full transaction details for a specific Kaspa address.
+     * This is useful when dealing with large transaction histories that need pagination.
+     * 
+     * @param address - The Kaspa wallet address to query
+     * @param param - Optional query parameters for pagination (e.g., limit, before,after,fields,resolve_previous_outpoints)
+     * @returns Promise containing the paginated transaction data
+     */
+    public static getFullTransactionPage(address: string, param: Record<string, string> = {}) {
+        return httpClient.get(`${this.getBaseUrl()}/addresses/${address}/full-transactions-page`, param);
+    }
+
+    /**
      * Get transaction count for a specific Kaspa address.
      * @param kaspaAddress The Kaspa wallet address
      */
