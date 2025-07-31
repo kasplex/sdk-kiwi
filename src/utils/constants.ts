@@ -14,6 +14,8 @@ export const BASE_P2SH_TO_KASPA_ADDRESS = 30000000n
 
 export const DEFAULT_FEE = 100000000n
 
+export const TRANSFER_FEE = 10000n
+
 export const MIN_PUSHDATA = {
     MIN_PUSHDATA1: 77,
     MIN_PUSHDATA2: 256,

@@ -30,3 +30,8 @@ export interface addressList {
     address: string,
     amount: bigint
 }
+
+export interface TransferList {
+    toAddress: string,
+    amount: bigint
+}

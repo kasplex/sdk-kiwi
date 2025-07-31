@@ -37,7 +37,6 @@ class HttpRequest {
     ): Promise<T> {
         // Build URL with query parameters
         const requestUrl = new URL(url);
-        console.log("url:", url)
 
         Object.entries(params).forEach(([key, value]) => requestUrl.searchParams.append(key, value));
 

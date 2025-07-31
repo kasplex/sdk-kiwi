@@ -1,6 +1,6 @@
 import { Wasm } from "./index";
 
-import { Krc20Data } from './types/interface';
+import { Krc20Data, TransferList } from './types/interface';
 import { Kiwi } from './kiwi';
 import { OP } from './utils/enum';
 import { Transaction } from './tx/transaction';
@@ -235,7 +235,7 @@ class KRC20 {
         let send = Wasm.Transaction.deserializeFromSafeJSON(sendTx);
         const fromAddress = privateKey.toPublicKey().toAddress(Kiwi.network);
 
-        let { entries } = await Rpc.getInstance().client.getUtxosByAddresses({addresses: [fromAddress.toString()]});
+        let { entries } = await Rpc.getInstance().client.getUtxosByAddresses({ addresses: [fromAddress.toString()] });
         // .ts-ignore
         send.inputs.forEach(input => {
             if (input.utxo) {
@@ -282,7 +282,7 @@ class KRC20 {
         fee: bigint = 0n,
         executionCount: number = 1,
         callback?: (current: number, txid: string) => void
-    ) : Promise<undefined> {
+    ): Promise<undefined> {
         if (data.op !== OP.Mint) throw new Error("Invalid input: 'op' must be 'mint'");
         if (executionCount < 1) throw new Error("Invalid executionCount");
 
@@ -338,7 +338,7 @@ class KRC20 {
         fee: bigint = 0n,
         executionCount: number = 1,
         callback?: (current: number, txid: string) => void
-    ) : Promise<undefined> {
+    ): Promise<undefined> {
         if (data.op !== OP.Mint) throw new Error("Invalid input: 'op' must be 'mint'");
         if (executionCount < 1) throw new Error("Invalid executionCount");
 
