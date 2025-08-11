@@ -42,13 +42,13 @@ To integrate **Kasplex Wallet SDK - Kiwi** into your project, follow these steps
    
 4. **send kas**:
    ```typescript
-   import { Kaspa } from "@kasplex/kiwi-web";
-   const resp = await Kaspa.transferKas(privateKey, toAddress, 130000000n, 10000n)
+   import { KaspaTransaction } from "@kasplex/kiwi-web";
+   const resp = await KaspaTransaction.transferKas(privateKey, toAddress, 130000000n, 10000n)
    ```
 
 5. **KRC20**:
    ```typescript
-   import { Kaspa, Enum, Utils, KRC20 } from "@kasplex/kiwi-web";
+   import { Enum, Utils, KRC20 } from "@kasplex/kiwi-web";
    const krc20data = Utils.createKrc20Data({
       p: "krc-20",
       op: Enum.OP.Mint,

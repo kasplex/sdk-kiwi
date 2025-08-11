@@ -38,13 +38,19 @@ To integrate **Kasplex Wallet SDK - Kiwi** into your project, follow these steps
    
 4. **send $KAS**:
    ```typescript
-   import { Kaspa } from "@kasplex/kiwi";
-   const resp = await Kaspa.transferKas(privateKey, toAddress, 130000000n, 10000n)
+   import { KaspaTransaction, Rpc, Wasm } from "@kasplex/kiwi";
+
+   // Connect to Kaspa testnet node using WebAssembly (Wasm) network type
+   // This establishes the RPC connection needed for subsequent transactions
+   await Rpc.setInstance(Wasm.NetworkType.Testnet).connect()
+   
+   // Transfer KAS from privateKey to toAddress with amount and fee
+   const resp = await KaspaTransaction.transferKas(privateKey, toAddress, 130000000n, 10000n)
    ```
 
 5. **KRC20**:
    ```typescript
-   import { Kaspa, Enum, Utils, KRC20 } from "@kasplex/kiwi";
+   import { Wasm, Enum, Utils, KRC20 } from "@kasplex/kiwi";
    const krc20data = Utils.createKrc20Data({
       p: "krc-20",
       op: Enum.OP.Mint,
