@@ -10,15 +10,21 @@ class BrowerWallet {
      *
      * @returns {Promise<string[]>} A promise that resolves to an array of wallet keys for installed wallets.
      */
-    public static async getBrowerWalletList(): Promise<string[]> {
-        if(this.walletList.length) return this.walletList
-        for (const key in WALLET_ID_LIST) {
-            const isInstalled = await this.isExtInstalled(key)
-            if (isInstalled) {
-                this.walletList.push(key)
-            }
-        }
-        return this.walletList
+    public static async getBrowerWalletList(force = false): Promise<string[]> {
+        if (!force && this.walletList.length) return this.walletList;
+        this.walletList = [];
+
+        const walletKeys = Object.keys(WALLET_ID_LIST);
+        const results = await Promise.all(
+            walletKeys.map(async (key) => {
+                const isInstalled = await this.isExtInstalled(key);
+                return isInstalled ? key : null;
+            })
+        );
+
+        // 过滤掉未安装的
+        this.walletList = results.filter((v): v is string => !!v);
+        return this.walletList;
     }
 
     /**
@@ -49,7 +55,7 @@ class BrowerWallet {
      * @param {number} delay - The delay (in milliseconds) between retries (default: 300).
      * @returns {Promise<boolean>} A promise that resolves to `true` if the extension is installed, otherwise `false`.
      */
-    public static async isExtInstalled(extensionName: string, retries: number = 3, delay: number = 350): Promise<boolean> {
+    public static async isExtInstalled(extensionName: string, retries: number = 2, delay: number = 150): Promise<boolean> {
         try {
             if (!extensionName) return false;
             for (let i = 0; i < retries; i++) {
