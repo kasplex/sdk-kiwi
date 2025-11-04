@@ -5,7 +5,10 @@ A unified wallet API interface for interacting with various cryptocurrency walle
 ## Quick Start
 
 ```typescript
-import { WalletApi } from '@kasplex/kiwi-web';
+import { WalletApi, BrowerWallet } from '@kasplex/kiwi-web';
+
+// Get Wallet List
+const walletList = await BrowerWallet.getBrowerWalletList()
 
 // Create and initialize wallet instance
 const wallet = await WalletApi.create('kasware');
@@ -13,6 +16,7 @@ const wallet = await WalletApi.create('kasware');
 // Request account access
 const accounts = await wallet.authorize();
 console.log('Connected accounts:', accounts);
+
 
 // Send KAS
 const txId = await wallet.sendKaspa(

@@ -132,9 +132,9 @@ before loading the WASM32 library. The compatible WebSocket library is [WebSocke
 <html>
     <head>
         <script type="module">
-            import * as kaspa from './kaspa-web/kaspa-web-wasm.js';
+            import * as kaspa from './kaspa/kaspa-wasm.js';
             (async () => {
-                await kaspa.default('./kaspa-web/kaspa-web-wasm_bg.wasm');
+                await kaspa.default('./kaspa/kaspa-wasm_bg.wasm');
                 console.log(kaspa.version());
                 // ...
             })();
@@ -149,7 +149,7 @@ before loading the WASM32 library. The compatible WebSocket library is [WebSocke
 ```javascript
 //
 // W3C WebSocket module shim
-// this is provided by NPM `kaspa-web` module and is only needed
+// this is provided by NPM `kaspa` module and is only needed
 // if you are building WASM libraries for NodeJS from source
 //
 // @ts-ignore
@@ -160,7 +160,7 @@ let {
     RpcClient,
     Encoding,
     initConsolePanicHook
-} = require('./');
+} = require('./kaspa');
 
 // enabling console panic hooks allows WASM to print panic details to console
 // initConsolePanicHook();

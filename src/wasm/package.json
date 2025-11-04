@@ -5,7 +5,7 @@
     "Kaspa developers"
   ],
   "description": "KASPA WASM bindings",
-  "version": "0.17.1",
+  "version": "1.0.1",
   "license": "ISC",
   "repository": {
     "type": "git",
@@ -14,7 +14,7 @@
   "files": [
     "kaspa_bg.wasm",
     "kaspa.js",
-    ""
+    "kaspa.d.ts"
   ],
   "main": "kaspa.js",
   "types": "kaspa.d.ts",
