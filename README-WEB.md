@@ -78,6 +78,22 @@ To integrate **Kasplex Wallet SDK - Kiwi** into your project, follow these steps
 
    For detailed browser extension integration guide, please refer to our [Browser Extension Documentation](./README-WalletExt.md)
 
+
+## WASM Initialization (Web)
+
+The Kiwi Web SDK depends on a WebAssembly module (`kaspa_bg.wasm`).
+You must initialize it **once** before using any wallet, RPC, or transaction-related functionality.
+
+### Recommended Usage (Browser)
+
+```ts
+import { initialize } from '@kasplex/kiwi-web'
+
+// Recommended: use URL-based initialization for browser environments
+await initialize(
+  new URL('/wasm/kaspa_bg.wasm', window.location.origin)
+)
+
 ## More Examples
 - For more detailed usage examples, check out our [Examples Directory](./examples/)
 - For usage of node, check out our [Kiwi for NODE](./README.md)

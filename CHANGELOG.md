@@ -21,11 +21,23 @@ This document records the release history of the `@kasplex/kiwi` SDK series, inc
 
 ---
 
+#### v1.0.26 (2026-01-21)
+- Updated wasm module to version `1.0.26`.
+
+---
+
 ### Web Version
 
 #### v1.0.16 (2025-11-04)
-- Updated wasm module to version `1.0.1`.
+- Updated wasm module to version `1.0.16`.
 - Fixed slow local wallet detection issue.
+
+#### v1.0.17 (2026-01-21)
+- Updated WASM module to version `1.0.17`.
+- **Breaking Change: Updated WASM initialization method**
+  - The Web SDK now uses a modern, wasm-bindgen–compatible initialization API.
+  - The `initialize` function no longer accepts only a plain string.
+  - Multiple WASM input types are now supported to improve compatibility with modern bundlers and browsers.
 
 ---
 
