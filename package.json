@@ -37,6 +37,11 @@
     ],
     "author": "kasplex",
     "license": "ISC",
+    "pnpm": {
+        "overrides": {
+            "minimatch": "^10.2.3"
+        }
+    },
     "devDependencies": {
         "@types/node": "^22.14.1",
         "bun-types": "^1.2.4",
