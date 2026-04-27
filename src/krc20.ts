@@ -1,6 +1,6 @@
 import { Wasm } from "./index";
 
-import { Krc20Data, TransferList } from './types/interface';
+import { Krc20Data, TransferList, EncodablePayload } from './types/interface';
 import { Kiwi } from './kiwi';
 import { OP } from './utils/enum';
 import { Transaction } from './tx/transaction';
@@ -34,7 +34,7 @@ class KRC20 {
         }).then(r => r.sign([privateKey]).submit())
     }
 
-    public static async executeReveal(privateKey: Wasm.PrivateKey, data: Krc20Data, commitTxid: string) {
+    public static async executeReveal(privateKey: Wasm.PrivateKey, data: Krc20Data, commitTxid: string, payload?: EncodablePayload) {
         ValidateKrc20Data.validate(data);
         const script = this.createScript(privateKey, data);
         const p2shAddress = this.createP2SHAddress(script);
@@ -52,8 +52,31 @@ class KRC20 {
             outputs: [],
             priorityFee: priorityFee,
             entries: [entry!],
+            payload: this.normalizePayload(payload),
             networkId: Kiwi.getNetworkID(),
         }).then(r => r.sign([privateKey], script).submit())
+    }
+
+    private static isHexString(value: string): boolean {
+        const hex = value.startsWith('0x') ? value.slice(2) : value;
+        return hex.length > 0 && hex.length % 2 === 0 && /^[0-9a-fA-F]+$/.test(hex);
+    }
+
+    private static normalizePayload(payload?: EncodablePayload): Uint8Array | undefined {
+        if (payload === undefined || payload === null) return undefined;
+        if (payload instanceof Uint8Array) return payload;
+        if (typeof payload === 'string') {
+            if (this.isHexString(payload)) {
+                const hex = payload.startsWith('0x') ? payload.slice(2) : payload;
+                const bytes = new Uint8Array(hex.length / 2);
+                for (let i = 0; i < hex.length; i += 2) {
+                    bytes[i / 2] = parseInt(hex.slice(i, i + 2), 16);
+                }
+                return bytes;
+            }
+            return new TextEncoder().encode(payload);
+        }
+        return new TextEncoder().encode(JSON.stringify(payload));
     }
 
     /**
@@ -64,7 +87,7 @@ class KRC20 {
      * .param payload - The transaction payload.
      * .returns The submitted transaction ID.
      */
-    public static async executeOperation(privateKey: Wasm.PrivateKey, data: Krc20Data, fee: bigint = 0n, payload?: Wasm.HexString | Uint8Array,) {
+    public static async executeOperation(privateKey: Wasm.PrivateKey, data: Krc20Data, fee: bigint = 0n, payload?: EncodablePayload,) {
         ValidateKrc20Data.validate(data);
         const script = this.createScript(privateKey, data);
         const p2shAddress = this.createP2SHAddress(script);
@@ -90,9 +113,105 @@ class KRC20 {
             outputs: [],
             priorityFee: priorityFee,
             entries: revealEntries,
-            payload: payload,
+            payload: this.normalizePayload(payload),
             networkId: Kiwi.getNetworkID(),
         }).then(r => r.sign([privateKey], script).submit())
+    }
+
+
+    /**
+     * Executes a direct KRC20 payload transaction.
+     *
+     * This is different from executeOperation/mint/transfer/deploy:
+     * - executeOperation uses the original P2SH commit-reveal flow.
+     * - executePayloadOperation creates a normal Kaspa transaction with the KRC20 JSON in tx payload.
+     *
+     * If payload is not provided, the KRC20 data itself will be used as the transaction payload.
+     * This keeps the payload in the standard KRC20 JSON shape:
+     * { p: "krc-20", op: "mint" | "transfer" | "deploy", ... }
+     *
+     * If you pass a custom payload, that custom payload will be written instead.
+     * Be careful: custom wrapped payload may not be recognized by a standard KRC20 indexer.
+     */
+    public static async executePayloadOperation(
+        privateKey: Wasm.PrivateKey,
+        data: Krc20Data,
+        fee: bigint = 0n,
+        payload?: EncodablePayload,
+    ) {
+        ValidateKrc20Data.validate(data);
+
+        const fromAddress = privateKey.toPublicKey().toAddress(Kiwi.network).toString();
+        const payloadData = payload === undefined ? (data as unknown as EncodablePayload) : payload;
+        const normalizedPayload = this.normalizePayload(payloadData);
+
+        if (!normalizedPayload || normalizedPayload.length === 0) {
+            throw new Error("Invalid input: payload must not be empty");
+        }
+
+        const { entries } = await Rpc.getInstance().client.getUtxosByAddresses([fromAddress]);
+        if (!entries || entries.length === 0) {
+            throw new Error("No spendable UTXO found for address: " + fromAddress);
+        }
+
+        return Transaction.createTransactions({
+            changeAddress: fromAddress,
+            outputs: [],
+            priorityFee: fee,
+            entries: entries,
+            payload: normalizedPayload,
+            networkId: Kiwi.getNetworkID(),
+        }).then(r => r.sign([privateKey]).submit())
+    }
+
+    /**
+     * Mints KRC20 by direct transaction payload.
+     *
+     * Default payload: data itself.
+     * Optional custom payload: pass payload as the 4th arg.
+     */
+    public static async mintByPayload(
+        privateKey: Wasm.PrivateKey,
+        data: Krc20Data,
+        fee: bigint = 0n,
+        payload?: EncodablePayload,
+    ) {
+        if (data.op !== OP.Mint) throw new Error("Invalid input: 'op' must be 'mint'")
+        return await KRC20.executePayloadOperation(privateKey, data, fee, payload)
+    }
+
+    /**
+     * Transfers KRC20 by direct transaction payload.
+     *
+     * Required fields: to, amt.
+     * Default payload: data itself.
+     * Optional custom payload: pass payload as the 4th arg.
+     */
+    public static async transferByPayload(
+        privateKey: Wasm.PrivateKey,
+        data: Krc20Data,
+        fee: bigint = 0n,
+        payload?: EncodablePayload,
+    ) {
+        if (data.op !== OP.Transfer) throw new Error("Invalid input: 'op' must be 'transfer'")
+        if (!data.to || !data.amt) throw new Error("Invalid input: 'to' and 'amt' must be provided")
+        return await KRC20.executePayloadOperation(privateKey, data, fee, payload)
+    }
+
+    /**
+     * Deploys KRC20 by direct transaction payload.
+     *
+     * Default payload: data itself.
+     * Optional custom payload: pass payload as the 4th arg.
+     */
+    public static async deployByPayload(
+        privateKey: Wasm.PrivateKey,
+        data: Krc20Data,
+        fee: bigint = 0n,
+        payload?: EncodablePayload,
+    ) {
+        if (data.op !== OP.Deploy) throw new Error("Invalid input: 'op' must be 'deploy'")
+        return await KRC20.executePayloadOperation(privateKey, data, fee, payload)
     }
 
     /**
@@ -118,7 +237,7 @@ class KRC20 {
      * .param payload - (Optional) payload in the transaction.
      * .returns The submitted reveal transaction.
      */
-    public static async mint(privateKey: Wasm.PrivateKey, data: Krc20Data, fee: bigint = 0n, payload?: Wasm.HexString | Uint8Array) {
+    public static async mint(privateKey: Wasm.PrivateKey, data: Krc20Data, fee: bigint = 0n, payload?: EncodablePayload) {
         if (data.op !== OP.Mint) throw new Error("Invalid input: 'op' must be 'mint'")
         return await KRC20.executeOperation(privateKey, data, fee, payload)
     }
@@ -130,7 +249,7 @@ class KRC20 {
      * .param fee - The transaction fee.
      * .returns The submitted reveal transaction.
      */
-    public static async deploy(privateKey: Wasm.PrivateKey, data: Krc20Data, fee: bigint = 0n, payload?: Wasm.HexString | Uint8Array) {
+    public static async deploy(privateKey: Wasm.PrivateKey, data: Krc20Data, fee: bigint = 0n, payload?: EncodablePayload) {
         if (data.op !== OP.Deploy) throw new Error("Invalid input: 'op' must be 'deploy'")
         return await KRC20.executeOperation(privateKey, data, fee, payload)
     }
@@ -142,7 +261,8 @@ class KRC20 {
      * .param fee - The transaction fee.
      * .returns The submitted reveal transaction.
      */
-    public static async transfer(privateKey: Wasm.PrivateKey, data: Krc20Data, fee: bigint = 0n, payload?: Wasm.HexString | Uint8Array) {
+    public static async transfer(privateKey: Wasm.PrivateKey, data: Krc20Data, fee: bigint = 0n, payload?: EncodablePayload,) {
+        if (data.op !== OP.Transfer) throw new Error("Invalid input: 'op' must be 'transfer'");
         if (!data.to || !data.amt) throw new Error("Invalid input: 'to' and 'amt' must be provided")
         return await KRC20.executeOperation(privateKey, data, fee, payload)
     }
@@ -154,7 +274,7 @@ class KRC20 {
      * .param fee - The transaction fee.
      * .returns The submitted reveal transaction.
      */
-    public static async list(privateKey: Wasm.PrivateKey, data: Krc20Data, fee: bigint = 0n) {
+    public static async list(privateKey: Wasm.PrivateKey, data: Krc20Data, fee: bigint = 0n, payload?: EncodablePayload) {
         if (data.op !== OP.List) throw new Error("Invalid input: 'op' must be 'list'")
         ValidateKrc20Data.validate(data)
 
@@ -171,6 +291,7 @@ class KRC20 {
             outputs: outputs,
             priorityFee: fee,
             entries: entries,
+            payload: this.normalizePayload(payload),
             networkId: Kiwi.getNetworkID(),
         }).then(r => r.sign([privateKey]).submit())
 
@@ -205,7 +326,7 @@ class KRC20 {
      * .param payload - The payload.
      * .returns The serialized transaction.
      */
-    public static async sendTransaction(privateKey: Wasm.PrivateKey, data: Krc20Data, hash: string, amount: bigint, payload: string = "") {
+    public static async sendTransaction(privateKey: Wasm.PrivateKey, data: Krc20Data, hash: string, amount: bigint, payload: EncodablePayload) {
         if (data.op !== OP.Send) {
             throw new Error("Invalid input: 'op' must be 'send'");
         }
@@ -220,7 +341,7 @@ class KRC20 {
 
         const output = Output.createOutputs(fromAddress, amount);
         const revealEntries = Entries.revealEntries(p2shAddress, hash, scriptPublicKey, entry.amount);
-        return Transaction.createTransactionWithEntries(revealEntries, output, 0n, payload, 1)
+        return Transaction.createTransactionWithEntries(revealEntries, output, 0n, this.normalizePayload(payload), 1)
             .sign(privateKey, script, Wasm.SighashType.SingleAnyOneCanPay).toJson()
     }
 
@@ -430,23 +551,23 @@ class KRC20 {
     }
 
 
-    public static async issue(privateKey: Wasm.PrivateKey, data: Krc20Data, fee: bigint = 0n, payload?: Wasm.HexString | Uint8Array) {
+    public static async issue(privateKey: Wasm.PrivateKey, data: Krc20Data, fee: bigint = 0n, payload?: EncodablePayload) {
         if (data.op !== OP.Issue) throw new Error("Invalid input: 'op' must be 'issue'")
         return await KRC20.executeOperation(privateKey, data, fee, payload)
     }
 
 
-    public static async burn(privateKey: Wasm.PrivateKey, data: Krc20Data, fee: bigint = 0n, payload?: Wasm.HexString | Uint8Array) {
+    public static async burn(privateKey: Wasm.PrivateKey, data: Krc20Data, fee: bigint = 0n, payload?: EncodablePayload) {
         if (data.op !== OP.Burn) throw new Error("Invalid input: 'op' must be 'burn'")
         return await KRC20.executeOperation(privateKey, data, fee, payload)
     }
 
-    public static async blacklist(privateKey: Wasm.PrivateKey, data: Krc20Data, fee: bigint = 0n, payload?: Wasm.HexString | Uint8Array) {
+    public static async blacklist(privateKey: Wasm.PrivateKey, data: Krc20Data, fee: bigint = 0n, payload?: EncodablePayload) {
         if (data.op !== OP.Blacklist) throw new Error("Invalid input: 'op' must be 'blacklist'")
         return await KRC20.executeOperation(privateKey, data, fee, payload)
     }
 
-    public static async chown(privateKey: Wasm.PrivateKey, data: Krc20Data, fee: bigint = 0n, payload?: Wasm.HexString | Uint8Array) {
+    public static async chown(privateKey: Wasm.PrivateKey, data: Krc20Data, fee: bigint = 0n, payload?: EncodablePayload) {
         if (data.op !== OP.Chown) throw new Error("Invalid input: 'op' must be 'chown'")
         return await KRC20.executeOperation(privateKey, data, fee, payload)
     }

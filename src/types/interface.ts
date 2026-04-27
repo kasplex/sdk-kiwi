@@ -24,6 +24,7 @@ export interface Krc20Data {
     dec?: string,
     pre?: string,
     ca?: string,
+    memo?: string,
 }
 
 export interface addressList {
@@ -35,3 +36,18 @@ export interface TransferList {
     toAddress: string,
     amount: bigint
 }
+
+export interface Krc20DataV2 extends Krc20Data { 
+    payload: string
+}
+
+export type EncodablePayload =
+    | string
+    | Wasm.HexString
+    | Uint8Array
+    | Record<string, unknown>
+    | Array<unknown>
+    | number
+    | boolean
+    | null
+    | undefined;
