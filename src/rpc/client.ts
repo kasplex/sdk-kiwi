@@ -4,6 +4,7 @@ import { networkToString } from "../utils/utils";
 class Rpc {
     private static instance: Rpc;
     public client: Wasm.RpcClient;
+    public readonly encoding: Wasm.Encoding;
 
     /**
      * Private constructor to initialize the Wasm.RpcClient with the given network and URL.
@@ -11,8 +12,9 @@ class Rpc {
      * @param network - The network type (default: Mainnet).
      * @param url - The optional RPC server URL.
      */
-    private constructor(network: Wasm.NetworkType, url: string = "") {
-        this.client = new Wasm.RpcClient(Rpc.getConfig(network, url));
+    private constructor(network: Wasm.NetworkType, url: string = "",  encoding: Wasm.Encoding = Wasm.Encoding.Borsh, ) {
+        this.encoding = encoding;
+        this.client = new Wasm.RpcClient(Rpc.getConfig(network, url, this.encoding));
     }
 
     /**
@@ -22,12 +24,8 @@ class Rpc {
      * @param url - The optional RPC server URL.
      * @returns The singleton instance of Rpc.
      */
-    public static setInstance(network: Wasm.NetworkType, url: string = ""): Rpc {
-        // if (Rpc.instance) {
-        //     console.log("Rpc instance already exists. Returning existing instance.");
-        //     return Rpc.instance;
-        // }
-        Rpc.instance = new Rpc(network, url);
+    public static setInstance( network: Wasm.NetworkType,  url: string = "", encoding: Wasm.Encoding = Wasm.Encoding.Borsh, ): Rpc {
+        Rpc.instance = new Rpc(network, url, encoding);
         return Rpc.instance;
     }
 
@@ -72,11 +70,14 @@ class Rpc {
      * @param url - The optional RPC server URL.
      * @returns The configuration object for the Wasm.RpcClient.
      */
-    private static getConfig(network: Wasm.NetworkType, url: string) {
+    private static getConfig(network: Wasm.NetworkType, url: string, encoding: Wasm.Encoding ) {
         const commonConfig = {
-            encoding: Wasm.Encoding.Borsh,
-            networkId: networkToString(network)
+            encoding,
+            networkId: networkToString(network),
         };
+        if (url && !url.startsWith("ws://") && !url.startsWith("wss://")) {
+            throw new Error(`Invalid RPC url: ${url}. Use ws:// or wss://`);
+        }
         return url ? { ...commonConfig, url } : { ...commonConfig, resolver: new Wasm.Resolver() };
     }
 }
